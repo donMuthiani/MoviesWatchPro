@@ -1,6 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias (libs.plugins.ksp)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hilt)
+    id("kotlin-kapt")
+
 }
 
 android {
@@ -10,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "com.example.movieswatchpro"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -66,4 +71,28 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //splash screen
+    implementation(libs.androidx.core.splashScreen)
+
+    //hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    //sharedPreferences
+    implementation(libs.androidx.preference.ktx)
+
+    //datastore
+
+    //Timber
+    implementation(libs.timber)
+
+
+
+
 }
+
+kapt {
+    correctErrorTypes = true
+}
+
+
