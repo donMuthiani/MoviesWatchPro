@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.movieswatchpro"
+    namespace = "com.muthiani.movieswatchpro"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.movieswatchpro"
+        applicationId = "com.muthiani.movieswatchpro"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -88,6 +88,11 @@ dependencies {
 
     //material icons
     implementation(libs.androidx.material.icons.extended)
+
+    //credential manager
+    implementation(libs.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 
 
 
