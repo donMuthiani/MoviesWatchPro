@@ -1,6 +1,5 @@
 package com.muthiani.movieswatchpro.ui.signup
 
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,22 +11,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -46,13 +39,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialRequest.Builder
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.muthiani.movieswatchpro.R
 import com.muthiani.movieswatchpro.ui.intro.ButtonUi
+import com.muthiani.movieswatchpro.utils.ConstantUtils
 
 
 @Composable
 fun SignUpScreen(
-    onNavigateHome: () -> Unit = {}
+    onNavigateHome: () -> Unit = {},
+    onGoogleSignIn: () -> Unit
 ) {
 
     Scaffold(topBar = { Header() }, content =
@@ -90,7 +88,6 @@ fun Content() {
     var email by remember {
         mutableStateOf("")
     }
-
     var password by remember {
         mutableStateOf("")
     }
@@ -159,7 +156,21 @@ fun Content() {
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        SignInButtons()
+        Column(modifier = Modifier.fillMaxWidth()) {
+            ButtonUi(modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+                text = "Sign In",
+                textColor = Color.White,
+                backgroundColor = Color.Black) {
+            }
+
+            Spacer(modifier = Modifier.size(24.dp))
+
+            GoogleSignInButton {
+                googleSignIn()
+            }
+        }
         
         Spacer(modifier = Modifier.size(24.dp))
 
@@ -169,6 +180,11 @@ fun Content() {
 }
 
 fun forgotPasword() {
+
+}
+
+ fun googleSignIn() {
+
 
 }
 
@@ -228,5 +244,5 @@ fun BottomPanel() {
 @Preview
 @Composable
 fun SignUpScreenPreview(){
-    SignUpScreen()
+    SignUpScreen {  }
 }

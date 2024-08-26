@@ -14,18 +14,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialRequest.Builder
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.PublicKeyCredential
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.muthiani.movieswatchpro.ui.intro.OnboardingScreen
 import com.muthiani.movieswatchpro.ui.signup.SignUpScreen
 import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
+import com.muthiani.movieswatchpro.utils.ConstantUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -43,16 +54,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MoviesWatchProTheme {
-                MyApp()
+                MoviesWatch()
             }
         }
     }
 
     @Composable
-    fun MyApp() {
+    fun MoviesWatch() {
         val isOnboarded = splashViewModel.isUserOnboarded
         val isLoggedIn = splashViewModel.isLoggedIn
         val navController = rememberNavController()
+        val scope = rememberCoroutineScope()
 
         NavHost(
             navController = navController, startDestination = when (isOnboarded) {
@@ -69,9 +81,35 @@ class MainActivity : ComponentActivity() {
                 enterTransition = {
                     slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
                 }) {
-                SignUpScreen {
-                    navController.navigate(route = "home")
-                }
+                SignUpScreen(
+                    onGoogleSignIn = {
+
+                        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+                            .setFilterByAuthorizedAccounts(true)
+                            .setServerClientId(ConstantUtils.WEB_KEY)
+                            .setAutoSelectEnabled(true)
+                            .setNonce("")
+                            .build()
+                        val request: GetCredentialRequest = Builder()
+                            .addCredentialOption(googleIdOption)
+                            .build()
+                        val credentialManager = CredentialManager.create(context = this@MainActivity.baseContext)
+                        scope.launch {
+                            try {
+                                val result = credentialManager.getCredential(request = request,
+                                    context = this@MainActivity.baseContext)
+                                handleSignIn(result)
+
+                            }catch (e: GetCredentialException) {
+                                handleFailure(e)
+                            }
+                        }
+
+                    },
+                    onNavigateHome = {
+                        navController.navigate(route = "home")
+                    }
+                )
             }
             composable(route = "onboarding",
                 exitTransition = {
@@ -98,10 +136,24 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun handleFailure(e: GetCredentialException) {
+
+    }
+
+    private fun handleSignIn(result: GetCredentialResponse) {
+        val credential = result.credential
+        when(credential) {
+            is PublicKeyCredential -> {
+
+            }
+        }
+
+    }
+
     @Preview(showBackground = true)
     @Composable
     fun MainScreenPreview() {
-        MyApp()
+        MoviesWatch()
     }
 
     @Composable
