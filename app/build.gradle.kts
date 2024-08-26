@@ -1,19 +1,19 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias (libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
     id("kotlin-kapt")
 
 }
 
 android {
-    namespace = "com.example.movieswatchpro"
+    namespace = "com.muthiani.movieswatchpro"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.movieswatchpro"
+        applicationId = "com.muthiani.movieswatchpro"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -86,6 +86,22 @@ dependencies {
     //Timber
     implementation(libs.timber)
 
+    //material icons
+    implementation(libs.androidx.material.icons.extended)
+
+    //credential manager
+    implementation(libs.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
+    // Views/Fragments integration
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+
+    //serializable
+    implementation(libs.kotlinx.serialization.json)
 
 
 
