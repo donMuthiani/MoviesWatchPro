@@ -46,8 +46,7 @@ fun GoogleSignInButton(
             Icon(
                 painter = painterResource(id = R.drawable.ic_google_button),
                 contentDescription = "Google Icon",
-                tint = Color.Unspecified
-            )
+                tint = Color.Unspecified)
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Sign in with Google", color = Color.Black)
         }

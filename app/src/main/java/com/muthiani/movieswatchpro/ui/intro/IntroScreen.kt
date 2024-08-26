@@ -18,6 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.muthiani.movieswatchpro.models.IntroModel
 
+
+
+
+
 @Composable
 fun IntroScreen(introModel: IntroModel) {
     Column(modifier = Modifier.fillMaxWidth()) {

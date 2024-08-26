@@ -12,22 +12,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashScreenViewModel @Inject constructor(private val sharedPreferences: MyPreferences) : ViewModel() {
-    private val splashShowFlow = MutableStateFlow(true)
-    val isSplashShow = splashShowFlow.asStateFlow()
 
-    init {
-        val isOnboarded = sharedPreferences.isOnboardingCompleted()
-
-        viewModelScope.launch {
-            splashShowFlow.value = !isOnboarded
-        }
-    }
-
+    val isUserOnboarded = sharedPreferences.isOnboardingCompleted()
+    val isLoggedIn = sharedPreferences.getIsLoggedIn()
 
     fun setOnBoardingComplete() {
         sharedPreferences.setOnboardingCompleted()
-        splashShowFlow.value = false
     }
-
 
 }

@@ -52,7 +52,7 @@ import com.muthiani.movieswatchpro.ui.intro.ButtonUi
 
 @Composable
 fun SignUpScreen(
-
+    onNavigateHome: () -> Unit = {}
 ) {
 
     Scaffold(topBar = { Header() }, content =

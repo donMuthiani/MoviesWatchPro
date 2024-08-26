@@ -109,7 +109,5 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun OnboardingPreview() {
-    OnboardingScreen {
-
-    }
+    OnboardingScreen(onFinished = {})
 }

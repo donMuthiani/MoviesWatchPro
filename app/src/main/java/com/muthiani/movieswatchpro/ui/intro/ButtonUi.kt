@@ -13,6 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
+object Login
+
+
 @Composable
 fun ButtonUi(
     text: String = "Next",

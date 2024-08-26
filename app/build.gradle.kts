@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias (libs.plugins.ksp)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.serialization)
     id("kotlin-kapt")
 
 }
@@ -94,7 +94,14 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
 
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
+    // Views/Fragments integration
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
+    //serializable
+    implementation(libs.kotlinx.serialization.json)
 
 
 
