@@ -1,5 +1,6 @@
 package com.muthiani.movieswatchpro.ui.signup
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,40 +30,65 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialRequest.Builder
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.PasswordCredential
+import androidx.credentials.PublicKeyCredential
+import androidx.credentials.exceptions.GetCredentialException
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.muthiani.movieswatchpro.R
 import com.muthiani.movieswatchpro.ui.intro.ButtonUi
+import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel
+import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 import com.muthiani.movieswatchpro.utils.ConstantUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+
+val SplashScreenViewModelProvider = compositionLocalOf<SplashScreenViewModel> { error("No SplashScreenViewModel provided") }
+val spacing = 24.dp
 
 
 @Composable
 fun SignUpScreen(
-    onNavigateHome: () -> Unit = {},
-    onGoogleSignIn: () -> Unit
+    navController: NavController
 ) {
+    val splashViewModel: SplashScreenViewModel  = viewModel()
+    CompositionLocalProvider(SplashScreenViewModelProvider provides splashViewModel) {
+        Scaffold(topBar = { Header() }, content =
+        {
+            Column(modifier = Modifier.padding(it)) {
+                Content(navController)
+            }
 
-    Scaffold(topBar = { Header() }, content =
-    {
-        Column(modifier = Modifier.padding(it)) {
-            Content()
-        }
-
-    }, bottomBar = {
-        BottomPanel()
-    })
-
+        }, bottomBar = {
+            BottomPanel()
+        })
+    }
 }
 
 @Composable
@@ -83,23 +109,23 @@ fun Header() {
 }
 
 @Composable
-fun Content() {
+fun Content(navController: NavController) {
+    val splashScreenViewModel: SplashScreenViewModel = SplashScreenViewModelProvider.current
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
-    var email by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
-    var passwordVisible by remember {
-        mutableStateOf(false)
-    }
-    var isError by remember {
-        mutableStateOf(false)
-    }
+    val emailState = rememberSaveable { mutableStateOf("") }
+    val passwordState = rememberSaveable { mutableStateOf("") }
+    val passwordVisibleState = rememberSaveable { mutableStateOf(false) }
+    val isErrorState = rememberSaveable { mutableStateOf(false) }
+
+    var email by emailState
+    var password by passwordState
+    var passwordVisible by passwordVisibleState
+    val isError by isErrorState
 
 
-    Spacer(modifier = Modifier.size(50.dp))
+    Spacer(modifier = Modifier.size(spacing))
 
     Column(
         modifier = Modifier
@@ -121,7 +147,7 @@ fun Content() {
             fontSize = 20.sp
         )
 
-        Spacer(modifier = Modifier.size(24.dp))
+        Spacer(modifier = Modifier.size(spacing))
 
         OutlinedTextField(value = email,
             modifier = Modifier.fillMaxWidth(),
@@ -154,7 +180,7 @@ fun Content() {
 
         BottomViews()
 
-        Spacer(modifier = Modifier.size(24.dp))
+        Spacer(modifier = Modifier.size(spacing))
 
         Column(modifier = Modifier.fillMaxWidth()) {
             ButtonUi(modifier = Modifier
@@ -165,14 +191,14 @@ fun Content() {
                 backgroundColor = Color.Black) {
             }
 
-            Spacer(modifier = Modifier.size(24.dp))
+            Spacer(modifier = Modifier.size(spacing))
 
             GoogleSignInButton {
-                googleSignIn()
+               googleSignIn(splashScreenViewModel, scope, context, navController)
             }
         }
         
-        Spacer(modifier = Modifier.size(24.dp))
+        Spacer(modifier = Modifier.size(spacing))
 
         NoAccountSignUp()
     }
@@ -183,9 +209,62 @@ fun forgotPasword() {
 
 }
 
- fun googleSignIn() {
+ fun googleSignIn(
+     splashScreenViewModel: SplashScreenViewModel,
+     scope: CoroutineScope,
+     context: Context,
+     navController: NavController
+ ) {
+     val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+         .setFilterByAuthorizedAccounts(false)
+         .setServerClientId(ConstantUtils.WEB_KEY)
+         .setNonce("")
+         .build()
+     val request: GetCredentialRequest = Builder()
+         .addCredentialOption(googleIdOption)
+         .build()
+     val credentialManager = CredentialManager.create(context = context)
+     scope.launch {
+         try {
+             val result = credentialManager.getCredential(request = request,
+                 context = context)
+             handleSignIn(splashScreenViewModel, result, navController)
+         }catch (e: GetCredentialException) {
+             handleFailure(e)
+         }
+     }
+}
 
+private fun handleSignIn(splashScreenViewModel: SplashScreenViewModel,result: GetCredentialResponse, navController: NavController) {
+    val credential = result.credential
+    when(credential) {
+        is PublicKeyCredential -> {
+            // Share responseJson such as a GetCredentialResponse on your server to
+        }
+        is PasswordCredential -> {
+            // Send ID and password to your server to validate and authenticate.
+            val userName = credential.id
+            val password = credential.password
+        }
+        is CustomCredential -> {
+            if(credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                try {
+                    val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                    val token = googleIdTokenCredential.idToken
+                    // Send token to server for validation
+                    navController.navigate(route = "home")
+                    splashScreenViewModel.setUserLoggedIn()
 
+                } catch (e: GoogleIdTokenParsingException) {
+                    Timber.tag("Google id token error").i(e.message)
+                }
+            }
+        }
+    }
+}
+
+private fun handleFailure(e: GetCredentialException) {
+    Timber.tag("Google Sign In Error").i(e.message)
 }
 
 @Composable
@@ -217,7 +296,6 @@ fun BottomViews() {
                 Text(text = "Forgot Password")
             }
         }
-
     }
 }
 
@@ -244,5 +322,7 @@ fun BottomPanel() {
 @Preview
 @Composable
 fun SignUpScreenPreview(){
-    SignUpScreen {  }
+    MoviesWatchProTheme {
+        SignUpScreen(navController = rememberNavController())
+    }
 }
