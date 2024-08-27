@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
+    id("com.google.gms.google-services")
     id("kotlin-kapt")
 
 }
@@ -77,9 +78,11 @@ dependencies {
 
     //hilt
     implementation(libs.hilt.android)
+    implementation(libs.hilt.compose)
     kapt(libs.hilt.compiler)
     //sharedPreferences
     implementation(libs.androidx.preference.ktx)
+
 
     //datastore
 
@@ -102,6 +105,11 @@ dependencies {
 
     //serializable
     implementation(libs.kotlinx.serialization.json)
+
+    //firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+
 
 
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "670632567756",
+    "project_id": "movieswatch-5025c",
+    "storage_bucket": "movieswatch-5025c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670632567756:android:36570659438cbfcb157369",
+        "android_client_info": {
+          "package_name": "com.muthiani.movieswatchpro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL94kxBcnfMZuv0eiGD7mP4CSWG2DA-V4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

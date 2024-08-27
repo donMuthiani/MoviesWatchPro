@@ -6,4 +6,5 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply true
     alias(libs.plugins.kotlin.serialization)
+    id("com.google.gms.google-services") version "4.4.2" apply false
 }

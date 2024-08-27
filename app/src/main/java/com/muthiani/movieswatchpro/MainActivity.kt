@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,9 +35,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val splashViewModel: SplashScreenViewModel by viewModels()
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         installSplashScreen()
@@ -43,15 +43,15 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MoviesWatchProTheme {
-                MyApp()
+                MoviesWatch()
             }
         }
     }
 
     @Composable
-    fun MyApp() {
+    fun MoviesWatch() {
         val isOnboarded = splashViewModel.isUserOnboarded
-        val isLoggedIn = splashViewModel.isLoggedIn
+        val isLoggedIn by  splashViewModel.loggedIn.collectAsState()
         val navController = rememberNavController()
 
         NavHost(
@@ -69,9 +69,9 @@ class MainActivity : ComponentActivity() {
                 enterTransition = {
                     slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
                 }) {
-                SignUpScreen {
-                    navController.navigate(route = "home")
-                }
+                SignUpScreen(
+                    navController = navController
+                )
             }
             composable(route = "onboarding",
                 exitTransition = {
@@ -98,10 +98,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
+
     @Preview(showBackground = true)
     @Composable
     fun MainScreenPreview() {
-        MyApp()
+        MoviesWatch()
     }
 
     @Composable

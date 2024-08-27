@@ -20,8 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.muthiani.movieswatchpro.R
 import com.muthiani.movieswatchpro.ui.intro.ButtonUi
+import com.muthiani.movieswatchpro.utils.ConstantUtils
 
 @Composable
 fun GoogleSignInButton(
@@ -55,19 +57,5 @@ fun GoogleSignInButton(
 
 @Composable
 fun SignInButtons() {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        ButtonUi(modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp),
-            text = "Sign In",
-            textColor = Color.White,
-            backgroundColor = Color.Black) {
-        }
 
-        Spacer(modifier = Modifier.size(24.dp))
-
-        GoogleSignInButton {
-
-        }
-    }
 }
