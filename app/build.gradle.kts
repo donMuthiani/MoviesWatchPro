@@ -78,9 +78,11 @@ dependencies {
 
     //hilt
     implementation(libs.hilt.android)
+    implementation(libs.hilt.compose)
     kapt(libs.hilt.compiler)
     //sharedPreferences
     implementation(libs.androidx.preference.ktx)
+
 
     //datastore
 
