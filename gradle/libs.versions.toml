@@ -22,6 +22,8 @@ splashScreen = "1.0.0"
 ksp = "2.0.0-1.0.21"
 timber = "5.0.1"
 compose-navigation = "2.7.7"
+ktlint = "12.1.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -65,5 +67,6 @@ hilt = {id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid"}
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 
 

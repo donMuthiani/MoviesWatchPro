@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -32,55 +31,60 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.muthiani.movieswatchpro.R
 
-
 @Composable
 fun Header() {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier =
+        Modifier
+            .fillMaxWidth(),
     ) {
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.primary)
+                .background(color = MaterialTheme.colorScheme.primary),
         ) {
             Image(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(vertical = 64.dp, horizontal = 16.dp)
                     .align(Alignment.CenterStart),
                 painter = painterResource(id = R.drawable.splash_logo),
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }
 }
 
 @Composable
-fun BottomPanel() {
+fun bottomPanel() {
     Box(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .background(color = MaterialTheme.colorScheme.primary)
+            .background(color = MaterialTheme.colorScheme.primary),
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomHomeTopBar() {
+fun customHomeTopBar() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     var showMenu by remember { mutableStateOf(false) }
 
-
-    MediumTopAppBar(colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primary
-    ), title = {
-        Image(
-            modifier = Modifier.padding(vertical = 24.dp),
-            painter = painterResource(id = R.drawable.splash_logo),
-            contentDescription = "Logo"
-        )
-    },
+    MediumTopAppBar(
+        colors =
+        TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+        ),
+        title = {
+            Image(
+                modifier = Modifier.padding(vertical = 24.dp),
+                painter = painterResource(id = R.drawable.splash_logo),
+                contentDescription = "Logo",
+            )
+        },
         actions = {
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "search movies")
@@ -90,15 +94,22 @@ fun CustomHomeTopBar() {
             }
             DropdownMenu(
                 expanded = showMenu,
-                onDismissRequest = { showMenu = false }
+                onDismissRequest = { showMenu = false },
             ) {
-                DropdownMenuItem(onClick = { /* Handle Option 1 */ },
-                    text = { Text(text = "Option 1") })
-                DropdownMenuItem(onClick = { /* Handle Option 2 */ },
-                    text = { Text(text = "Option 2") })
-                DropdownMenuItem(onClick = { /* Handle Option 3 */ },
-                    text = { Text(text = "Option 2") })
+                DropdownMenuItem(
+                    onClick = { /* Handle Option 1 */ },
+                    text = { Text(text = "Option 1") },
+                )
+                DropdownMenuItem(
+                    onClick = { /* Handle Option 2 */ },
+                    text = { Text(text = "Option 2") },
+                )
+                DropdownMenuItem(
+                    onClick = { /* Handle Option 3 */ },
+                    text = { Text(text = "Option 2") },
+                )
             }
-        }, scrollBehavior = scrollBehavior
+        },
+        scrollBehavior = scrollBehavior,
     )
 }

@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,95 +23,103 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.muthiani.movieswatchpro.ui.intro.OnboardingScreen
-import com.muthiani.movieswatchpro.ui.signup.SignUpScreen
+import com.muthiani.movieswatchpro.ui.home.home
+import com.muthiani.movieswatchpro.ui.intro.onboardingScreen
+import com.muthiani.movieswatchpro.ui.signup.signUpScreen
 import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val splashViewModel: SplashScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MoviesWatchProTheme {
-                MoviesWatch()
+                moviesWatch()
             }
         }
     }
 
     @Composable
-    fun MoviesWatch() {
+    fun moviesWatch() {
         val isOnboarded = splashViewModel.isUserOnboarded
-        val isLoggedIn by  splashViewModel.loggedIn.collectAsState()
+        val isLoggedIn by splashViewModel.loggedIn.collectAsState()
         val navController = rememberNavController()
 
         NavHost(
-            navController = navController, startDestination = when (isOnboarded) {
+            navController = navController,
+            startDestination =
+            when (isOnboarded) {
                 true -> {
                     if (isLoggedIn) "home" else "login"
                 }
 
                 else -> "onboarding"
-            }
-        ) {
-            composable(route = "login",  exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
             },
-                enterTransition = {
-                    slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
-                }) {
-                SignUpScreen(
-                    navController = navController
-                )
-            }
-            composable(route = "onboarding",
+        ) {
+            composable(
+                route = "login",
                 exitTransition = {
                     slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
                 },
                 enterTransition = {
                     slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
-                }) {
-                OnboardingScreen(
+                },
+            ) {
+                signUpScreen(
+                    navController = navController,
+                )
+            }
+            composable(
+                route = "onboarding",
+                exitTransition = {
+                    slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+                },
+                enterTransition = {
+                    slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+                },
+            ) {
+                onboardingScreen(
                     onFinished = {
                         splashViewModel.setOnBoardingComplete()
                         navController.navigate(route = "login")
-                    }
+                    },
                 )
             }
-            composable(route = "home",  exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
-            },
+            composable(
+                route = "home",
+                exitTransition = {
+                    slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+                },
                 enterTransition = {
                     slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
-                }) {
-                HomeScreen()
+                },
+            ) {
+                home()
             }
         }
     }
 
-
-
     @Preview(showBackground = true)
     @Composable
-    fun MainScreenPreview() {
-        MoviesWatch()
+    fun mainScreenPreview() {
+        moviesWatch()
     }
 
     @Composable
-    fun HomeScreen() {
+    fun homeScreen() {
         Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(top = 24.dp) // Add padding for status bar
-                    .fillMaxSize()
+                    .fillMaxSize(),
             ) {
                 Text(text = "Home Screen", style = MaterialTheme.typography.titleLarge)
             }
@@ -121,10 +128,7 @@ class MainActivity : ComponentActivity() {
 
     @Preview(showBackground = true)
     @Composable
-    fun HomeScreenPreview() {
-        HomeScreen()
+    fun homeScreenPreview() {
+        homeScreen()
     }
 }
-
-
-

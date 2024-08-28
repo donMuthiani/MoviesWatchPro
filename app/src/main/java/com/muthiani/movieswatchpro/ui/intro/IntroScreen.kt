@@ -18,57 +18,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.muthiani.movieswatchpro.models.IntroModel
 
-
-
-
-
 @Composable
-fun IntroScreen(introModel: IntroModel) {
+fun introScreen(introModel: IntroModel) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.size(80.dp))
 
-        Image(painter = painterResource(id = introModel.image),
+        Image(
+            painter = painterResource(id = introModel.image),
             contentDescription = null,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .padding(20.dp, 0.dp),
-            alignment = Alignment.Center
-            )
+            alignment = Alignment.Center,
+        )
 
         Spacer(modifier = Modifier.size(70.dp))
 
-        Text(text = introModel.title,
+        Text(
+            text = introModel.title,
             modifier = Modifier.fillMaxWidth(),
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onBackground)
+            color = MaterialTheme.colorScheme.onBackground,
+        )
 
         Spacer(modifier = Modifier.size(10.dp))
 
-        Text(text = introModel.description,
+        Text(
+            text = introModel.description,
             modifier = Modifier.fillMaxWidth().padding(15.dp, 0.dp),
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface)
+            color = MaterialTheme.colorScheme.onSurface,
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun IntroScreenPreview1() {
-    IntroScreen(introModel = IntroModel.FirstIntro)
+fun introScreenPreview1() {
+    introScreen(introModel = IntroModel.FirstIntro)
 }
 
 @Preview(showBackground = true)
 @Composable
-fun IntroScreenPreview2() {
-    IntroScreen(introModel = IntroModel.SecondIntro)
+fun introScreenPreview2() {
+    introScreen(introModel = IntroModel.SecondIntro)
 }
 
 @Preview(showBackground = true)
 @Composable
-fun IntroScreenPreview3() {
-    IntroScreen(introModel = IntroModel.ThirdIntro)
+fun introScreenPreview3() {
+    introScreen(introModel = IntroModel.ThirdIntro)
 }

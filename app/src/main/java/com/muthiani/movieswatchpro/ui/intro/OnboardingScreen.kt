@@ -23,91 +23,89 @@ import androidx.compose.ui.unit.dp
 import com.muthiani.movieswatchpro.models.IntroModel
 import kotlinx.coroutines.launch
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingScreen(onFinished: () -> Unit) {
+fun onboardingScreen(onFinished: () -> Unit) {
     val pages = listOf(IntroModel.FirstIntro, IntroModel.SecondIntro, IntroModel.ThirdIntro)
 
-    val pagerState = rememberPagerState(initialPage = 0) {
-        pages.size
-    }
+    val pagerState =
+        rememberPagerState(initialPage = 0) {
+            pages.size
+        }
 
-    val buttonState = remember {
-        derivedStateOf {
-            when (pagerState.currentPage) {
-                0 -> listOf("", "Next")
-                1 -> listOf("Back", "Next")
-                2 -> listOf("Back", "Get Started")
-                else -> listOf("", "")
+    val buttonState =
+        remember {
+            derivedStateOf {
+                when (pagerState.currentPage) {
+                    0 -> listOf("", "Next")
+                    1 -> listOf("Back", "Next")
+                    2 -> listOf("Back", "Get Started")
+                    else -> listOf("", "")
+                }
             }
         }
-    }
 
     val scope = rememberCoroutineScope()
 
-    Scaffold(bottomBar = {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp, 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    Scaffold(
+        bottomBar = {
+            Row(
+                modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
+                    if (buttonState.value[0].isNotEmpty()) {
+                        buttonUi(
+                            text = buttonState.value[0],
+                            backgroundColor = Color.Transparent,
+                            textColor = Color.Gray,
+                        ) {
+                            scope.launch {
+                                if (pagerState.currentPage > 0) {
+                                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                                }
+                            }
+                        }
+                    }
+                }
 
-            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterStart) {
-                if (buttonState.value[0].isNotEmpty()) {
-                    ButtonUi(
-                        text = buttonState.value[0], backgroundColor = Color.Transparent,
-                        textColor = Color.Gray
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    indicatorUi(pageSize = pages.size, currentPage = pagerState.currentPage)
+                }
+
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
+                    buttonUi(
+                        text = buttonState.value[1],
+                        backgroundColor = MaterialTheme.colorScheme.primary,
+                        textColor = MaterialTheme.colorScheme.onPrimary,
                     ) {
                         scope.launch {
-                            if (pagerState.currentPage > 0) {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                            if (pagerState.currentPage < pages.size - 1) {
+                                pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
+                            } else {
+                                onFinished()
                             }
                         }
                     }
                 }
             }
-
-
-            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                IndicatorUi(pageSize = pages.size, currentPage = pagerState.currentPage)
-            }
-
-
-            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
-                ButtonUi(
-                    text = buttonState.value[1],
-                    backgroundColor = MaterialTheme.colorScheme.primary,
-                    textColor = MaterialTheme.colorScheme.onPrimary
-                    ) {
-                    scope.launch {
-                        if(pagerState.currentPage < pages.size - 1) {
-                            pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
-                        } else {
-                            onFinished()
-                        }
-                    }
-                }
-            }
-        }
-    },
-
+        },
         content = {
             Column(Modifier.padding(it)) {
                 HorizontalPager(state = pagerState) { index ->
-                    IntroScreen(introModel = pages[index])
+                    introScreen(introModel = pages[index])
                 }
             }
-        })
-
-
+        },
+    )
 }
-
 
 @Preview(showBackground = true)
 @Composable
-fun OnboardingPreview() {
-    OnboardingScreen(onFinished = {})
+fun onboardingPreview() {
+    onboardingScreen(onFinished = {})
 }

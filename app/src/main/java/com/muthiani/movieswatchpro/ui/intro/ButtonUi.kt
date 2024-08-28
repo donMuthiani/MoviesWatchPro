@@ -12,45 +12,28 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
 object Login
 
-
 @Composable
-fun ButtonUi(
+fun buttonUi(
     text: String = "Next",
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     textColor: Color = MaterialTheme.colorScheme.onPrimary,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     fontSize: Int = 14,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors(
+        colors =
+        ButtonDefaults.buttonColors(
             containerColor = backgroundColor,
-            contentColor = textColor
-        ), shape = RoundedCornerShape(10.dp)
+            contentColor = textColor,
+        ),
+        shape = RoundedCornerShape(10.dp),
     ) {
         Text(text = text, style = textStyle, fontSize = fontSize.sp)
-    }
-}
-
-@Composable
-fun NextButton() {
-    ButtonUi(text = "Next"){}
-}
-
-@Composable
-fun BackButton() {
-    ButtonUi(
-        text = "Back",
-        textColor = Color.Gray,
-        textStyle = MaterialTheme.typography.bodySmall,
-        fontSize = 13
-    ) {
-
     }
 }
