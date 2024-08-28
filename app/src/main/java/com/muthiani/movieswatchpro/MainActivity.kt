@@ -23,7 +23,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.muthiani.movieswatchpro.ui.home.home
+import com.muthiani.movieswatchpro.ui.home.Home
 import com.muthiani.movieswatchpro.ui.intro.onboardingScreen
 import com.muthiani.movieswatchpro.ui.signup.signUpScreen
 import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel
@@ -101,7 +101,7 @@ class MainActivity : ComponentActivity() {
                     slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
                 },
             ) {
-                home()
+                Home()
             }
         }
     }

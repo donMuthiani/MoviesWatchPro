@@ -28,7 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
-fun home() {
+fun Home() {
     val bottomNavItems =
         listOf(
             BottomNavItem.WatchList,
