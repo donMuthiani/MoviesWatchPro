@@ -5,11 +5,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MyPreferences @Inject constructor(private val sharedPreferences: SharedPreferences) {
+class MyPreferences
+@Inject
+constructor(private val sharedPreferences: SharedPreferences) {
     val isLoggedIn = "isLoggedIn"
     val onboarding = "Onboaarding"
 
-    fun setIsLoggedIn(value: Boolean)  {
+    fun setIsLoggedIn(value: Boolean) {
         sharedPreferences.edit().putBoolean(isLoggedIn, value).apply()
     }
 

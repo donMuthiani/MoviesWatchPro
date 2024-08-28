@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     id("com.google.gms.google-services")
     id("kotlin-kapt")
-
 }
 
 android {
@@ -31,7 +30,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -73,50 +72,43 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    //splash screen
+    // splash screen
     implementation(libs.androidx.core.splashScreen)
 
-    //hilt
+    // hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)
     kapt(libs.hilt.compiler)
-    //sharedPreferences
+    // sharedPreferences
     implementation(libs.androidx.preference.ktx)
 
+    // datastore
 
-    //datastore
-
-    //Timber
+    // Timber
     implementation(libs.timber)
 
-    //material icons
+    // material icons
     implementation(libs.androidx.material.icons.extended)
 
-    //credential manager
+    // credential manager
     implementation(libs.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
 
-    //Navigation
+    // Navigation
     implementation(libs.androidx.navigation.compose)
     // Views/Fragments integration
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
 
-    //serializable
+    // serializable
     implementation(libs.kotlinx.serialization.json)
 
-    //firebase
+    // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
-
-
-
-
 }
 
 kapt {
     correctErrorTypes = true
 }
-
-

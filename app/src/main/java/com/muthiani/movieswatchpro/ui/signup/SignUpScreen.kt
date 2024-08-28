@@ -55,9 +55,9 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
-import com.muthiani.movieswatchpro.ui.components.BottomPanel
 import com.muthiani.movieswatchpro.ui.components.Header
-import com.muthiani.movieswatchpro.ui.intro.ButtonUi
+import com.muthiani.movieswatchpro.ui.components.bottomPanel
+import com.muthiani.movieswatchpro.ui.intro.buttonUi
 import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 import com.muthiani.movieswatchpro.utils.ConstantUtils
@@ -65,258 +65,263 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-
 val spacing = 24.dp
 
+@Composable
+fun signUpScreen(navController: NavController) {
+    val splashViewModel: SplashScreenViewModel = hiltViewModel()
 
-    @Composable
-    fun SignUpScreen(
-        navController: NavController
-    ) {
-        val splashViewModel: SplashScreenViewModel = hiltViewModel()
-
-        Scaffold(topBar = { Header() }, content =
+    Scaffold(
+        topBar = { Header() },
+        content =
         {
             Column(modifier = Modifier.padding(it)) {
-                Content(navController, splashViewModel)
+                content(navController, splashViewModel)
             }
+        },
+        bottomBar = {
+            bottomPanel()
+        },
+    )
+}
 
-        }, bottomBar = {
-            BottomPanel()
-        })
-    }
+@Composable
+fun content(
+    navController: NavController,
+    splashViewModel: SplashScreenViewModel,
+) {
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
+    val emailState = rememberSaveable { mutableStateOf("") }
+    val passwordState = rememberSaveable { mutableStateOf("") }
+    val passwordVisibleState = rememberSaveable { mutableStateOf(false) }
+    val isErrorState = rememberSaveable { mutableStateOf(false) }
 
-    @Composable
-    fun Content(navController: NavController, splashViewModel: SplashScreenViewModel) {
-        val scope = rememberCoroutineScope()
-        val context = LocalContext.current
+    var email by emailState
+    var password by passwordState
+    var passwordVisible by passwordVisibleState
+    val isError by isErrorState
 
-        val emailState = rememberSaveable { mutableStateOf("") }
-        val passwordState = rememberSaveable { mutableStateOf("") }
-        val passwordVisibleState = rememberSaveable { mutableStateOf(false) }
-        val isErrorState = rememberSaveable { mutableStateOf(false) }
+    Spacer(modifier = Modifier.size(spacing))
 
-        var email by emailState
-        var password by passwordState
-        var passwordVisible by passwordVisibleState
-        val isError by isErrorState
+    Column(
+        modifier =
+        Modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.background)
+            .padding(horizontal = 24.dp)
+            .verticalScroll(state = rememberScrollState()),
+    ) {
+        Text(
+            text = "Welcome back",
+            style = MaterialTheme.typography.titleMedium,
+            fontSize = 20.sp,
+        )
 
+        Text(
+            text = "Please enter your details",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.secondary,
+            fontSize = 20.sp,
+        )
 
         Spacer(modifier = Modifier.size(spacing))
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.background)
-                .padding(horizontal = 24.dp)
-                .verticalScroll(state = rememberScrollState())
-        ) {
+        OutlinedTextField(
+            value = email,
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = { email = it },
+            label = { Text(text = "Email address") },
+            isError = isError,
+        )
+
+        OutlinedTextField(
+            value = password,
+            modifier = Modifier.fillMaxWidth(),
+            onValueChange = { password = it },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            label = { Text(text = "Enter password") },
+            isError = isError,
+            trailingIcon = {
+                val image =
+                    if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
+
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = image, contentDescription = null)
+                }
+            },
+        )
+
+        if (isError) {
             Text(
-                text = "Welcome back",
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 20.sp
+                text = "Error: Invalid email",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp),
             )
-
-            Text(
-                text = "Please enter your details",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.secondary,
-                fontSize = 20.sp
-            )
-
-            Spacer(modifier = Modifier.size(spacing))
-
-            OutlinedTextField(
-                value = email,
-                modifier = Modifier.fillMaxWidth(),
-                onValueChange = { email = it },
-                label = { Text(text = "Email address") },
-                isError = isError
-            )
-
-            OutlinedTextField(value = password,
-                modifier = Modifier.fillMaxWidth(),
-                onValueChange = { password = it },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                label = { Text(text = "Enter password") },
-                isError = isError,
-                trailingIcon = {
-                    val image =
-                        if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
-
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = image, contentDescription = null)
-                    }
-                }
-            )
-
-            if (isError) {
-                Text(
-                    text = "Error: Invalid email",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(start = 16.dp, top = 4.dp)
-                )
-            }
-
-            BottomViews()
-
-            Spacer(modifier = Modifier.size(spacing))
-
-            Column(modifier = Modifier.fillMaxWidth()) {
-                ButtonUi(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    text = "Sign In",
-                    textColor = Color.White,
-                    backgroundColor = Color.Black
-                ) {
-                }
-
-                Spacer(modifier = Modifier.size(spacing))
-
-                GoogleSignInButton {
-                    googleSignIn(splashViewModel, scope, context, navController)
-                }
-            }
-
-            Spacer(modifier = Modifier.size(spacing))
-
-            NoAccountSignUp()
         }
 
+        bottomViews()
+
+        Spacer(modifier = Modifier.size(spacing))
+
+        Column(modifier = Modifier.fillMaxWidth()) {
+            buttonUi(
+                modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                text = "Sign In",
+                textColor = Color.White,
+                backgroundColor = Color.Black,
+            ) {
+                splashViewModel.setUserLoggedIn()
+                navController.navigate(route = "home")
+            }
+
+            Spacer(modifier = Modifier.size(spacing))
+
+            googleSignInButton {
+                googleSignIn(splashViewModel, scope, context, navController)
+            }
+        }
+
+        Spacer(modifier = Modifier.size(spacing))
+
+        noAccountSignUp()
     }
+}
 
-    fun forgotPasword() {
+fun forgotPasword() {
+}
 
-    }
-
-    fun googleSignIn(
-        splashScreenViewModel: SplashScreenViewModel,
-        scope: CoroutineScope,
-        context: Context,
-        navController: NavController
-    ) {
-        val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+fun googleSignIn(
+    splashScreenViewModel: SplashScreenViewModel,
+    scope: CoroutineScope,
+    context: Context,
+    navController: NavController,
+) {
+    val googleIdOption: GetGoogleIdOption =
+        GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
             .setServerClientId(ConstantUtils.WEB_KEY)
             .setNonce("")
             .build()
-        val request: GetCredentialRequest = Builder()
+    val request: GetCredentialRequest =
+        Builder()
             .addCredentialOption(googleIdOption)
             .build()
-        val credentialManager = CredentialManager.create(context = context)
-        scope.launch {
-            try {
-                val result = credentialManager.getCredential(
+    val credentialManager = CredentialManager.create(context = context)
+    scope.launch {
+        try {
+            val result =
+                credentialManager.getCredential(
                     request = request,
-                    context = context
+                    context = context,
                 )
-                handleSignIn(splashScreenViewModel, result, navController)
-            } catch (e: GetCredentialException) {
-                handleFailure(e)
-            }
+            handleSignIn(splashScreenViewModel, result, navController)
+        } catch (e: GetCredentialException) {
+            handleFailure(e)
         }
     }
+}
 
-    private fun handleSignIn(
-        splashScreenViewModel: SplashScreenViewModel,
-        result: GetCredentialResponse,
-        navController: NavController
-    ) {
-        val credential = result.credential
-        when (credential) {
-            is PublicKeyCredential -> {
-                // Share responseJson such as a GetCredentialResponse on your server to
-            }
+private fun handleSignIn(
+    splashScreenViewModel: SplashScreenViewModel,
+    result: GetCredentialResponse,
+    navController: NavController,
+) {
+    val credential = result.credential
+    when (credential) {
+        is PublicKeyCredential -> {
+            // Share responseJson such as a GetCredentialResponse on your server to
+        }
 
-            is PasswordCredential -> {
-                // Send ID and password to your server to validate and authenticate.
-                val userName = credential.id
-                val password = credential.password
-            }
+        is PasswordCredential -> {
+            // Send ID and password to your server to validate and authenticate.
+            val userName = credential.id
+            val password = credential.password
+        }
 
-            is CustomCredential -> {
-                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                    try {
-                        val googleIdTokenCredential =
-                            GoogleIdTokenCredential.createFrom(credential.data)
-                        val token = googleIdTokenCredential.idToken
-                        // Send token to server for validation
-                        navController.navigate(route = "home")
-                        splashScreenViewModel.setUserLoggedIn()
-
-                    } catch (e: GoogleIdTokenParsingException) {
-                        Timber.tag("Google id token error").i(e.message)
-                    }
+        is CustomCredential -> {
+            if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                try {
+                    val googleIdTokenCredential =
+                        GoogleIdTokenCredential.createFrom(credential.data)
+                    val token = googleIdTokenCredential.idToken
+                    // Send token to server for validation
+                    navController.navigate(route = "home")
+                    splashScreenViewModel.setUserLoggedIn()
+                } catch (e: GoogleIdTokenParsingException) {
+                    Timber.tag("Google id token error").i(e.message)
                 }
             }
         }
     }
+}
 
-    private fun handleFailure(e: GetCredentialException) {
-        Timber.tag("Google Sign In Error").i(e.message)
+private fun handleFailure(e: GetCredentialException) {
+    Timber.tag("Google Sign In Error").i(e.message)
+}
+
+@Composable
+fun bottomViews() {
+    var isChecked by remember {
+        mutableStateOf(false)
     }
-
-    @Composable
-    fun BottomViews() {
-        var isChecked by remember {
-            mutableStateOf(false)
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.wrapContentSize()) {
+            Checkbox(checked = isChecked, onCheckedChange = { isChecked = !isChecked })
         }
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Box(modifier = Modifier.wrapContentSize()) {
-                Checkbox(checked = isChecked, onCheckedChange = { isChecked = !isChecked })
-            }
 
-            Box(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .align(Alignment.CenterVertically)
-                    .weight(1f)
-            ) {
-                Text(
-                    text = "Remember for 30 days",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 0.dp)
-                    .align(Alignment.CenterVertically)
-                    .weight(1f),
-                contentAlignment = Alignment.CenterEnd
-            )
-            {
-                TextButton(onClick = { forgotPasword() }) {
-                    Text(text = "Forgot Password")
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun NoAccountSignUp() {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+        Box(
+            modifier =
+            Modifier
+                .wrapContentSize()
+                .align(Alignment.CenterVertically)
+                .weight(1f),
         ) {
-            Text(text = "Don't have an account?")
-            TextButton(onClick = { }) {
-                Text(text = "Sign Up")
+            Text(
+                text = "Remember for 30 days",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
+
+        Box(
+            modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(end = 0.dp)
+                .align(Alignment.CenterVertically)
+                .weight(1f),
+            contentAlignment = Alignment.CenterEnd,
+        ) {
+            TextButton(onClick = { forgotPasword() }) {
+                Text(text = "Forgot Password")
             }
         }
     }
+}
 
-
-    @Preview
-    @Composable
-    fun SignUpScreenPreview() {
-        MoviesWatchProTheme {
-            SignUpScreen(navController = rememberNavController())
+@Composable
+fun noAccountSignUp() {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Text(text = "Don't have an account?")
+        TextButton(onClick = { }) {
+            Text(text = "Sign Up")
         }
     }
+}
+
+@Preview
+@Composable
+fun signUpScreenPreview() {
+    MoviesWatchProTheme {
+        signUpScreen(navController = rememberNavController())
+    }
+}

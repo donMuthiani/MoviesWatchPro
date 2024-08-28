@@ -4,16 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muthiani.movieswatchpro.shared.MyPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-
 
 @HiltViewModel
-class SplashScreenViewModel @Inject constructor(private val sharedPreferences: MyPreferences) : ViewModel() {
-
+class SplashScreenViewModel
+@Inject
+constructor(private val sharedPreferences: MyPreferences) : ViewModel() {
     var _isLoggedIn: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val loggedIn: StateFlow<Boolean> = _isLoggedIn
 
@@ -25,14 +24,11 @@ class SplashScreenViewModel @Inject constructor(private val sharedPreferences: M
 
     val isUserOnboarded = sharedPreferences.isOnboardingCompleted()
 
-
-
     fun setOnBoardingComplete() {
         sharedPreferences.setOnboardingCompleted()
     }
 
-    fun setUserLoggedIn()
-    {
+    fun setUserLoggedIn() {
         sharedPreferences.setIsLoggedIn(true)
     }
 }

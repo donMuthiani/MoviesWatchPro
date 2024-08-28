@@ -1,12 +1,10 @@
 package com.muthiani.movieswatchpro.ui.signup
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -20,42 +18,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.muthiani.movieswatchpro.R
-import com.muthiani.movieswatchpro.ui.intro.ButtonUi
-import com.muthiani.movieswatchpro.utils.ConstantUtils
 
 @Composable
-fun GoogleSignInButton(
-    onClick: () -> Unit
-) {
+fun googleSignInButton(onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .height(50.dp),
-        colors = ButtonDefaults.buttonColors(
+        colors =
+        ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface
+            contentColor = MaterialTheme.colorScheme.onSurface,
         ),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_google_button),
                 contentDescription = "Google Icon",
-                tint = Color.Unspecified)
+                tint = Color.Unspecified,
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Sign in with Google", color = Color.Black)
         }
     }
-}
-
-@Composable
-fun SignInButtons() {
-
 }

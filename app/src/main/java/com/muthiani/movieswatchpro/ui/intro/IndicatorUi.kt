@@ -17,43 +17,44 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-
 @Composable
-fun IndicatorUi(pageSize: Int, currentPage:Int,
-                selectedColor: Color = MaterialTheme.colorScheme.secondary,
-                unselectedColor: Color = MaterialTheme.colorScheme.secondaryContainer) {
+fun indicatorUi(
+    pageSize: Int,
+    currentPage: Int,
+    selectedColor: Color = MaterialTheme.colorScheme.secondary,
+    unselectedColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+) {
     Row(horizontalArrangement = Arrangement.SpaceBetween) {
         repeat(pageSize) {
-
-            Box(modifier = Modifier
-                .height(14.dp)
-                .width(if(it == currentPage) 24.dp else 16.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .align(Alignment.CenterVertically)
-                .background(color = if(it == currentPage) selectedColor else unselectedColor)
+            Box(
+                modifier =
+                Modifier
+                    .height(14.dp)
+                    .width(if (it == currentPage) 24.dp else 16.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .align(Alignment.CenterVertically)
+                    .background(color = if (it == currentPage) selectedColor else unselectedColor),
             )
 
             Spacer(modifier = Modifier.width(2.5.dp))
-
         }
-
     }
 }
 
 @Preview
 @Composable
-fun Indicator1() {
-    IndicatorUi(pageSize = 3, currentPage = 1)
+fun indicator1() {
+    indicatorUi(pageSize = 3, currentPage = 1)
 }
 
 @Preview
 @Composable
-fun Indicator2() {
-    IndicatorUi(pageSize = 3, currentPage = 2)
+fun indicator2() {
+    indicatorUi(pageSize = 3, currentPage = 2)
 }
 
 @Preview
 @Composable
-fun Indicator3() {
-    IndicatorUi(pageSize = 3, currentPage = 3)
+fun indicator3() {
+    indicatorUi(pageSize = 3, currentPage = 3)
 }
