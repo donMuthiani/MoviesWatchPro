@@ -107,6 +107,9 @@ dependencies {
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+
+    // coil
+    implementation(libs.coil.compose)
 }
 
 kapt {

@@ -48,7 +48,7 @@ fun Home() {
                     tabBarItems = bottomNavItems,
                     navController = navController,
                 )
-            }) {
+            }) { innepPadding ->
                 NavHost(
                     navController = navController,
                     startDestination = BottomNavItem.WatchList.route,
@@ -62,7 +62,7 @@ fun Home() {
                             slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
                         },
                     ) {
-                        watchListScreen(navController = navController)
+                        WatchListScreen(innerPadding = innepPadding, navController = navController)
                     }
                     composable(
                         BottomNavItem.MyShows.route,

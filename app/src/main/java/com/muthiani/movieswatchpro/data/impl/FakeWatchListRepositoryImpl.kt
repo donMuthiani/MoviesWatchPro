@@ -13,7 +13,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             imageUrl = "https://m.media-amazon.com/images/M/MV5BN2FjNmEyNWMtYzM0ZS00NjIyLTg5YzYtYThlMGVjNzE1OGViXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
             category = "SCI-FI",
             releaseDate = "September 2021",
-            progress = "0/155"
+            progress = "45"
         ),
         Movie(
             title = "Arrival",
@@ -21,7 +21,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             imageUrl = "https://m.media-amazon.com/images/M/MV5BMTExMzU0ODcxNDheQTJeQWpwZ15BbWU4MDE1OTI4MzAy._V1_.jpg",
             category = "SCI-FI",
             releaseDate = "November 2016",
-            progress = "0/116"
+            progress = "22"
         ),
         Movie(
             title = "Interstellar",
@@ -29,7 +29,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             imageUrl = "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg",
             category = "SCI-FI",
             releaseDate = "November 2014",
-            progress = "0/169"
+            progress = "76"
         ),
         Movie(
             title = "Mad Max: Fury Road",
@@ -37,7 +37,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             imageUrl = "https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGQyMi00Zjg1LTk3MDctZTdjOTQ3OWU3MGIwXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg",
             category = "ACTION",
             releaseDate = "May 2015",
-            progress = "0/120"
+            progress = "87"
         ),
         Movie(
             title = "Parasite",
@@ -45,7 +45,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             imageUrl = "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_FMjpg_UX1000_.jpg",
             category = "THRILLER",
             releaseDate = "October 2019",
-            progress = "0/132"
+            progress = "50"
         ),
         Movie(
             title = "1917",
@@ -53,7 +53,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             imageUrl = "https://m.media-amazon.com/images/M/MV5BOTdmNTFjNDEtNzg0My00ZjkxLTg1ZDAtZTdkMDc2ZmFiNWQ1XkEyXkFqcGdeQXVyNTAzNzgwNzM@._V1_.jpg",
             category = "WAR",
             releaseDate = "December 2019",
-            progress = "0/119"
+            progress = "90"
         ),
         Movie(
             title = "The Grand Budapest Hotel",
@@ -61,7 +61,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             imageUrl = "https://m.media-amazon.com/images/M/MV5BMzM5NjUxOTEyMl5BMl5BanBnXkFtZTgwNjEyMDM0MDE@._V1_.jpg",
             category = "COMEDY",
             releaseDate = "February 2014",
-            progress = "0/99"
+            progress = "5"
         ),
         Movie(
             title = "Spider-Man: Into the Spider-Verse",
@@ -69,7 +69,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             imageUrl = "https://m.media-amazon.com/images/M/MV5BMjMwNDkxMTc2OF5BMl5BanBnXkFtZTgwNTkwNTQ3NjM@._V1_.jpg",
             category = "ANIMATION",
             releaseDate = "December 2018",
-            progress = "0/117"
+            progress = "24"
         ),
         Movie(
             title = "Portrait of a Lady on Fire",
@@ -77,7 +77,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             imageUrl = "https://m.media-amazon.com/images/M/MV5BNDExZDc0OGMtYzIwYy00Nzk0LTg3OTItYTNjYzBkOWM2YjU3XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg",
             category = "DRAMA",
             releaseDate = "September 2019",
-            progress = "0/122"
+            progress = "30"
         )
     )
 
