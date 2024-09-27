@@ -44,4 +44,8 @@ class WatchListViewModel @Inject constructor(private val fakeWatchListRepository
             }
         }
     }
+
+    suspend fun getMovie(movieId: Int): Movie? {
+        return fakeWatchListRepository.getMovie(movieId)
+    }
 }

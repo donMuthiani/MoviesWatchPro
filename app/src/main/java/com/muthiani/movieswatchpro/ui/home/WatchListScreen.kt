@@ -1,5 +1,6 @@
 package com.muthiani.movieswatchpro.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -57,7 +58,7 @@ fun WatchListScreen(
                     }
 
                     else -> {
-                        ScrollContent(uiState.watchList)
+                        ScrollContent(uiState.watchList, navController)
                     }
                 }
             }
@@ -68,33 +69,56 @@ fun WatchListScreen(
 }
 
 @Composable
-fun ScrollContent(movieList: List<Movie>) {
+fun ScrollContent(movieList: List<Movie>, navController: NavController) {
     LazyColumn {
         items(movieList) { movie ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable(
+                        onClick = { navController.navigate("movieDetail/${movie.id}") })
                     .padding(16.dp),
                 verticalAlignment = Alignment.Top
             ) {
-                AsyncImage(model = movie.imageUrl, contentDescription = "image from url",
+                AsyncImage(
+                    model = movie.imageUrl, contentDescription = "image from url",
                     modifier = Modifier
                         .height(120.dp)
                         .width(90.dp)
-                        .clip(shape = RoundedCornerShape(12.dp)))
+                        .clip(shape = RoundedCornerShape(12.dp))
+                )
 
-                Column(modifier = Modifier.fillMaxWidth().padding(start = 16.dp)) {
-                    Text(text = movie.title, style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp)
+                ) {
+                    Text(
+                        text = movie.title, style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
 
                     val annotatedString = buildAnnotatedString {
                         append(movie.releaseDate)
-                        append(AnnotatedString(text = ".", spanStyle = SpanStyle(color = MaterialTheme.colorScheme.primary, fontSize = 26.sp)))
+                        append(
+                            AnnotatedString(
+                                text = ".",
+                                spanStyle = SpanStyle(
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontSize = 26.sp
+                                )
+                            )
+                        )
                         append(movie.category)
                     }
                     Text(text = annotatedString, style = MaterialTheme.typography.bodyMedium)
 
-                    LinearProgressIndicator(progress = { (movie.progress.toFloat() / 100) }, modifier = Modifier.fillMaxWidth().height(10.dp).clip(shape = RoundedCornerShape(10.dp)))
+                    LinearProgressIndicator(
+                        progress = { (movie.progress.toFloat() / 100) }, modifier = Modifier
+                            .fillMaxWidth()
+                            .height(10.dp)
+                            .clip(shape = RoundedCornerShape(10.dp))
+                    )
                 }
             }
         }
