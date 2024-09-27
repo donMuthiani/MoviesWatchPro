@@ -16,16 +16,20 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun Home() {
@@ -37,6 +41,8 @@ fun Home() {
             BottomNavItem.Statistics,
         )
     val navController = rememberNavController()
+    val viewModel: WatchListViewModel = hiltViewModel()
+    val scope = rememberCoroutineScope()
 
     MoviesWatchProTheme {
         Surface(
@@ -48,7 +54,7 @@ fun Home() {
                     tabBarItems = bottomNavItems,
                     navController = navController,
                 )
-            }) {
+            }) { innepPadding ->
                 NavHost(
                     navController = navController,
                     startDestination = BottomNavItem.WatchList.route,
@@ -62,7 +68,7 @@ fun Home() {
                             slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
                         },
                     ) {
-                        watchListScreen(navController = navController)
+                        WatchListScreen(innerPadding = innepPadding, navController = navController)
                     }
                     composable(
                         BottomNavItem.MyShows.route,
@@ -99,6 +105,12 @@ fun Home() {
                     ) {
                         Text(text = BottomNavItem.Statistics.label)
                     }
+
+                    composable(route = "movieDetail/{movieId}") {backStackEntry ->
+                        val movieId = backStackEntry.arguments?.getString("movieId")?.toIntOrNull()
+
+                        MovieDetail(navController = navController, movieId = movieId ?: 0)
+                    }
                 }
             }
         }
@@ -111,7 +123,7 @@ fun TabView(
     navController: NavController,
 ) {
     var selectedIndex by rememberSaveable {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
 
     NavigationBar {
