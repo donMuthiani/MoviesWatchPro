@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -28,8 +27,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.muthiani.movieswatchpro.ui.discover.DiscoverScreen
+import com.muthiani.movieswatchpro.ui.myshows.MyShowsScreen
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun Home() {
@@ -54,7 +54,7 @@ fun Home() {
                     tabBarItems = bottomNavItems,
                     navController = navController,
                 )
-            }) { innepPadding ->
+            }) { innerPadding ->
                 NavHost(
                     navController = navController,
                     startDestination = BottomNavItem.WatchList.route,
@@ -68,7 +68,7 @@ fun Home() {
                             slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
                         },
                     ) {
-                        WatchListScreen(innerPadding = innepPadding, navController = navController)
+                        WatchListScreen(innerPadding = innerPadding, navController = navController)
                     }
                     composable(
                         BottomNavItem.MyShows.route,
@@ -79,7 +79,7 @@ fun Home() {
                             slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
                         },
                     ) {
-                        Text(text = BottomNavItem.MyShows.label)
+                        MyShowsScreen(innerPadding, navController)
                     }
 
                     composable(
@@ -91,7 +91,7 @@ fun Home() {
                             slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
                         },
                     ) {
-                        Text(text = BottomNavItem.Discover.label)
+                        DiscoverScreen()
                     }
 
                     composable(
@@ -106,7 +106,7 @@ fun Home() {
                         Text(text = BottomNavItem.Statistics.label)
                     }
 
-                    composable(route = "movieDetail/{movieId}") {backStackEntry ->
+                    composable(route = "movieDetail/{movieId}") { backStackEntry ->
                         val movieId = backStackEntry.arguments?.getString("movieId")?.toIntOrNull()
 
                         MovieDetail(navController = navController, movieId = movieId ?: 0)

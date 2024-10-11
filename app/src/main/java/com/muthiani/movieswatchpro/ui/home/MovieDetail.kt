@@ -1,6 +1,5 @@
 package com.muthiani.movieswatchpro.ui.home
 
-import android.util.Log
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +24,7 @@ fun MovieDetail(navController: NavController, movieId: Int) {
         isLoading = false
     }
 
-    if(isLoading) {
+    if (isLoading) {
         CircularProgressIndicator()
     } else {
         movie?.let {
