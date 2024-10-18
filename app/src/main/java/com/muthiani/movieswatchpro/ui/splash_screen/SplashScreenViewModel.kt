@@ -2,7 +2,7 @@ package com.muthiani.movieswatchpro.ui.splash_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.muthiani.movieswatchpro.shared.MyPreferences
+import com.muthiani.movieswatchpro.data.shared.MyPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
