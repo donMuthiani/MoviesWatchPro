@@ -2,7 +2,7 @@ package com.muthiani.movieswatchpro.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.muthiani.movieswatchpro.shared.MyPreferences
+import com.muthiani.movieswatchpro.data.shared.MyPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

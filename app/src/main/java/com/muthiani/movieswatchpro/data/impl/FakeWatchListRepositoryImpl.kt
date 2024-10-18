@@ -8,7 +8,7 @@ import javax.inject.Inject
 class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepository {
     private val watchlist = listOf(
         Movie(
-            id =1,
+            id = 1,
             title = "Dune",
             description = "A noble family becomes embroiled in a war for control of the galaxy's most valuable asset while its heir becomes troubled by visions of a dark future.",
             imageUrl = "https://m.media-amazon.com/images/M/MV5BN2FjNmEyNWMtYzM0ZS00NjIyLTg5YzYtYThlMGVjNzE1OGViXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
@@ -78,7 +78,7 @@ class FakeWatchListRepositoryImpl @Inject constructor() : FakeWatchListRepositor
             promoImage = "https://www.tallengestore.com/cdn/shop/products/GrandBudapestHotel-WesAnderson-TallengeHollywoodMoviePosterCollection_42d0d93c-ed2c-4aea-bab4-38262a332d4f.jpg?v=1602760296"
         ),
         Movie(
-            id= 7,
+            id = 7,
             title = "Spider-Man: Into the Spider-Verse",
             description = "Teen Miles Morales becomes Spider-Man of his reality, crossing his path with five counterparts from other dimensions to stop a threat for all realities.",
             imageUrl = "https://m.media-amazon.com/images/M/MV5BMjMwNDkxMTgzOF5BMl5BanBnXkFtZTgwNTkwNTQ3NjM@._V1_FMjpg_UX1000_.jpg",

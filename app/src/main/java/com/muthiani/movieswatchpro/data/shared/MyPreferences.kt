@@ -1,4 +1,4 @@
-package com.muthiani.movieswatchpro.shared
+package com.muthiani.movieswatchpro.data.shared
 
 import android.content.SharedPreferences
 import javax.inject.Inject

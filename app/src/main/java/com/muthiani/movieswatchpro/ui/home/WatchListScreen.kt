@@ -46,7 +46,7 @@ fun WatchListScreen(
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val uiState by watchListViewModel.uiState.collectAsState()
     MoviesWatchProTheme {
-        Scaffold(topBar = { customHomeTopBar() }, content = { innerpadding ->
+        Scaffold(topBar = { customHomeTopBar(false) }, content = { innerpadding ->
             Column(modifier = Modifier.padding(innerpadding)) {
                 when {
                     uiState.loading -> {
