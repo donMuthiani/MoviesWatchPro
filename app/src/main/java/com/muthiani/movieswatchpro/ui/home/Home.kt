@@ -1,149 +1,402 @@
 package com.muthiani.movieswatchpro.ui.home
 
+import androidx.annotation.FloatRange
+import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Filter
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
+import androidx.core.os.ConfigurationCompat
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDeepLink
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
+import com.muthiani.movieswatchpro.R
 import com.muthiani.movieswatchpro.ui.discover.DiscoverScreen
 import com.muthiani.movieswatchpro.ui.myshows.MyShowsScreen
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
+import java.util.Locale
+
+fun NavGraphBuilder.composableWithCompositionLocal(
+    route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
+    deepLinks: List<NavDeepLink> = emptyList(),
+    enterTransition: (
+        @JvmSuppressWildcards
+        AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?
+    )? = {
+        fadeIn(nonSpatialExpressiveSpring())
+    },
+    exitTransition: (
+        @JvmSuppressWildcards
+        AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
+    )? = {
+        fadeOut(nonSpatialExpressiveSpring())
+    },
+    popEnterTransition: (
+        @JvmSuppressWildcards
+        AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?
+    )? =
+        enterTransition,
+    popExitTransition: (
+        @JvmSuppressWildcards
+        AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
+    )? =
+        exitTransition,
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route,
+        arguments,
+        deepLinks,
+        enterTransition,
+        exitTransition,
+        popEnterTransition,
+        popExitTransition
+    ) {
+        CompositionLocalProvider(
+            LocalNavAnimatedVisibilityScope provides this@composable
+        ) {
+            content(it)
+        }
+    }
+}
+
+enum class HomeSections(
+    @StringRes val title: Int,
+    val icon: ImageVector,
+    val route: String
+) {
+    WATCH_LIST(R.string.watch_list, Icons.Outlined.Home, "home/watchList"),
+    MY_SHOWS(R.string.my_shows, Icons.Outlined.Favorite, "home/myShows"),
+    DISCOVER(R.string.discover, Icons.Outlined.Search, "home/discover"),
+    STATISTICS(R.string.statistics, Icons.Outlined.AccountCircle, "home/statistics")
+}
+
+fun NavGraphBuilder.addHomeGraph(
+    onMovieSelected: (Long, String, NavBackStackEntry) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    composable(HomeSections.WATCH_LIST.route) {
+        WatchListScreen()
+    }
+
+    composable(HomeSections.MY_SHOWS.route) {
+        MyShowsScreen(onMovieSelected = { id, route -> onMovieSelected(id, route, it) }, modifier = modifier)
+    }
+
+    composable(HomeSections.DISCOVER.route) {
+        DiscoverScreen(onMovieSelected = { id, route -> onMovieSelected(id, route, it) }, modifier = modifier)
+    }
+
+    composable(HomeSections.STATISTICS.route) {
+        StatisticsScreen(modifier = modifier)
+    }
+}
 
 @Composable
-fun Home() {
-    val bottomNavItems =
-        listOf(
-            BottomNavItem.WatchList,
-            BottomNavItem.MyShows,
-            BottomNavItem.Discover,
-            BottomNavItem.Statistics,
-        )
-    val navController = rememberNavController()
-    val viewModel: WatchListViewModel = hiltViewModel()
-    val scope = rememberCoroutineScope()
-
-    MoviesWatchProTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
+fun MoviesWatchBottomBar(
+    tabs: Array<HomeSections>,
+    currentRoute: String,
+    navigateToRoute: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+) {
+    val routes = remember {
+        tabs.map { it.route }
+    }
+    val currentSection = tabs.first { it.route == currentRoute }
+    Surface(
+        modifier = modifier,
+        color = color,
+        contentColor = contentColor
+    ) {
+        val springSpec = spatialExpressiveSpring<Float>()
+        MoviesWatchBottomNavLayout(
+            selectedIndex = currentSection.ordinal,
+            itemCount = routes.size,
+            indicator = { JetsnackBottomNavIndicator() },
+            animSpec = springSpec,
+            modifier = Modifier.navigationBarsPadding()
         ) {
-            Scaffold(bottomBar = {
-                TabView(
-                    tabBarItems = bottomNavItems,
-                    navController = navController,
+            val configuration = LocalConfiguration.current
+            val currentLocale: Locale =
+                ConfigurationCompat.getLocales(configuration).get(0) ?: Locale.getDefault()
+
+            tabs.forEach { section ->
+                val selected = section == currentSection
+                val tint by animateColorAsState(
+                    if (selected) {
+                        MoviesWatchProTheme.colors.iconInteractive
+                    } else {
+                        MoviesWatchProTheme.colors.iconInteractiveInactive
+                    },
+                    label = "tint"
                 )
-            }) { innerPadding ->
-                NavHost(
-                    navController = navController,
-                    startDestination = BottomNavItem.WatchList.route,
-                ) {
-                    composable(
-                        BottomNavItem.WatchList.route,
-                        exitTransition = {
-                            slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
-                        },
-                        enterTransition = {
-                            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
-                        },
-                    ) {
-                        WatchListScreen(innerPadding = innerPadding, navController = navController)
-                    }
-                    composable(
-                        BottomNavItem.MyShows.route,
-                        exitTransition = {
-                            slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
-                        },
-                        enterTransition = {
-                            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
-                        },
-                    ) {
-                        MyShowsScreen(innerPadding, navController)
-                    }
 
-                    composable(
-                        BottomNavItem.Discover.route,
-                        exitTransition = {
-                            slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
-                        },
-                        enterTransition = {
-                            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
-                        },
-                    ) {
-                        DiscoverScreen()
-                    }
+                val text = stringResource(section.title).uppercase(currentLocale)
 
-                    composable(
-                        BottomNavItem.Statistics.route,
-                        exitTransition = {
-                            slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left)
-                        },
-                        enterTransition = {
-                            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
-                        },
-                    ) {
-                        Text(text = BottomNavItem.Statistics.label)
-                    }
-
-                    composable(route = "movieDetail/{movieId}") { backStackEntry ->
-                        val movieId = backStackEntry.arguments?.getString("movieId")?.toIntOrNull()
-
-                        MovieDetail(navController = navController, movieId = movieId ?: 0)
-                    }
-                }
+                JetsnackBottomNavigationItem(
+                    icon = {
+                        Icon(
+                            imageVector = section.icon,
+                            tint = tint,
+                            contentDescription = text
+                        )
+                    },
+                    text = {
+                        Text(
+                            text = text,
+                            color = tint,
+                            style = MaterialTheme.typography.labelLarge,
+                            maxLines = 1
+                        )
+                    },
+                    selected = selected,
+                    onSelected = { navigateToRoute(section.route) },
+                    animSpec = springSpec,
+                    modifier = BottomNavigationItemPadding
+                        .clip(BottomNavIndicatorShape)
+                )
             }
         }
     }
 }
 
 @Composable
-fun TabView(
-    tabBarItems: List<BottomNavItem>,
-    navController: NavController,
+private fun MoviesWatchBottomNavLayout(
+    selectedIndex: Int,
+    itemCount: Int,
+    animSpec: AnimationSpec<Float>,
+    indicator: @Composable BoxScope.() -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
-    var selectedIndex by rememberSaveable {
-        mutableIntStateOf(0)
+    // Track how "selected" each item is [0, 1]
+    val selectionFractions = remember(itemCount) {
+        List(itemCount) { i ->
+            Animatable(if (i == selectedIndex) 1f else 0f)
+        }
+    }
+    selectionFractions.forEachIndexed { index, selectionFraction ->
+        val target = if (index == selectedIndex) 1f else 0f
+        LaunchedEffect(target, animSpec) {
+            selectionFraction.animateTo(target, animSpec)
+        }
     }
 
-    NavigationBar {
-        tabBarItems.forEachIndexed { index, bottomNavItem ->
-            NavigationBarItem(selected = selectedIndex == index, onClick = {
-                selectedIndex = index
-                navController.navigate(bottomNavItem.route)
-            }, icon = {
-                Icon(imageVector = bottomNavItem.icon, contentDescription = bottomNavItem.label)
-            }, label = { Text(text = bottomNavItem.label) })
+    // Animate the position of the indicator
+    val indicatorIndex = remember { Animatable(0f) }
+    val targetIndicatorIndex = selectedIndex.toFloat()
+    LaunchedEffect(targetIndicatorIndex) {
+        indicatorIndex.animateTo(targetIndicatorIndex, animSpec)
+    }
+
+    Layout(
+        modifier = modifier.height(BottomNavHeight),
+        content = {
+            content()
+            Box(Modifier.layoutId("indicator"), content = indicator)
+        }
+    ) { measurables, constraints ->
+        check(itemCount == (measurables.size - 1)) // account for indicator
+
+        // Divide the width into n+1 slots and give the selected item 2 slots
+        val unselectedWidth = constraints.maxWidth / (itemCount + 1)
+        val selectedWidth = 2 * unselectedWidth
+        val indicatorMeasurable = measurables.first { it.layoutId == "indicator" }
+
+        val itemPlaceables = measurables
+            .filterNot { it == indicatorMeasurable }
+            .mapIndexed { index, measurable ->
+                // Animate item's width based upon the selection amount
+                val width = lerp(unselectedWidth, selectedWidth, selectionFractions[index].value)
+                measurable.measure(
+                    constraints.copy(
+                        minWidth = width,
+                        maxWidth = width
+                    )
+                )
+            }
+        val indicatorPlaceable = indicatorMeasurable.measure(
+            constraints.copy(
+                minWidth = selectedWidth,
+                maxWidth = selectedWidth
+            )
+        )
+
+        layout(
+            width = constraints.maxWidth,
+            height = itemPlaceables.maxByOrNull { it.height }?.height ?: 0
+        ) {
+            val indicatorLeft = indicatorIndex.value * unselectedWidth
+            indicatorPlaceable.placeRelative(x = indicatorLeft.toInt(), y = 0)
+            var x = 0
+            itemPlaceables.forEach { placeable ->
+                placeable.placeRelative(x = x, y = 0)
+                x += placeable.width
+            }
         }
     }
 }
 
-sealed class BottomNavItem(val route: String, val icon: ImageVector, val label: String) {
-    data object WatchList : BottomNavItem("watchList", Icons.Default.Home, "WatchList")
-
-    data object MyShows : BottomNavItem("myShows", Icons.Default.Filter, "MyShows")
-
-    data object Discover : BottomNavItem(route = "Discover", Icons.Default.Search, "Discover")
-
-    data object Statistics : BottomNavItem(route = "Statistics", Icons.Default.Person, "Statistics")
+@Composable
+fun JetsnackBottomNavigationItem(
+    icon: @Composable BoxScope.() -> Unit,
+    text: @Composable BoxScope.() -> Unit,
+    selected: Boolean,
+    onSelected: () -> Unit,
+    animSpec: AnimationSpec<Float>,
+    modifier: Modifier = Modifier
+) {
+    // Animate the icon/text positions within the item based on selection
+    val animationProgress by animateFloatAsState(
+        if (selected) 1f else 0f, animSpec,
+        label = "animation progress"
+    )
+    MoviesWatchBottomNavItemLayout(
+        icon = icon,
+        text = text,
+        animationProgress = animationProgress,
+        modifier = modifier
+            .selectable(selected = selected, onClick = onSelected)
+            .wrapContentSize()
+    )
 }
+
+@Composable
+private fun MoviesWatchBottomNavItemLayout(
+    icon: @Composable BoxScope.() -> Unit,
+    text: @Composable BoxScope.() -> Unit,
+    @FloatRange(from = 0.0, to = 1.0) animationProgress: Float,
+    modifier: Modifier = Modifier
+) {
+    Layout(
+        modifier = modifier,
+        content = {
+            Box(
+                modifier = Modifier
+                    .layoutId("icon")
+                    .padding(horizontal = TextIconSpacing),
+                content = icon
+            )
+            val scale = lerp(0.6f, 1f, animationProgress)
+            Box(
+                modifier = Modifier
+                    .layoutId("text")
+                    .padding(horizontal = TextIconSpacing)
+                    .graphicsLayer {
+                        alpha = animationProgress
+                        scaleX = scale
+                        scaleY = scale
+                        transformOrigin = BottomNavLabelTransformOrigin
+                    },
+                content = text
+            )
+        }
+    ) { measurables, constraints ->
+        val iconPlaceable = measurables.first { it.layoutId == "icon" }.measure(constraints)
+        val textPlaceable = measurables.first { it.layoutId == "text" }.measure(constraints)
+
+        placeTextAndIcon(
+            textPlaceable,
+            iconPlaceable,
+            constraints.maxWidth,
+            constraints.maxHeight,
+            animationProgress
+        )
+    }
+}
+
+private fun MeasureScope.placeTextAndIcon(
+    textPlaceable: Placeable,
+    iconPlaceable: Placeable,
+    width: Int,
+    height: Int,
+    @FloatRange(from = 0.0, to = 1.0) animationProgress: Float
+): MeasureResult {
+    val iconY = (height - iconPlaceable.height) / 2
+    val textY = (height - textPlaceable.height) / 2
+
+    val textWidth = textPlaceable.width * animationProgress
+    val iconX = (width - textWidth - iconPlaceable.width) / 2
+    val textX = iconX + iconPlaceable.width
+
+    return layout(width, height) {
+        iconPlaceable.placeRelative(iconX.toInt(), iconY)
+        if (animationProgress != 0f) {
+            textPlaceable.placeRelative(textX.toInt(), textY)
+        }
+    }
+}
+
+@Composable
+private fun JetsnackBottomNavIndicator(
+    strokeWidth: Dp = 2.dp,
+    color: Color = MoviesWatchProTheme.colors.iconInteractive,
+    shape: Shape = BottomNavIndicatorShape
+) {
+    Spacer(
+        modifier = Modifier
+            .fillMaxSize()
+            .then(BottomNavigationItemPadding)
+            .border(strokeWidth, color, shape)
+    )
+}
+
+private val TextIconSpacing = 2.dp
+private val BottomNavHeight = 56.dp
+private val BottomNavLabelTransformOrigin = TransformOrigin(0f, 0.5f)
+private val BottomNavIndicatorShape = RoundedCornerShape(percent = 50)
+private val BottomNavigationItemPadding = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)

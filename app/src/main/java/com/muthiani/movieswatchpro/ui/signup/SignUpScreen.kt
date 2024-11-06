@@ -1,27 +1,32 @@
 package com.muthiani.movieswatchpro.ui.signup
 
 import android.content.Context
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,8 +41,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,15 +57,16 @@ import androidx.credentials.GetCredentialResponse
 import androidx.credentials.PasswordCredential
 import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.GetCredentialException
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.muthiani.movieswatchpro.R
+import com.muthiani.movieswatchpro.ui.MainDestinations
+import com.muthiani.movieswatchpro.ui.MoviesWatchNavController
 import com.muthiani.movieswatchpro.ui.components.Header
+import com.muthiani.movieswatchpro.ui.components.MoviesWatchButton
 import com.muthiani.movieswatchpro.ui.components.bottomPanel
-import com.muthiani.movieswatchpro.ui.intro.buttonUi
+import com.muthiani.movieswatchpro.ui.rememberMoviesWatchNavController
 import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 import com.muthiani.movieswatchpro.utils.ConstantUtils
@@ -68,27 +77,31 @@ import timber.log.Timber
 val spacing = 24.dp
 
 @Composable
-fun signUpScreen(navController: NavController) {
-    val splashViewModel: SplashScreenViewModel = hiltViewModel()
+fun SignUpScreen(navController: MoviesWatchNavController) {
 
-    Scaffold(
-        topBar = { Header() },
-        content =
-        {
-            Column(modifier = Modifier.padding(it)) {
-                content(navController, splashViewModel)
-            }
-        },
-        bottomBar = {
-            bottomPanel()
-        },
-    )
+//    val splashViewModel: SplashScreenViewModel = hiltViewModel()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            topBar = { Header() },
+            containerColor = MoviesWatchProTheme.colors.uiBackground,
+            content =
+            {
+                Column(modifier = Modifier.padding(it)) {
+                    Content(navController)
+                }
+            },
+            bottomBar = {
+                bottomPanel()
+            },
+        )
+    }
 }
 
 @Composable
-fun content(
-    navController: NavController,
-    splashViewModel: SplashScreenViewModel,
+fun Content(
+    navController: MoviesWatchNavController,
+//    splashViewModel: SplashScreenViewModel,
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -109,12 +122,11 @@ fun content(
         modifier =
         Modifier
             .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.background)
             .padding(horizontal = 24.dp)
             .verticalScroll(state = rememberScrollState()),
     ) {
         Text(
-            text = "Welcome back",
+            text = "Welcome",
             style = MaterialTheme.typography.titleMedium,
             fontSize = 20.sp,
         )
@@ -122,7 +134,7 @@ fun content(
         Text(
             text = "Please enter your details",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.secondary,
+            color = MoviesWatchProTheme.colors.textSecondary,
             fontSize = 20.sp,
         )
 
@@ -134,9 +146,39 @@ fun content(
             onValueChange = { email = it },
             label = { Text(text = "Email address") },
             isError = isError,
+            textStyle = TextStyle(
+                color = MoviesWatchProTheme.colors.textSecondary,
+                fontSize = 16.sp
+            ),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MoviesWatchProTheme.colors.brand,
+                unfocusedBorderColor = MoviesWatchProTheme.colors.brand,
+                focusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
+                unfocusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
+                cursorColor = MoviesWatchProTheme.colors.textSecondary,
+                errorCursorColor = MoviesWatchProTheme.colors.textSecondary,
+                errorLabelColor = MoviesWatchProTheme.colors.error,
+
+            )
         )
 
         OutlinedTextField(
+            textStyle = TextStyle(
+                color = MoviesWatchProTheme.colors.textSecondary,
+                fontSize = 16.sp
+            ),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MoviesWatchProTheme.colors.brand,
+                unfocusedBorderColor = MoviesWatchProTheme.colors.brand,
+                focusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
+                unfocusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
+                cursorColor = MoviesWatchProTheme.colors.textSecondary,
+                errorCursorColor = MoviesWatchProTheme.colors.textSecondary,
+                errorLabelColor = MoviesWatchProTheme.colors.error,
+                focusedTrailingIconColor = MoviesWatchProTheme.colors.textSecondary,
+                unfocusedTrailingIconColor = MoviesWatchProTheme.colors.textSecondary,
+
+            ),
             value = password,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = { password = it },
@@ -146,7 +188,6 @@ fun content(
             trailingIcon = {
                 val image =
                     if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff
-
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(imageVector = image, contentDescription = null)
                 }
@@ -156,34 +197,65 @@ fun content(
         if (isError) {
             Text(
                 text = "Error: Invalid email",
-                color = MaterialTheme.colorScheme.error,
+                color = MoviesWatchProTheme.colors.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp),
             )
         }
 
-        bottomViews()
+        BottomViews()
 
         Spacer(modifier = Modifier.size(spacing))
 
         Column(modifier = Modifier.fillMaxWidth()) {
-            buttonUi(
+            MoviesWatchButton(
+                shape = RoundedCornerShape(size = 12.dp),
                 modifier =
                 Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                text = "Sign In",
-                textColor = Color.White,
-                backgroundColor = Color.Black,
+                onClick = {
+//                    splashViewModel.setUserLoggedIn()
+                    navController.navigateToRoute(
+                        route = MainDestinations.HOME_ROUTE,
+                        noTrace = true
+                    )
+                }
             ) {
-                splashViewModel.setUserLoggedIn()
-                navController.navigate(route = "home")
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        text = "Sign In",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.Center) // This centers the text both vertically and horizontally
+                    )
+                }
+//                Text(text = "Sign In", textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize())
             }
 
             Spacer(modifier = Modifier.size(spacing))
 
-            googleSignInButton {
-                googleSignIn(splashViewModel, scope, context, navController)
+            MoviesWatchButton(
+                backgroundGradient = listOf(Color.White, Color.White),
+                border = BorderStroke(1.dp, MoviesWatchProTheme.colors.textInteractive),
+                onClick = {
+//                googleSignIn(splashViewModel, scope, context, navController)
+                }, shape = RoundedCornerShape(size = 12.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_google_button),
+                        contentDescription = "Google Icon",
+                        tint = Color.Unspecified,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "Sign in with Google", color = Color.Black)
+                }
             }
         }
 
@@ -193,14 +265,11 @@ fun content(
     }
 }
 
-fun forgotPasword() {
-}
-
 fun googleSignIn(
     splashScreenViewModel: SplashScreenViewModel,
     scope: CoroutineScope,
     context: Context,
-    navController: NavController,
+    navController: MoviesWatchNavController,
 ) {
     val googleIdOption: GetGoogleIdOption =
         GetGoogleIdOption.Builder()
@@ -230,7 +299,7 @@ fun googleSignIn(
 private fun handleSignIn(
     splashScreenViewModel: SplashScreenViewModel,
     result: GetCredentialResponse,
-    navController: NavController,
+    navController: MoviesWatchNavController,
 ) {
     val credential = result.credential
     when (credential) {
@@ -251,7 +320,7 @@ private fun handleSignIn(
                         GoogleIdTokenCredential.createFrom(credential.data)
                     val token = googleIdTokenCredential.idToken
                     // Send token to server for validation
-                    navController.navigate(route = "home")
+                    navController.navigateToRoute(route = MainDestinations.HOME_ROUTE)
                     splashScreenViewModel.setUserLoggedIn()
                 } catch (e: GoogleIdTokenParsingException) {
                     Timber.tag("Google id token error").i(e.message)
@@ -266,13 +335,30 @@ private fun handleFailure(e: GetCredentialException) {
 }
 
 @Composable
-fun bottomViews() {
+fun BottomViews() {
     var isChecked by remember {
         mutableStateOf(false)
     }
     Row(modifier = Modifier.fillMaxWidth()) {
         Box(modifier = Modifier.wrapContentSize()) {
-            Checkbox(checked = isChecked, onCheckedChange = { isChecked = !isChecked })
+            Checkbox(
+                colors = CheckboxColors(
+                    checkedBorderColor = MoviesWatchProTheme.colors.brand,
+                    uncheckedBorderColor = MoviesWatchProTheme.colors.brand,
+                    checkedCheckmarkColor = MoviesWatchProTheme.colors.brand,
+                    uncheckedCheckmarkColor = MoviesWatchProTheme.colors.brand,
+                    checkedBoxColor = MoviesWatchProTheme.colors.brand,
+                    uncheckedBoxColor = MoviesWatchProTheme.colors.brand,
+                    disabledCheckedBoxColor = MoviesWatchProTheme.colors.brand,
+                    disabledUncheckedBoxColor = MoviesWatchProTheme.colors.brand,
+                    disabledBorderColor = MoviesWatchProTheme.colors.brand,
+                    disabledUncheckedBorderColor = MoviesWatchProTheme.colors.brand,
+                    disabledIndeterminateBorderColor = MoviesWatchProTheme.colors.brand,
+                    disabledIndeterminateBoxColor = MoviesWatchProTheme.colors.brand,
+                ),
+                checked = isChecked,
+                onCheckedChange = { isChecked = !isChecked }
+            )
         }
 
         Box(
@@ -297,11 +383,15 @@ fun bottomViews() {
                 .weight(1f),
             contentAlignment = Alignment.CenterEnd,
         ) {
-            TextButton(onClick = { forgotPasword() }) {
-                Text(text = "Forgot Password")
+            TextButton(onClick = { forgotPassword() }) {
+                Text(text = "Forgot Password", color = MoviesWatchProTheme.colors.brand)
             }
         }
     }
+}
+
+fun forgotPassword() {
+//    TODO("Not yet implemented")
 }
 
 @Composable
@@ -313,15 +403,15 @@ fun noAccountSignUp() {
     ) {
         Text(text = "Don't have an account?")
         TextButton(onClick = { }) {
-            Text(text = "Sign Up")
+            Text(text = "Sign Up", color = MoviesWatchProTheme.colors.brand)
         }
     }
 }
 
 @Preview
 @Composable
-fun signUpScreenPreview() {
+fun SignUpScreenPreview() {
     MoviesWatchProTheme {
-        signUpScreen(navController = rememberNavController())
+        SignUpScreen(navController = rememberMoviesWatchNavController())
     }
 }

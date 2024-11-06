@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.muthiani.movieswatchpro.models.IntroModel
+import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
 fun introScreen(introModel: IntroModel) {
@@ -41,7 +42,7 @@ fun introScreen(introModel: IntroModel) {
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = MoviesWatchProTheme.colors.textInteractive,
         )
 
         Spacer(modifier = Modifier.size(10.dp))
@@ -52,7 +53,7 @@ fun introScreen(introModel: IntroModel) {
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MoviesWatchProTheme.colors.textInteractive,
         )
     }
 }

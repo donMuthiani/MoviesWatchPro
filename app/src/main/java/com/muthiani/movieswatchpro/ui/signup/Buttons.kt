@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.muthiani.movieswatchpro.R
 
 @Composable
-fun googleSignInButton(onClick: () -> Unit) {
+fun GoogleSignInButton(onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
         modifier =

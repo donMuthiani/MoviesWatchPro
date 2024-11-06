@@ -24,6 +24,7 @@ ksp = "2.0.0-1.0.21"
 timber = "5.0.1"
 compose-navigation = "2.7.7"
 ktlint = "12.1.0"
+ui = "1.7.4"
 
 
 [libraries]
@@ -60,6 +61,7 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 #compilers
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 
 
 [plugins]

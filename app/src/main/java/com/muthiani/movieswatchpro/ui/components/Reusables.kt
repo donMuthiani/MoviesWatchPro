@@ -39,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.muthiani.movieswatchpro.R
+import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
 fun Header() {
@@ -51,7 +52,7 @@ fun Header() {
             modifier =
             Modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.primary),
+                .background(color = MoviesWatchProTheme.colors.brand),
         ) {
             Image(
                 modifier =
@@ -72,7 +73,7 @@ fun bottomPanel() {
         Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .background(color = MaterialTheme.colorScheme.primary),
+            .background(MoviesWatchProTheme.colors.brand),
     )
 }
 

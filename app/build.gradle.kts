@@ -110,6 +110,9 @@ dependencies {
 
     // coil
     implementation(libs.coil.compose)
+
+    // ui-compose
+    implementation(libs.ui)
 }
 
 kapt {

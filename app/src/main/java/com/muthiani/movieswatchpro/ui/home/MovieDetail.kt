@@ -1,5 +1,6 @@
 package com.muthiani.movieswatchpro.ui.home
 
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,9 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -59,6 +57,15 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.muthiani.movieswatchpro.data.Movie
 
+fun <T> nonSpatialExpressiveSpring() = spring<T>(
+    dampingRatio = 1f,
+    stiffness = 1600f
+)
+
+fun <T> spatialExpressiveSpring() = spring<T>(
+    dampingRatio = 0.8f,
+    stiffness = 380f
+)
 
 @Composable
 fun MovieDetail(navController: NavController, movieId: Int) {
@@ -176,7 +183,6 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
                 )
             }
 
-
             Text(
                 text = movie.description,
                 style = MaterialTheme.typography.bodyLarge,
@@ -223,9 +229,9 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
             LazyRow(modifier = Modifier.padding(start = 16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(16.dp)
             ) {
-                itemsIndexed(movie.providers){ index, provider ->
+                itemsIndexed(movie.providers) { index, provider ->
                     val backgroundColor = itemColors[index] // Use precomputed color
-                    Button(onClick = { navigateToPRovider(provider)},
+                    Button(onClick = { navigateToPRovider(provider) },
                         modifier = Modifier
                             .height(50.dp) // Set desired height for the button
                             .width(120.dp),
@@ -236,14 +242,11 @@ fun MovieDetailScreen(movie: Movie, navController: NavController) {
                     }
                 }
             }
-
-
         }
     }
 }
 
 fun navigateToPRovider(provider: String) {
-    
 }
 
 @Composable
@@ -265,4 +268,3 @@ fun CircularTextIndicator(percentage: String, backgroundColor: Color) {
         )
     }
 }
-

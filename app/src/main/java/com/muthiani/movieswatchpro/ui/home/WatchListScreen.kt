@@ -2,7 +2,6 @@ package com.muthiani.movieswatchpro.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -30,18 +28,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavBackStackEntry
 import coil.compose.AsyncImage
 import com.muthiani.movieswatchpro.data.Movie
 import com.muthiani.movieswatchpro.ui.components.bottomPanel
 import com.muthiani.movieswatchpro.ui.components.customHomeTopBar
+import com.muthiani.movieswatchpro.ui.rememberMoviesWatchNavController
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
-fun WatchListScreen(
-    navController: NavController,
-    innerPadding: PaddingValues
-) {
+fun WatchListScreen() {
+    val moviesWatchNavController = rememberMoviesWatchNavController()
 
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val uiState by watchListViewModel.uiState.collectAsState()
@@ -58,7 +55,7 @@ fun WatchListScreen(
                     }
 
                     else -> {
-                        ScrollContent(uiState.watchList, navController)
+                        ScrollContent(uiState.watchList, moviesWatchNavController::navigateToSnackDetail)
                     }
                 }
             }
@@ -69,14 +66,14 @@ fun WatchListScreen(
 }
 
 @Composable
-fun ScrollContent(movieList: List<Movie>, navController: NavController) {
+fun ScrollContent(movieList: List<Movie>, onMovieClicked: (Long, String, NavBackStackEntry) -> Unit) {
     LazyColumn {
         items(movieList) { movie ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(
-                        onClick = { navController.navigate("movieDetail/${movie.id}") })
+                        onClick = { onMovieClicked })
                     .padding(16.dp),
                 verticalAlignment = Alignment.Top
             ) {
@@ -128,8 +125,5 @@ fun ScrollContent(movieList: List<Movie>, navController: NavController) {
 @Preview
 @Composable
 fun watchListScreenPreview() {
-    WatchListScreen(
-        navController = NavController(LocalContext.current),
-        innerPadding = PaddingValues(12.dp, 12.dp)
-    )
+    WatchListScreen()
 }

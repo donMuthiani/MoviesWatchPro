@@ -11,14 +11,13 @@ data class Movie(
     val promoImage: String = "",
     val rating: Float = 8.1f,
     val providers: List<String> = listOf("Netflix", "Hulu", "Disney+", "HBO Max")
-    )
+)
 
 interface FakeWatchListRepository {
     // Get watchList based on profile interests
     suspend fun getWatchList(): Result<List<Movie>>
 
     // Get my Shows list
-
     suspend fun getMyShows(): Result<List<Movie>>
 
     suspend fun getMovie(movieId: Int): Movie?

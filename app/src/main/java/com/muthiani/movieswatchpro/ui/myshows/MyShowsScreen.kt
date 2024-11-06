@@ -1,7 +1,6 @@
 package com.muthiani.movieswatchpro.ui.myshows
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -21,13 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.muthiani.movieswatchpro.ui.components.customHomeTopBar
 import com.muthiani.movieswatchpro.ui.home.WatchListViewModel
 
 @Composable
-fun MyShowsScreen(innerPAdding: PaddingValues, navController: NavController) {
+fun MyShowsScreen(onMovieSelected: (Long, String) -> Unit, modifier: Modifier) {
 
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val myShows by watchListViewModel.uiState.collectAsState()

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MoviesWatchPro</string>
+    <string name="watch_list">Watch List</string>
+    <string name="my_shows">My shows</string>
+    <string name="discover">Discover</string>
+    <string name="statistics">Statistics</string>
 </resources>

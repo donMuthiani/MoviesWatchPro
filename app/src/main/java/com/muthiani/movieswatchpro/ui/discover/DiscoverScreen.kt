@@ -30,7 +30,7 @@ import com.muthiani.movieswatchpro.ui.components.SearcheableTopBar
 import com.muthiani.movieswatchpro.ui.home.WatchListViewModel
 
 @Composable
-fun DiscoverScreen() {
+fun DiscoverScreen(onMovieSelected: (Long, String) -> Unit, modifier: Modifier) {
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val movies = watchListViewModel.uiState.collectAsState().value.watchList
 
