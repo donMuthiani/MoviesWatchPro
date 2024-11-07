@@ -70,7 +70,7 @@ data class MoviesWatchColors(
     val isDark: Boolean
 )
 
-private val LocalMoviesWatchColors = staticCompositionLocalOf<MoviesWatchColors> {
+val LocalMoviesWatchColors = staticCompositionLocalOf<MoviesWatchColors> {
     error("No ColorPalette provided")
 }
 

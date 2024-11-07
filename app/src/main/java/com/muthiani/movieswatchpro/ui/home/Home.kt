@@ -150,8 +150,8 @@ fun MoviesWatchBottomBar(
     currentRoute: String,
     navigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.primary,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    color: Color = MoviesWatchProTheme.colors.uiBackground,
+    contentColor: Color = MoviesWatchProTheme.colors.textInteractive,
 ) {
     val routes = remember {
         tabs.map { it.route }
@@ -160,7 +160,7 @@ fun MoviesWatchBottomBar(
     Surface(
         modifier = modifier,
         color = color,
-        contentColor = contentColor
+        contentColor = contentColor,
     ) {
         val springSpec = spatialExpressiveSpring<Float>()
         MoviesWatchBottomNavLayout(

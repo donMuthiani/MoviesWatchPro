@@ -57,6 +57,7 @@ import androidx.credentials.GetCredentialResponse
 import androidx.credentials.PasswordCredential
 import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -79,7 +80,7 @@ val spacing = 24.dp
 @Composable
 fun SignUpScreen(navController: MoviesWatchNavController) {
 
-//    val splashViewModel: SplashScreenViewModel = hiltViewModel()
+    val splashViewModel: SplashScreenViewModel = hiltViewModel()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
@@ -88,7 +89,7 @@ fun SignUpScreen(navController: MoviesWatchNavController) {
             content =
             {
                 Column(modifier = Modifier.padding(it)) {
-                    Content(navController)
+                    Content(navController, splashViewModel)
                 }
             },
             bottomBar = {
@@ -101,7 +102,7 @@ fun SignUpScreen(navController: MoviesWatchNavController) {
 @Composable
 fun Content(
     navController: MoviesWatchNavController,
-//    splashViewModel: SplashScreenViewModel,
+    splashViewModel: SplashScreenViewModel,
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -141,7 +142,7 @@ fun Content(
         Spacer(modifier = Modifier.size(spacing))
 
         OutlinedTextField(
-            value = email,
+            value = "email",
             modifier = Modifier.fillMaxWidth(),
             onValueChange = { email = it },
             label = { Text(text = "Email address") },
@@ -215,7 +216,7 @@ fun Content(
                     .fillMaxWidth()
                     .height(50.dp),
                 onClick = {
-//                    splashViewModel.setUserLoggedIn()
+                    splashViewModel.setUserLoggedIn()
                     navController.navigateToRoute(
                         route = MainDestinations.HOME_ROUTE,
                         noTrace = true
@@ -231,7 +232,6 @@ fun Content(
                         modifier = Modifier.align(Alignment.Center) // This centers the text both vertically and horizontally
                     )
                 }
-//                Text(text = "Sign In", textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize())
             }
 
             Spacer(modifier = Modifier.size(spacing))
@@ -240,7 +240,7 @@ fun Content(
                 backgroundGradient = listOf(Color.White, Color.White),
                 border = BorderStroke(1.dp, MoviesWatchProTheme.colors.textInteractive),
                 onClick = {
-//                googleSignIn(splashViewModel, scope, context, navController)
+                googleSignIn(splashViewModel, scope, context, navController)
                 }, shape = RoundedCornerShape(size = 12.dp)
             ) {
                 Row(
