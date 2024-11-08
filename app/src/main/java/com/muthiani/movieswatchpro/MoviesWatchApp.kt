@@ -2,24 +2,20 @@ package com.muthiani.movieswatchpro
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.Transition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -169,16 +165,13 @@ fun mainScreenPreview() {
     CompositionLocalProvider(LocalMoviesWatchColors provides MoviesWatchProTheme.colors) {
         SharedTransitionLayout {
             LocalSharedTransitionScope provides this
-                MoviesWatchProTheme {
-                    MainContainer(modifier = Modifier) { movieId, movieTitle, navBackStackEntry ->
-                        println("Movie selected: ID = $movieId, Title = $movieTitle")
-                    }
-
+            MoviesWatchProTheme {
+                MainContainer(modifier = Modifier) { movieId, movieTitle, navBackStackEntry ->
+                    println("Movie selected: ID = $movieId, Title = $movieTitle")
+                }
             }
-
         }
     }
-
 }
 
 

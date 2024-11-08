@@ -21,8 +21,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.muthiani.movieswatchpro.ui.components.MoviesWatchScaffold
 import com.muthiani.movieswatchpro.ui.components.customHomeTopBar
 import com.muthiani.movieswatchpro.ui.home.WatchListViewModel
+import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
 fun MyShowsScreen(onMovieSelected: (Long, String) -> Unit, modifier: Modifier) {
@@ -30,7 +32,7 @@ fun MyShowsScreen(onMovieSelected: (Long, String) -> Unit, modifier: Modifier) {
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val myShows by watchListViewModel.uiState.collectAsState()
 
-    Scaffold(topBar = { customHomeTopBar(showActions = false) }, content = { innerPadding ->
+    MoviesWatchScaffold(topBar = { customHomeTopBar(showActions = false) }, content = { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             items(myShows.watchList.filter { it.progress.toInt() > 50 }) { movie ->
                 Row(modifier = Modifier.padding(8.dp)) {
@@ -44,7 +46,7 @@ fun MyShowsScreen(onMovieSelected: (Long, String) -> Unit, modifier: Modifier) {
 
                     Column {
                         Text(text = movie.title, style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MoviesWatchProTheme.colors.textInteractive,
                             modifier = Modifier.padding(top = 4.dp))
                     }
                 }

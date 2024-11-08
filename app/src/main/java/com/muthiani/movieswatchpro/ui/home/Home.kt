@@ -30,7 +30,6 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -62,6 +61,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
 import com.muthiani.movieswatchpro.R
+import com.muthiani.movieswatchpro.ui.components.MoviesWatchSurface
 import com.muthiani.movieswatchpro.ui.discover.DiscoverScreen
 import com.muthiani.movieswatchpro.ui.myshows.MyShowsScreen
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
@@ -151,24 +151,21 @@ fun MoviesWatchBottomBar(
     navigateToRoute: (String) -> Unit,
     modifier: Modifier = Modifier,
     color: Color = MoviesWatchProTheme.colors.uiBackground,
-    contentColor: Color = MoviesWatchProTheme.colors.textInteractive,
 ) {
     val routes = remember {
         tabs.map { it.route }
     }
     val currentSection = tabs.first { it.route == currentRoute }
-    Surface(
+    MoviesWatchSurface(
         modifier = modifier,
-        color = color,
-        contentColor = contentColor,
-    ) {
+        color = color) {
         val springSpec = spatialExpressiveSpring<Float>()
         MoviesWatchBottomNavLayout(
             selectedIndex = currentSection.ordinal,
             itemCount = routes.size,
             indicator = { JetsnackBottomNavIndicator() },
             animSpec = springSpec,
-            modifier = Modifier.navigationBarsPadding()
+            modifier = Modifier.navigationBarsPadding().padding(top = 16.dp)
         ) {
             val configuration = LocalConfiguration.current
             val currentLocale: Locale =
@@ -187,7 +184,7 @@ fun MoviesWatchBottomBar(
 
                 val text = stringResource(section.title).uppercase(currentLocale)
 
-                JetsnackBottomNavigationItem(
+                MoviesWatchBottomNavigationItem(
                     icon = {
                         Icon(
                             imageVector = section.icon,
@@ -292,7 +289,7 @@ private fun MoviesWatchBottomNavLayout(
 }
 
 @Composable
-fun JetsnackBottomNavigationItem(
+fun MoviesWatchBottomNavigationItem(
     icon: @Composable BoxScope.() -> Unit,
     text: @Composable BoxScope.() -> Unit,
     selected: Boolean,

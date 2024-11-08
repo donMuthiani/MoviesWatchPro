@@ -26,15 +26,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.muthiani.movieswatchpro.data.Movie
+import com.muthiani.movieswatchpro.ui.components.MoviesWatchScaffold
 import com.muthiani.movieswatchpro.ui.components.SearcheableTopBar
 import com.muthiani.movieswatchpro.ui.home.WatchListViewModel
+import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
 fun DiscoverScreen(onMovieSelected: (Long, String) -> Unit, modifier: Modifier) {
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val movies = watchListViewModel.uiState.collectAsState().value.watchList
 
-    Scaffold(topBar = { SearcheableTopBar() }, content = { paddingValues ->
+    MoviesWatchScaffold(topBar = { SearcheableTopBar() }, content = { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             DiscoverContent(movies)
         }
@@ -65,15 +67,15 @@ fun DiscoverContent(itemsList: List<Movie>) {
 
                         Text(text = movie.rating.toString(), modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(8.dp)
-                            .background(color = Color.White.copy(alpha = 0.2f)), style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White)
+                            .background(color = Color.Black.copy(alpha = 0.4f), shape = RoundedCornerShape(4.dp))
+                            .padding(4.dp),
+                            style = MaterialTheme.typography.bodyLarge, color = MoviesWatchProTheme.colors.brand)
                     }
 
                     Text(text = movie.title, modifier = Modifier
                         .padding(bottom = 16.dp)
                         .align(Alignment.CenterHorizontally), style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MoviesWatchProTheme.colors.textInteractive
                     )
                 }
             }

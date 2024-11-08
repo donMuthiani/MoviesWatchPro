@@ -84,7 +84,7 @@ fun SearcheableTopBar() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.primary)
+            .background(color = MoviesWatchProTheme.colors.brand)
             .wrapContentHeight()
     ) {
         Image(
@@ -144,7 +144,12 @@ fun CustomTextField(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
-            errorIndicatorColor = Color.Transparent
+            errorIndicatorColor = Color.Transparent,
+            cursorColor = Color.Black,
+            focusedLabelColor = Color.Black,
+            unfocusedLabelColor = Color.Black,
+            focusedPlaceholderColor = Color.Black,
+            unfocusedPlaceholderColor = Color.Black
         )
     )
 }
@@ -158,7 +163,7 @@ fun customHomeTopBar(showActions: Boolean = true) {
     MediumTopAppBar(
         colors =
         TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
+            containerColor = MoviesWatchProTheme.colors.brand,
         ),
         title = {
             Image(
@@ -173,14 +178,14 @@ fun customHomeTopBar(showActions: Boolean = true) {
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "search movies",
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = Color.White
                     )
                 }
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         imageVector = Icons.Filled.MoreVert,
                         contentDescription = "user",
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = Color.White
                     )
                 }
                 DropdownMenu(

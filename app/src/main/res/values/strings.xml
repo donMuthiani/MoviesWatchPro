@@ -4,4 +4,6 @@
     <string name="my_shows">My shows</string>
     <string name="discover">Discover</string>
     <string name="statistics">Statistics</string>
+    <string name="work_in_progress">Currently in progress</string>
+    <string name="grab_beverage">Grab a drink</string>
 </resources>

@@ -1,8 +1,12 @@
 package com.muthiani.movieswatchpro.ui.home
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -31,9 +36,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import coil.compose.AsyncImage
 import com.muthiani.movieswatchpro.data.Movie
-import com.muthiani.movieswatchpro.ui.components.bottomPanel
+import com.muthiani.movieswatchpro.ui.components.MoviesWatchButton
 import com.muthiani.movieswatchpro.ui.components.customHomeTopBar
 import com.muthiani.movieswatchpro.ui.rememberMoviesWatchNavController
+import com.muthiani.movieswatchpro.ui.theme.MoviesWatchColors
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
@@ -43,8 +49,8 @@ fun WatchListScreen() {
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val uiState by watchListViewModel.uiState.collectAsState()
     MoviesWatchProTheme {
-        Scaffold(topBar = { customHomeTopBar(false) }, content = { innerpadding ->
-            Column(modifier = Modifier.padding(innerpadding)) {
+        Scaffold(topBar = { customHomeTopBar(true) }, content = { innerPadding ->
+            Column(modifier = Modifier.padding(innerPadding)) {
                 when {
                     uiState.loading -> {
                         CircularProgressIndicator()
@@ -55,26 +61,34 @@ fun WatchListScreen() {
                     }
 
                     else -> {
-                        ScrollContent(uiState.watchList, moviesWatchNavController::navigateToSnackDetail)
+                        MoviesWatchList(
+                            uiState.watchList,
+                            moviesWatchNavController::navigateToSnackDetail
+                        )
                     }
                 }
             }
-        }, bottomBar = {
-            bottomPanel()
         })
     }
 }
 
 @Composable
-fun ScrollContent(movieList: List<Movie>, onMovieClicked: (Long, String, NavBackStackEntry) -> Unit) {
-    LazyColumn {
+fun MoviesWatchList(
+    movieList: List<Movie>,
+    onMovieClicked: (Long, String, NavBackStackEntry) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .background(color = MoviesWatchProTheme.colors.uiBackground)
+            .padding(bottom = 48.dp)
+    ) {
         items(movieList) { movie ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable(
                         onClick = { onMovieClicked })
-                    .padding(16.dp),
+                    .padding(vertical = 32.dp),
                 verticalAlignment = Alignment.Top
             ) {
                 AsyncImage(
@@ -87,12 +101,11 @@ fun ScrollContent(movieList: List<Movie>, onMovieClicked: (Long, String, NavBack
 
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(start = 16.dp)
                 ) {
                     Text(
-                        text = movie.title, style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface
+                        text = movie.title, style = MaterialTheme.typography.titleMedium,
+                        color = MoviesWatchProTheme.colors.textInteractive
                     )
 
                     val annotatedString = buildAnnotatedString {
@@ -101,21 +114,64 @@ fun ScrollContent(movieList: List<Movie>, onMovieClicked: (Long, String, NavBack
                             AnnotatedString(
                                 text = ".",
                                 spanStyle = SpanStyle(
-                                    color = MaterialTheme.colorScheme.primary,
+                                    color = MoviesWatchProTheme.colors.brand,
                                     fontSize = 26.sp
                                 )
                             )
                         )
                         append(movie.category)
                     }
-                    Text(text = annotatedString, style = MaterialTheme.typography.bodyMedium)
-
-                    LinearProgressIndicator(
-                        progress = { (movie.progress.toFloat() / 100) }, modifier = Modifier
-                            .fillMaxWidth()
-                            .height(10.dp)
-                            .clip(shape = RoundedCornerShape(10.dp))
+                    Text(
+                        text = annotatedString,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MoviesWatchProTheme.colors.textInteractive
                     )
+
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        LinearProgressIndicator(
+                            color = MoviesWatchProTheme.colors.brand,
+                            trackColor = MoviesWatchProTheme.colors.iconSecondary,
+                            progress = { (movie.progress.toFloat() / 100) },
+                            modifier = Modifier
+                                .height(10.dp)
+                                .align(Alignment.CenterVertically)
+                                .clip(shape = RoundedCornerShape(10.dp))
+                                .weight(1f)
+                        )
+
+
+                        Text(
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .padding(start = 8.dp, end = 8.dp),
+                            text = "3/8",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MoviesWatchProTheme.colors.textInteractive
+                        )
+
+                    }
+
+                    Row(Modifier.padding(top = 8.dp)) {
+                        MoviesWatchButton(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            onClick = { /*TODO*/ },
+                            border = BorderStroke(
+                                width = 1.dp,
+                                color = MoviesWatchProTheme.colors.textInteractive
+                            ),
+                            backgroundGradient = listOf(Color.Transparent, Color.Transparent)
+                        ) {
+                            Text(text = "Episode Info", style = MaterialTheme.typography.bodyLarge)
+                        }
+
+                        Text(
+                            text = "5 Left", style = (MaterialTheme.typography.bodyLarge),
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .align(Alignment.CenterVertically),
+                            color = MoviesWatchProTheme.colors.textInteractive.copy(alpha = 0.4f)
+                        )
+                    }
                 }
             }
         }
