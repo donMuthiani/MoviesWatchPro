@@ -20,7 +20,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -45,20 +44,20 @@ import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 fun Header() {
     Column(
         modifier =
-        Modifier
-            .fillMaxWidth(),
+            Modifier
+                .fillMaxWidth(),
     ) {
         Box(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(color = MoviesWatchProTheme.colors.brand),
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = MoviesWatchProTheme.colors.brand),
         ) {
             Image(
                 modifier =
-                Modifier
-                    .padding(vertical = 64.dp, horizontal = 16.dp)
-                    .align(Alignment.CenterStart),
+                    Modifier
+                        .padding(vertical = 64.dp, horizontal = 16.dp)
+                        .align(Alignment.CenterStart),
                 painter = painterResource(id = R.drawable.splash_logo),
                 contentDescription = null,
             )
@@ -70,10 +69,10 @@ fun Header() {
 fun bottomPanel() {
     Box(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .background(MoviesWatchProTheme.colors.brand),
+            Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .background(MoviesWatchProTheme.colors.brand),
     )
 }
 
@@ -82,16 +81,18 @@ fun bottomPanel() {
 fun SearcheableTopBar() {
     var textState by remember { mutableStateOf(TextFieldValue("")) } // Initial text value
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = MoviesWatchProTheme.colors.brand)
-            .wrapContentHeight()
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(color = MoviesWatchProTheme.colors.brand)
+                .wrapContentHeight(),
     ) {
         Image(
-            modifier = Modifier
-                .padding(start = 24.dp, top = 48.dp)
-                .align(Alignment.Start)
-                .height(64.dp),
+            modifier =
+                Modifier
+                    .padding(start = 24.dp, top = 48.dp)
+                    .align(Alignment.Start)
+                    .height(64.dp),
             painter = painterResource(id = R.drawable.splash_logo),
             contentDescription = "Logo",
         )
@@ -108,7 +109,7 @@ fun SearcheableTopBar() {
 @Composable
 fun CustomTextField(
     value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit
+    onValueChange: (TextFieldValue) -> Unit,
 ) {
     TextField(
         value = value,
@@ -117,7 +118,7 @@ fun CustomTextField(
             Icon(
                 imageVector = Icons.Default.Search, // Replace with your leading icon
                 contentDescription = "Leading Icon",
-                tint = Color.Black
+                tint = Color.Black,
             )
         },
         placeholder = {
@@ -127,30 +128,33 @@ fun CustomTextField(
             Icon(
                 imageVector = Icons.Default.SettingsVoice, // Replace with your trailing icon
                 contentDescription = "Trailing Icon",
-                tint = Color.Black
+                tint = Color.Black,
             )
         },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp)
-            .background(Color.White, shape = RoundedCornerShape(24.dp)), // White background with rounded corners
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(24.dp)
+                .background(Color.White, shape = RoundedCornerShape(24.dp)),
+        // White background with rounded corners
         shape = RoundedCornerShape(24.dp), // Rounded corners for the TextField
-        colors = TextFieldDefaults.colors(
-            focusedTextColor = Color.Black,
-            unfocusedTextColor = Color.Black,
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
-            disabledTextColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-            errorIndicatorColor = Color.Transparent,
-            cursorColor = Color.Black,
-            focusedLabelColor = Color.Black,
-            unfocusedLabelColor = Color.Black,
-            focusedPlaceholderColor = Color.Black,
-            unfocusedPlaceholderColor = Color.Black
-        )
+        colors =
+            TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledTextColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent,
+                cursorColor = Color.Black,
+                focusedLabelColor = Color.Black,
+                unfocusedLabelColor = Color.Black,
+                focusedPlaceholderColor = Color.Black,
+                unfocusedPlaceholderColor = Color.Black,
+            ),
     )
 }
 
@@ -162,9 +166,9 @@ fun customHomeTopBar(showActions: Boolean = true) {
 
     MediumTopAppBar(
         colors =
-        TopAppBarDefaults.topAppBarColors(
-            containerColor = MoviesWatchProTheme.colors.brand,
-        ),
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MoviesWatchProTheme.colors.brand,
+            ),
         title = {
             Image(
                 modifier = Modifier.padding(vertical = 24.dp),
@@ -178,14 +182,14 @@ fun customHomeTopBar(showActions: Boolean = true) {
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "search movies",
-                        tint = Color.White
+                        tint = Color.White,
                     )
                 }
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
                         imageVector = Icons.Filled.MoreVert,
                         contentDescription = "user",
-                        tint = Color.White
+                        tint = Color.White,
                     )
                 }
                 DropdownMenu(

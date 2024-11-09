@@ -49,8 +49,9 @@ fun OnboardingScreen(onFinished: () -> Unit) {
     val scope = rememberCoroutineScope()
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier =
+            Modifier
+                .fillMaxSize(),
     ) {
         Scaffold(
             modifier = Modifier,
@@ -58,9 +59,9 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             bottomBar = {
                 Row(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp, 10.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp, 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -73,7 +74,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                                             pagerState.animateScrollToPage(pagerState.currentPage - 1)
                                         }
                                     }
-                                }
+                                },
                             ) {
                                 Text(text = buttonState.value[0])
                             }
@@ -94,7 +95,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                                         onFinished()
                                     }
                                 }
-                            }
+                            },
                         ) {
                             Text(text = buttonState.value[1])
                         }

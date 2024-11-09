@@ -3,10 +3,8 @@ package com.muthiani.movieswatchpro.ui.home
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,19 +31,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import coil.compose.AsyncImage
 import com.muthiani.movieswatchpro.data.Movie
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchButton
 import com.muthiani.movieswatchpro.ui.components.customHomeTopBar
-import com.muthiani.movieswatchpro.ui.rememberMoviesWatchNavController
-import com.muthiani.movieswatchpro.ui.theme.MoviesWatchColors
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
+import timber.log.Timber
 
 @Composable
-fun WatchListScreen() {
-    val moviesWatchNavController = rememberMoviesWatchNavController()
-
+fun WatchListScreen(onMovieSelected: (Long) -> Unit) {
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val uiState by watchListViewModel.uiState.collectAsState()
     MoviesWatchProTheme {
@@ -63,7 +57,7 @@ fun WatchListScreen() {
                     else -> {
                         MoviesWatchList(
                             uiState.watchList,
-                            moviesWatchNavController::navigateToSnackDetail
+                            onMovieSelected,
                         )
                     }
                 }
@@ -75,56 +69,68 @@ fun WatchListScreen() {
 @Composable
 fun MoviesWatchList(
     movieList: List<Movie>,
-    onMovieClicked: (Long, String, NavBackStackEntry) -> Unit
+    onMovieClicked: (Long) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .background(color = MoviesWatchProTheme.colors.uiBackground)
-            .padding(bottom = 48.dp)
+        modifier =
+            Modifier
+                .background(color = MoviesWatchProTheme.colors.uiBackground)
+                .padding(bottom = 48.dp),
     ) {
         items(movieList) { movie ->
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(
-                        onClick = { onMovieClicked })
-                    .padding(vertical = 32.dp),
-                verticalAlignment = Alignment.Top
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            onClick = {
+                                Timber.i("Movie clicked id ${movie.id}")
+                                onMovieClicked(movie.id.toLong())
+                            },
+                        )
+                        .padding(vertical = 32.dp),
+                verticalAlignment = Alignment.Top,
             ) {
                 AsyncImage(
-                    model = movie.imageUrl, contentDescription = "image from url",
-                    modifier = Modifier
-                        .height(120.dp)
-                        .width(90.dp)
-                        .clip(shape = RoundedCornerShape(12.dp))
+                    model = movie.imageUrl,
+                    contentDescription = "image from url",
+                    modifier =
+                        Modifier
+                            .height(120.dp)
+                            .width(90.dp)
+                            .clip(shape = RoundedCornerShape(12.dp)),
                 )
 
                 Column(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
+                    modifier =
+                        Modifier
+                            .padding(start = 16.dp),
                 ) {
                     Text(
-                        text = movie.title, style = MaterialTheme.typography.titleMedium,
-                        color = MoviesWatchProTheme.colors.textInteractive
+                        text = movie.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MoviesWatchProTheme.colors.textInteractive,
                     )
 
-                    val annotatedString = buildAnnotatedString {
-                        append(movie.releaseDate)
-                        append(
-                            AnnotatedString(
-                                text = ".",
-                                spanStyle = SpanStyle(
-                                    color = MoviesWatchProTheme.colors.brand,
-                                    fontSize = 26.sp
-                                )
+                    val annotatedString =
+                        buildAnnotatedString {
+                            append(movie.releaseDate)
+                            append(
+                                AnnotatedString(
+                                    text = ".",
+                                    spanStyle =
+                                        SpanStyle(
+                                            color = MoviesWatchProTheme.colors.brand,
+                                            fontSize = 26.sp,
+                                        ),
+                                ),
                             )
-                        )
-                        append(movie.category)
-                    }
+                            append(movie.category)
+                        }
                     Text(
                         text = annotatedString,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MoviesWatchProTheme.colors.textInteractive
+                        color = MoviesWatchProTheme.colors.textInteractive,
                     )
 
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -132,44 +138,47 @@ fun MoviesWatchList(
                             color = MoviesWatchProTheme.colors.brand,
                             trackColor = MoviesWatchProTheme.colors.iconSecondary,
                             progress = { (movie.progress.toFloat() / 100) },
-                            modifier = Modifier
-                                .height(10.dp)
-                                .align(Alignment.CenterVertically)
-                                .clip(shape = RoundedCornerShape(10.dp))
-                                .weight(1f)
+                            modifier =
+                                Modifier
+                                    .height(10.dp)
+                                    .align(Alignment.CenterVertically)
+                                    .clip(shape = RoundedCornerShape(10.dp))
+                                    .weight(1f),
                         )
-
 
                         Text(
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                                .padding(start = 8.dp, end = 8.dp),
+                            modifier =
+                                Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .padding(start = 8.dp, end = 8.dp),
                             text = "3/8",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MoviesWatchProTheme.colors.textInteractive
+                            color = MoviesWatchProTheme.colors.textInteractive,
                         )
-
                     }
 
                     Row(Modifier.padding(top = 8.dp)) {
                         MoviesWatchButton(
                             modifier = Modifier.align(Alignment.CenterVertically),
                             onClick = { /*TODO*/ },
-                            border = BorderStroke(
-                                width = 1.dp,
-                                color = MoviesWatchProTheme.colors.textInteractive
-                            ),
-                            backgroundGradient = listOf(Color.Transparent, Color.Transparent)
+                            border =
+                                BorderStroke(
+                                    width = 1.dp,
+                                    color = MoviesWatchProTheme.colors.textInteractive,
+                                ),
+                            backgroundGradient = listOf(Color.Transparent, Color.Transparent),
                         ) {
                             Text(text = "Episode Info", style = MaterialTheme.typography.bodyLarge)
                         }
 
                         Text(
-                            text = "5 Left", style = (MaterialTheme.typography.bodyLarge),
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                                .align(Alignment.CenterVertically),
-                            color = MoviesWatchProTheme.colors.textInteractive.copy(alpha = 0.4f)
+                            text = "5 Left",
+                            style = (MaterialTheme.typography.bodyLarge),
+                            modifier =
+                                Modifier
+                                    .padding(start = 8.dp)
+                                    .align(Alignment.CenterVertically),
+                            color = MoviesWatchProTheme.colors.textInteractive.copy(alpha = 0.4f),
                         )
                     }
                 }
@@ -181,5 +190,5 @@ fun MoviesWatchList(
 @Preview
 @Composable
 fun watchListScreenPreview() {
-    WatchListScreen()
+//    WatchListScreen()
 }

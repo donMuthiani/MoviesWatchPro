@@ -28,7 +28,7 @@ fun MoviesWatchScaffold(
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     backgroundColor: Color = MoviesWatchProTheme.colors.uiBackground,
     contentColor: Color = MoviesWatchProTheme.colors.textSecondary,
-    content: @Composable (PaddingValues) -> Unit
+    content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -41,7 +41,7 @@ fun MoviesWatchScaffold(
         floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = backgroundColor,
         contentColor = contentColor,
-        content = content
+        content = content,
     )
 }
 

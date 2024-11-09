@@ -1,4 +1,4 @@
-package com.muthiani.movieswatchpro.ui
+package com.muthiani.movieswatchpro.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -21,15 +21,14 @@ object MainDestinations {
 }
 
 @Composable
-fun rememberMoviesWatchNavController(
-    navController: NavHostController = rememberNavController()
-): MoviesWatchNavController = remember(navController) {
-    MoviesWatchNavController(navController)
-}
+fun rememberMoviesWatchNavController(navController: NavHostController = rememberNavController()): MoviesWatchNavController =
+    remember(navController) {
+        MoviesWatchNavController(navController)
+    }
 
 @Stable
 class MoviesWatchNavController(
-    val navController: NavHostController
+    val navController: NavHostController,
 ) {
     fun upPress() {
         navController.navigateUp()
@@ -48,14 +47,20 @@ class MoviesWatchNavController(
         }
     }
 
-    fun navigateToSnackDetail(movieID: Long, origin: String, from: NavBackStackEntry) {
+    fun navigateToMovieDetail(
+        movieID: Long,
+        from: NavBackStackEntry,
+    ) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         if (from.lifecycleIsResumed()) {
-            navController.navigate("${MainDestinations.MOVIE_DETAIL_ROUTE}/$movieID?origin=$origin")
+            navController.navigate("${MainDestinations.MOVIE_DETAIL_ROUTE}/$movieID")
         }
     }
 
-    fun navigateToRoute(route: String, noTrace: Boolean = false) {
+    fun navigateToRoute(
+        route: String,
+        noTrace: Boolean = false,
+    ) {
         navController.navigate(route) {
             launchSingleTop
             restoreState
@@ -67,12 +72,12 @@ class MoviesWatchNavController(
         }
     }
 
-    private fun NavBackStackEntry.lifecycleIsResumed() =
-        this.lifecycle.currentState == Lifecycle.State.RESUMED
+    private fun NavBackStackEntry.lifecycleIsResumed() = this.lifecycle.currentState == Lifecycle.State.RESUMED
 
     private val NavGraph.startDestination: NavDestination?
         get() = findNode(startDestinationId)
 
     private tailrec fun findStartDestination(graph: NavDestination): NavDestination {
         return if (graph is NavGraph) findStartDestination(graph.findStartDestination()) else graph
-    } }
+    }
+}

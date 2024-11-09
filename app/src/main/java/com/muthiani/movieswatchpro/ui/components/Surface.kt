@@ -28,25 +28,29 @@ fun MoviesWatchSurface(
     contentColor: Color = MoviesWatchProTheme.colors.textSecondary,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .shadow(elevation = elevation, shape = shape, clip = false)
-            .zIndex(elevation.value)
-            .then(if (border != null) Modifier.border(border, shape) else Modifier)
-            .background(
-                color = getBackgroundColorForElevation(color, elevation),
-                shape = shape
-            )
-            .clip(shape)
+        modifier =
+            modifier
+                .shadow(elevation = elevation, shape = shape, clip = false)
+                .zIndex(elevation.value)
+                .then(if (border != null) Modifier.border(border, shape) else Modifier)
+                .background(
+                    color = getBackgroundColorForElevation(color, elevation),
+                    shape = shape,
+                )
+                .clip(shape),
     ) {
         CompositionLocalProvider(LocalContentColor provides contentColor, content = content)
     }
 }
 
 @Composable
-private fun getBackgroundColorForElevation(color: Color, elevation: Dp): Color {
+private fun getBackgroundColorForElevation(
+    color: Color,
+    elevation: Dp,
+): Color {
     return if (elevation > 0.dp) {
         color.withElevation(elevation)
     } else {

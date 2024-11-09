@@ -28,12 +28,12 @@ fun indicatorUi(
         repeat(pageSize) {
             Box(
                 modifier =
-                Modifier
-                    .height(14.dp)
-                    .width(if (it == currentPage) 24.dp else 16.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .align(Alignment.CenterVertically)
-                    .background(color = if (it == currentPage) selectedColor else unselectedColor),
+                    Modifier
+                        .height(14.dp)
+                        .width(if (it == currentPage) 24.dp else 16.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .align(Alignment.CenterVertically)
+                        .background(color = if (it == currentPage) selectedColor else unselectedColor),
             )
 
             Spacer(modifier = Modifier.width(2.5.dp))

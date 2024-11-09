@@ -10,7 +10,7 @@ data class Movie(
     val progress: String,
     val promoImage: String = "",
     val rating: Float = 8.1f,
-    val providers: List<String> = listOf("Netflix", "Hulu", "Disney+", "HBO Max")
+    val providers: List<String> = listOf("Netflix", "Hulu", "Disney+", "HBO"),
 )
 
 interface FakeWatchListRepository {

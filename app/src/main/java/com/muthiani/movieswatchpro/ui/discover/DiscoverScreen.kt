@@ -1,6 +1,7 @@
 package com.muthiani.movieswatchpro.ui.discover
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +14,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,52 +32,73 @@ import com.muthiani.movieswatchpro.ui.home.WatchListViewModel
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
-fun DiscoverScreen(onMovieSelected: (Long, String) -> Unit, modifier: Modifier) {
+fun DiscoverScreen(onMovieSelected: (Long) -> Unit) {
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val movies = watchListViewModel.uiState.collectAsState().value.watchList
 
     MoviesWatchScaffold(topBar = { SearcheableTopBar() }, content = { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-            DiscoverContent(movies)
+            DiscoverContent(movies, onMovieSelected)
         }
     }, bottomBar = {})
 }
 
 @Composable
-fun DiscoverContent(itemsList: List<Movie>) {
+fun DiscoverContent(
+    itemsList: List<Movie>,
+    onMovieSelected: (Long) -> Unit,
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         modifier = Modifier.padding(bottom = 24.dp),
         content = {
             items(itemsList) { movie ->
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(
+                    modifier =
+                        Modifier.padding(16.dp).clickable {
+                            onMovieSelected(movie.id.toLong())
+                        },
+                ) {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(220.dp)
-                            .wrapContentHeight()
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(220.dp)
+                                .wrapContentHeight(),
                     ) {
                         AsyncImage(
-                            model = movie.imageUrl, contentDescription = "",
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(8.dp)),
-                            contentScale = ContentScale.Crop
+                            model = movie.imageUrl,
+                            contentDescription = "",
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(8.dp)),
+                            contentScale = ContentScale.Crop,
                         )
 
-                        Text(text = movie.rating.toString(), modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .background(color = Color.Black.copy(alpha = 0.4f), shape = RoundedCornerShape(4.dp))
-                            .padding(4.dp),
-                            style = MaterialTheme.typography.bodyLarge, color = MoviesWatchProTheme.colors.brand)
+                        Text(
+                            text = movie.rating.toString(),
+                            modifier =
+                                Modifier
+                                    .align(Alignment.TopEnd)
+                                    .background(color = Color.Black.copy(alpha = 0.4f), shape = RoundedCornerShape(4.dp))
+                                    .padding(4.dp),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MoviesWatchProTheme.colors.brand,
+                        )
                     }
 
-                    Text(text = movie.title, modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .align(Alignment.CenterHorizontally), style = MaterialTheme.typography.bodyLarge,
-                        color = MoviesWatchProTheme.colors.textInteractive
+                    Text(
+                        text = movie.title,
+                        modifier =
+                            Modifier
+                                .padding(bottom = 16.dp)
+                                .align(Alignment.CenterHorizontally),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MoviesWatchProTheme.colors.textInteractive,
                     )
                 }
             }
-        })
+        },
+    )
 }

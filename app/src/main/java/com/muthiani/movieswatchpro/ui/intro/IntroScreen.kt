@@ -28,9 +28,9 @@ fun introScreen(introModel: IntroModel) {
             painter = painterResource(id = introModel.image),
             contentDescription = null,
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(20.dp, 0.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp, 0.dp),
             alignment = Alignment.Center,
         )
 

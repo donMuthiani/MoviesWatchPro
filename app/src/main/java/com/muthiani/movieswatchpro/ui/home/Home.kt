@@ -93,7 +93,7 @@ fun NavGraphBuilder.composableWithCompositionLocal(
         AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
     )? =
         exitTransition,
-    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
 ) {
     composable(
         route,
@@ -102,10 +102,10 @@ fun NavGraphBuilder.composableWithCompositionLocal(
         enterTransition,
         exitTransition,
         popEnterTransition,
-        popExitTransition
+        popExitTransition,
     ) {
         CompositionLocalProvider(
-            LocalNavAnimatedVisibilityScope provides this@composable
+            LocalNavAnimatedVisibilityScope provides this@composable,
         ) {
             content(it)
         }
@@ -115,28 +115,28 @@ fun NavGraphBuilder.composableWithCompositionLocal(
 enum class HomeSections(
     @StringRes val title: Int,
     val icon: ImageVector,
-    val route: String
+    val route: String,
 ) {
     WATCH_LIST(R.string.watch_list, Icons.Outlined.Home, "home/watchList"),
     MY_SHOWS(R.string.my_shows, Icons.Outlined.Favorite, "home/myShows"),
     DISCOVER(R.string.discover, Icons.Outlined.Search, "home/discover"),
-    STATISTICS(R.string.statistics, Icons.Outlined.AccountCircle, "home/statistics")
+    STATISTICS(R.string.statistics, Icons.Outlined.AccountCircle, "home/statistics"),
 }
 
 fun NavGraphBuilder.addHomeGraph(
-    onMovieSelected: (Long, String, NavBackStackEntry) -> Unit,
-    modifier: Modifier = Modifier
+    onMovieSelected: (Long, NavBackStackEntry) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    composable(HomeSections.WATCH_LIST.route) {
-        WatchListScreen()
+    composable(HomeSections.WATCH_LIST.route) { backStackEntry ->
+        WatchListScreen(onMovieSelected = { id -> onMovieSelected(id, backStackEntry) })
     }
 
     composable(HomeSections.MY_SHOWS.route) {
-        MyShowsScreen(onMovieSelected = { id, route -> onMovieSelected(id, route, it) }, modifier = modifier)
+        MyShowsScreen(onMovieSelected = { id -> onMovieSelected(id, it) })
     }
 
     composable(HomeSections.DISCOVER.route) {
-        DiscoverScreen(onMovieSelected = { id, route -> onMovieSelected(id, route, it) }, modifier = modifier)
+        DiscoverScreen(onMovieSelected = { id -> onMovieSelected(id, it) })
     }
 
     composable(HomeSections.STATISTICS.route) {
@@ -152,20 +152,22 @@ fun MoviesWatchBottomBar(
     modifier: Modifier = Modifier,
     color: Color = MoviesWatchProTheme.colors.uiBackground,
 ) {
-    val routes = remember {
-        tabs.map { it.route }
-    }
+    val routes =
+        remember {
+            tabs.map { it.route }
+        }
     val currentSection = tabs.first { it.route == currentRoute }
     MoviesWatchSurface(
         modifier = modifier,
-        color = color) {
+        color = color,
+    ) {
         val springSpec = spatialExpressiveSpring<Float>()
         MoviesWatchBottomNavLayout(
             selectedIndex = currentSection.ordinal,
             itemCount = routes.size,
             indicator = { JetsnackBottomNavIndicator() },
             animSpec = springSpec,
-            modifier = Modifier.navigationBarsPadding().padding(top = 16.dp)
+            modifier = Modifier.navigationBarsPadding().padding(top = 16.dp),
         ) {
             val configuration = LocalConfiguration.current
             val currentLocale: Locale =
@@ -179,7 +181,7 @@ fun MoviesWatchBottomBar(
                     } else {
                         MoviesWatchProTheme.colors.iconInteractiveInactive
                     },
-                    label = "tint"
+                    label = "tint",
                 )
 
                 val text = stringResource(section.title).uppercase(currentLocale)
@@ -189,7 +191,7 @@ fun MoviesWatchBottomBar(
                         Icon(
                             imageVector = section.icon,
                             tint = tint,
-                            contentDescription = text
+                            contentDescription = text,
                         )
                     },
                     text = {
@@ -197,14 +199,15 @@ fun MoviesWatchBottomBar(
                             text = text,
                             color = tint,
                             style = MaterialTheme.typography.labelLarge,
-                            maxLines = 1
+                            maxLines = 1,
                         )
                     },
                     selected = selected,
                     onSelected = { navigateToRoute(section.route) },
                     animSpec = springSpec,
-                    modifier = BottomNavigationItemPadding
-                        .clip(BottomNavIndicatorShape)
+                    modifier =
+                        BottomNavigationItemPadding
+                            .clip(BottomNavIndicatorShape),
                 )
             }
         }
@@ -218,14 +221,15 @@ private fun MoviesWatchBottomNavLayout(
     animSpec: AnimationSpec<Float>,
     indicator: @Composable BoxScope.() -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     // Track how "selected" each item is [0, 1]
-    val selectionFractions = remember(itemCount) {
-        List(itemCount) { i ->
-            Animatable(if (i == selectedIndex) 1f else 0f)
+    val selectionFractions =
+        remember(itemCount) {
+            List(itemCount) { i ->
+                Animatable(if (i == selectedIndex) 1f else 0f)
+            }
         }
-    }
     selectionFractions.forEachIndexed { index, selectionFraction ->
         val target = if (index == selectedIndex) 1f else 0f
         LaunchedEffect(target, animSpec) {
@@ -245,7 +249,7 @@ private fun MoviesWatchBottomNavLayout(
         content = {
             content()
             Box(Modifier.layoutId("indicator"), content = indicator)
-        }
+        },
     ) { measurables, constraints ->
         check(itemCount == (measurables.size - 1)) // account for indicator
 
@@ -254,28 +258,30 @@ private fun MoviesWatchBottomNavLayout(
         val selectedWidth = 2 * unselectedWidth
         val indicatorMeasurable = measurables.first { it.layoutId == "indicator" }
 
-        val itemPlaceables = measurables
-            .filterNot { it == indicatorMeasurable }
-            .mapIndexed { index, measurable ->
-                // Animate item's width based upon the selection amount
-                val width = lerp(unselectedWidth, selectedWidth, selectionFractions[index].value)
-                measurable.measure(
-                    constraints.copy(
-                        minWidth = width,
-                        maxWidth = width
+        val itemPlaceables =
+            measurables
+                .filterNot { it == indicatorMeasurable }
+                .mapIndexed { index, measurable ->
+                    // Animate item's width based upon the selection amount
+                    val width = lerp(unselectedWidth, selectedWidth, selectionFractions[index].value)
+                    measurable.measure(
+                        constraints.copy(
+                            minWidth = width,
+                            maxWidth = width,
+                        ),
                     )
-                )
-            }
-        val indicatorPlaceable = indicatorMeasurable.measure(
-            constraints.copy(
-                minWidth = selectedWidth,
-                maxWidth = selectedWidth
+                }
+        val indicatorPlaceable =
+            indicatorMeasurable.measure(
+                constraints.copy(
+                    minWidth = selectedWidth,
+                    maxWidth = selectedWidth,
+                ),
             )
-        )
 
         layout(
             width = constraints.maxWidth,
-            height = itemPlaceables.maxByOrNull { it.height }?.height ?: 0
+            height = itemPlaceables.maxByOrNull { it.height }?.height ?: 0,
         ) {
             val indicatorLeft = indicatorIndex.value * unselectedWidth
             indicatorPlaceable.placeRelative(x = indicatorLeft.toInt(), y = 0)
@@ -295,20 +301,22 @@ fun MoviesWatchBottomNavigationItem(
     selected: Boolean,
     onSelected: () -> Unit,
     animSpec: AnimationSpec<Float>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     // Animate the icon/text positions within the item based on selection
     val animationProgress by animateFloatAsState(
-        if (selected) 1f else 0f, animSpec,
-        label = "animation progress"
+        if (selected) 1f else 0f,
+        animSpec,
+        label = "animation progress",
     )
     MoviesWatchBottomNavItemLayout(
         icon = icon,
         text = text,
         animationProgress = animationProgress,
-        modifier = modifier
-            .selectable(selected = selected, onClick = onSelected)
-            .wrapContentSize()
+        modifier =
+            modifier
+                .selectable(selected = selected, onClick = onSelected)
+                .wrapContentSize(),
     )
 }
 
@@ -317,31 +325,33 @@ private fun MoviesWatchBottomNavItemLayout(
     icon: @Composable BoxScope.() -> Unit,
     text: @Composable BoxScope.() -> Unit,
     @FloatRange(from = 0.0, to = 1.0) animationProgress: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Layout(
         modifier = modifier,
         content = {
             Box(
-                modifier = Modifier
-                    .layoutId("icon")
-                    .padding(horizontal = TextIconSpacing),
-                content = icon
+                modifier =
+                    Modifier
+                        .layoutId("icon")
+                        .padding(horizontal = TextIconSpacing),
+                content = icon,
             )
             val scale = lerp(0.6f, 1f, animationProgress)
             Box(
-                modifier = Modifier
-                    .layoutId("text")
-                    .padding(horizontal = TextIconSpacing)
-                    .graphicsLayer {
-                        alpha = animationProgress
-                        scaleX = scale
-                        scaleY = scale
-                        transformOrigin = BottomNavLabelTransformOrigin
-                    },
-                content = text
+                modifier =
+                    Modifier
+                        .layoutId("text")
+                        .padding(horizontal = TextIconSpacing)
+                        .graphicsLayer {
+                            alpha = animationProgress
+                            scaleX = scale
+                            scaleY = scale
+                            transformOrigin = BottomNavLabelTransformOrigin
+                        },
+                content = text,
             )
-        }
+        },
     ) { measurables, constraints ->
         val iconPlaceable = measurables.first { it.layoutId == "icon" }.measure(constraints)
         val textPlaceable = measurables.first { it.layoutId == "text" }.measure(constraints)
@@ -351,7 +361,7 @@ private fun MoviesWatchBottomNavItemLayout(
             iconPlaceable,
             constraints.maxWidth,
             constraints.maxHeight,
-            animationProgress
+            animationProgress,
         )
     }
 }
@@ -361,7 +371,7 @@ private fun MeasureScope.placeTextAndIcon(
     iconPlaceable: Placeable,
     width: Int,
     height: Int,
-    @FloatRange(from = 0.0, to = 1.0) animationProgress: Float
+    @FloatRange(from = 0.0, to = 1.0) animationProgress: Float,
 ): MeasureResult {
     val iconY = (height - iconPlaceable.height) / 2
     val textY = (height - textPlaceable.height) / 2
@@ -382,13 +392,14 @@ private fun MeasureScope.placeTextAndIcon(
 private fun JetsnackBottomNavIndicator(
     strokeWidth: Dp = 2.dp,
     color: Color = MoviesWatchProTheme.colors.iconInteractive,
-    shape: Shape = BottomNavIndicatorShape
+    shape: Shape = BottomNavIndicatorShape,
 ) {
     Spacer(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(BottomNavigationItemPadding)
-            .border(strokeWidth, color, shape)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .then(BottomNavigationItemPadding)
+                .border(strokeWidth, color, shape),
     )
 }
 

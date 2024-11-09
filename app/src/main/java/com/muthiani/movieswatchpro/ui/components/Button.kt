@@ -45,42 +45,43 @@ fun MoviesWatchButton(
     contentColor: Color = MoviesWatchProTheme.colors.textInteractive,
     disabledContentColor: Color = MoviesWatchProTheme.colors.textHelp,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     MoviesWatchSurface(
         shape = shape,
         color = Color.Transparent,
         contentColor = if (enabled) contentColor else disabledContentColor,
         border = border,
-        modifier = modifier
-            .clip(shape)
-            .background(
-                Brush.horizontalGradient(
-                    colors = if (enabled) backgroundGradient else disabledBackgroundGradient
+        modifier =
+            modifier
+                .clip(shape)
+                .background(
+                    Brush.horizontalGradient(
+                        colors = if (enabled) backgroundGradient else disabledBackgroundGradient,
+                    ),
                 )
-            )
-            .clickable(
-                onClick = onClick,
-                enabled = enabled,
-                role = Role.Button,
-                interactionSource = interactionSource,
-                indication = rememberRipple()
-            )
+                .clickable(
+                    onClick = onClick,
+                    enabled = enabled,
+                    role = Role.Button,
+                    interactionSource = interactionSource,
+                    indication = rememberRipple(),
+                ),
     ) {
         ProvideTextStyle(
-            value = MaterialTheme.typography.labelLarge.copy(textAlign = TextAlign.Center)
+            value = MaterialTheme.typography.labelLarge.copy(textAlign = TextAlign.Center),
         ) {
             Row(
                 Modifier
                     .defaultMinSize(
                         minWidth = ButtonDefaults.MinWidth,
-                        minHeight = ButtonDefaults.MinHeight
+                        minHeight = ButtonDefaults.MinHeight,
                     )
                     .indication(interactionSource, rememberRipple())
                     .padding(contentPadding),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                content = content
+                content = content,
             )
         }
     }
@@ -107,7 +108,8 @@ private fun ButtonPreview() {
 private fun RectangleButtonPreview() {
     MoviesWatchProTheme {
         MoviesWatchButton(
-            onClick = {}, shape = RectangleShape
+            onClick = {},
+            shape = RectangleShape,
         ) {
             Text(text = "Demo")
         }
