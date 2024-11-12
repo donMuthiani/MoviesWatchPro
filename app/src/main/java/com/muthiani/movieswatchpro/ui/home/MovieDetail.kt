@@ -1,6 +1,12 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.muthiani.movieswatchpro.ui.home
 
+import androidx.compose.animation.BoundsTransform
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -52,10 +58,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
+import com.muthiani.movieswatchpro.LocalSharedTransitionScope
+import com.muthiani.movieswatchpro.MovieSharedElementKey
+import com.muthiani.movieswatchpro.MovieSharedElementType
 import com.muthiani.movieswatchpro.data.Movie
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 import com.muthiani.movieswatchpro.utils.isMovieRunning
-import timber.log.Timber
 
 fun <T> nonSpatialExpressiveSpring() =
     spring<T>(
@@ -69,6 +78,12 @@ fun <T> spatialExpressiveSpring() =
         stiffness = 380f,
     )
 
+@OptIn(ExperimentalSharedTransitionApi::class)
+val movieDetailBoundsTransform =
+    BoundsTransform { _, _ ->
+        spatialExpressiveSpring()
+    }
+
 @Composable
 @Preview
 fun MovieDetailScreenPreview() {
@@ -78,14 +93,13 @@ fun MovieDetailScreenPreview() {
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MovieDetailScreen(
     movieId: Long,
     upPress: () -> Unit,
 ) {
-    Timber.i("Movie clicked entered")
-
-    var movie by remember { mutableStateOf<Movie?>(null) }
+    var movie by remember(movieId) { mutableStateOf<Movie?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     val watchListViewModel: WatchListViewModel = hiltViewModel()
 
@@ -94,178 +108,217 @@ fun MovieDetailScreen(
         isLoading = false
     }
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(250.dp), // Set desired height for the image
-        ) {
-            AsyncImage(
-                model = movie?.promoImage,
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier =
-                    Modifier
-                        .fillMaxSize(),
-            )
+    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalArgumentException("No scope found")
+    val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current ?: throw IllegalArgumentException("No scope found")
 
-            Icon(
-                imageVector = Icons.Default.ArrowBackIosNew,
-                contentDescription = "Navigate back",
-                tint = Color.White,
-                modifier =
-                    Modifier
-                        .statusBarsPadding()
-                        .padding(start = 8.dp)
-                        .size(36.dp)
-                        .background(Color.White.copy(alpha = 0.3f), shape = CircleShape)
-                        .clickable {
-                            upPress.invoke()
-                        }
-                        .align(Alignment.TopStart)
-                        .padding(8.dp),
-            )
-        }
-
+    with(sharedTransitionScope) {
         Column(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 60.dp),
+                    .sharedBounds(
+                        rememberSharedContentState(
+                            key =
+                                MovieSharedElementKey(
+                                    snackId = movieId,
+                                    type = MovieSharedElementType.Bounds,
+                                ),
+                        ),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
+                        boundsTransform = movieDetailBoundsTransform,
+                        exit = fadeOut(nonSpatialExpressiveSpring()),
+                        enter = fadeIn(nonSpatialExpressiveSpring()),
+                    ),
         ) {
-            Row(
+            Box(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(8.dp),
+                        .height(250.dp),
             ) {
                 AsyncImage(
-                    model = movie?.imageUrl,
+                    model = movie?.promoImage,
                     contentDescription = "",
                     contentScale = ContentScale.Crop,
                     modifier =
                         Modifier
-                            .width(120.dp)
-                            .height(200.dp)
-                            .padding(start = 16.dp)
-                            .offset(y = ((-60).dp))
-                            .clip(RoundedCornerShape(8.dp)),
+                            .fillMaxSize(),
+                )
+                Icon(
+                    imageVector = Icons.Default.ArrowBackIosNew,
+                    contentDescription = "Navigate back",
+                    tint = Color.White,
+                    modifier =
+                        Modifier
+                            .statusBarsPadding()
+                            .padding(start = 8.dp)
+                            .size(36.dp)
+                            .background(Color.White.copy(alpha = 0.3f), shape = CircleShape)
+                            .clickable {
+                                upPress.invoke()
+                            }
+                            .align(Alignment.TopStart)
+                            .padding(8.dp),
+                )
+            }
+
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 60.dp),
+            ) {
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(8.dp),
+                ) {
+                    AsyncImage(
+                        model = movie?.imageUrl,
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        modifier =
+                            Modifier
+                                .width(120.dp)
+                                .height(200.dp)
+                                .padding(start = 16.dp)
+                                .offset(y = ((-60).dp))
+                                .clip(RoundedCornerShape(8.dp))
+                                .sharedBounds(
+                                    rememberSharedContentState(
+                                        key =
+                                            MovieSharedElementKey(
+                                                snackId = movieId,
+                                                type = MovieSharedElementType.Image,
+                                            ),
+                                    ),
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                    clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
+                                    boundsTransform = movieDetailBoundsTransform,
+                                    exit = fadeOut(nonSpatialExpressiveSpring()),
+                                    enter = fadeIn(nonSpatialExpressiveSpring()),
+                                ),
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Column(modifier = Modifier.wrapContentHeight()) {
+                        Text(
+                            text = movie?.title.orEmpty(),
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MoviesWatchProTheme.colors.textInteractive,
+                            modifier =
+                                Modifier
+                                    .padding(top = 8.dp),
+                        )
+
+                        Text(
+                            text = "${movie?.releaseDate?.isMovieRunning()}",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MoviesWatchProTheme.colors.textSecondary,
+                            modifier =
+                                Modifier
+                                    .padding(top = 8.dp),
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    CircularTextIndicator(
+                        percentage = "${movie?.progress}%",
+                        backgroundColor = MoviesWatchProTheme.colors.brand,
+                    )
+                }
+
+                Text(
+                    text = movie?.description.orEmpty(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MoviesWatchProTheme.colors.textInteractive,
+                    modifier =
+                        Modifier
+                            .padding(start = 24.dp)
+                            .offset(y = (-60).dp),
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MoviesWatchProTheme.colors.textInteractive.copy(alpha = 0.2f),
+                )
 
-                Column(modifier = Modifier.wrapContentHeight()) {
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = "rating",
+                        modifier =
+                            Modifier
+                                .size(24.dp)
+                                .align(Alignment.CenterVertically),
+                        tint = MoviesWatchProTheme.colors.brand,
+                    )
+
+                    val annotatedString =
+                        buildAnnotatedString {
+                            append(movie?.rating.toString())
+                            append(
+                                AnnotatedString(
+                                    text = " · ",
+                                    spanStyle =
+                                        SpanStyle(
+                                            color = MoviesWatchProTheme.colors.brand,
+                                            fontSize = 36.sp,
+                                        ),
+                                ),
+                            )
+                            append(movie?.category)
+                        }
+
                     Text(
-                        text = movie?.title.orEmpty(),
+                        text = annotatedString,
                         style = MaterialTheme.typography.titleLarge,
                         color = MoviesWatchProTheme.colors.textInteractive,
                         modifier =
                             Modifier
-                                .padding(top = 8.dp),
-                    )
-
-                    Text(
-                        text = "${movie?.releaseDate?.isMovieRunning()}",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MoviesWatchProTheme.colors.textSecondary,
-                        modifier =
-                            Modifier
-                                .padding(top = 8.dp),
+                                .align(Alignment.CenterVertically)
+                                .padding(8.dp),
                     )
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
-
-                CircularTextIndicator(
-                    percentage = "${movie?.progress}%",
-                    backgroundColor = MoviesWatchProTheme.colors.brand,
-                )
-            }
-
-            Text(
-                text = movie?.description.orEmpty(),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MoviesWatchProTheme.colors.textInteractive,
-                modifier =
-                    Modifier
-                        .padding(start = 24.dp)
-                        .offset(y = (-60).dp),
-            )
-
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                color = MoviesWatchProTheme.colors.textInteractive.copy(alpha = 0.2f),
-            )
-
-            Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Star,
-                    contentDescription = "rating",
-                    modifier =
-                        Modifier
-                            .size(24.dp)
-                            .align(Alignment.CenterVertically),
-                    tint = MoviesWatchProTheme.colors.brand,
-                )
-
-                val annotatedString =
-                    buildAnnotatedString {
-                        append(movie?.rating.toString())
-                        append(
-                            AnnotatedString(
-                                text = " · ",
-                                spanStyle =
-                                    SpanStyle(
-                                        color = MoviesWatchProTheme.colors.brand,
-                                        fontSize = 36.sp,
-                                    ),
-                            ),
-                        )
-                        append(movie?.category)
+                val colors = listOf(Color.Red, Color.Blue, Color.Magenta)
+                val itemColors =
+                    remember(movie?.providers) {
+                        List(movie?.providers?.size ?: 0) { index -> colors[index % colors.size] }
                     }
-
-                Text(
-                    text = annotatedString,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MoviesWatchProTheme.colors.textInteractive,
-                    modifier = Modifier.align(Alignment.CenterVertically).padding(8.dp),
-                )
-            }
-
-            val colors = listOf(Color.Red, Color.Blue, Color.Magenta)
-            val itemColors =
-                remember(movie?.providers) {
-                    List(movie?.providers?.size ?: 0) { index -> colors[index % colors.size] }
-                }
-            LazyRow(
-                modifier = Modifier.padding(start = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(16.dp),
-            ) {
-                itemsIndexed(movie?.providers.orEmpty()) { index, provider ->
-                    val backgroundColor = itemColors[index] // Use precomputed color
-                    Button(
-                        onClick = { navigateToProvider(provider) },
-                        modifier =
-                            Modifier
-                                .height(50.dp)
-                                .width(120.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor),
-                    ) {
-                        Text(
-                            text = provider,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                        )
+                LazyRow(
+                    modifier = Modifier.padding(start = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(16.dp),
+                ) {
+                    itemsIndexed(movie?.providers.orEmpty()) { index, provider ->
+                        val backgroundColor = itemColors[index] // Use precomputed color
+                        Button(
+                            onClick = { navigateToProvider(provider) },
+                            modifier =
+                                Modifier
+                                    .height(50.dp)
+                                    .width(120.dp),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = ButtonDefaults.buttonColors(backgroundColor),
+                        ) {
+                            Text(
+                                text = provider,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
                     }
                 }
             }

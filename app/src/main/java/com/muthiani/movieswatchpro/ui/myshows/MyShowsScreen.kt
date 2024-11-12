@@ -1,5 +1,10 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.muthiani.movieswatchpro.ui.myshows
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,9 +28,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
+import com.muthiani.movieswatchpro.LocalSharedTransitionScope
+import com.muthiani.movieswatchpro.MovieSharedElementKey
+import com.muthiani.movieswatchpro.MovieSharedElementType
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchScaffold
 import com.muthiani.movieswatchpro.ui.components.customHomeTopBar
 import com.muthiani.movieswatchpro.ui.home.WatchListViewModel
+import com.muthiani.movieswatchpro.ui.home.movieDetailBoundsTransform
+import com.muthiani.movieswatchpro.ui.home.nonSpatialExpressiveSpring
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
@@ -33,37 +44,56 @@ fun MyShowsScreen(onMovieSelected: (Long) -> Unit) {
     val watchListViewModel: WatchListViewModel = hiltViewModel()
     val myShows by watchListViewModel.uiState.collectAsState()
 
-    MoviesWatchScaffold(topBar = { customHomeTopBar(showActions = false) }, content = { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            items(myShows.watchList.filter { it.progress.toInt() > 50 }) { movie ->
-                Row(
-                    modifier =
-                        Modifier.padding(8.dp).fillMaxWidth().clickable {
-                            onMovieSelected(movie.id.toLong())
-                        },
-                ) {
-                    AsyncImage(
-                        model = movie.imageUrl,
-                        contentDescription = "",
+    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalArgumentException("No scope found")
+    val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current ?: throw IllegalArgumentException("No scope found")
+
+    with(sharedTransitionScope) {
+        MoviesWatchScaffold(topBar = { customHomeTopBar(showActions = false) }, content = { innerPadding ->
+            LazyColumn(modifier = Modifier.padding(innerPadding)) {
+                items(myShows.watchList.filter { it.progress.toInt() > 50 }) { movie ->
+                    Row(
                         modifier =
-                            Modifier
-                                .height(120.dp)
-                                .width(80.dp)
-                                .clip(RoundedCornerShape(4.dp)),
-                    )
-
-                    Spacer(modifier = Modifier.size(16.dp))
-
-                    Column(modifier = Modifier.align(Alignment.CenterVertically)) {
-                        Text(
-                            text = movie.title,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MoviesWatchProTheme.colors.textInteractive,
-                            modifier = Modifier.padding(top = 4.dp),
+                            Modifier.padding(8.dp).fillMaxWidth().clickable {
+                                onMovieSelected(movie.id.toLong())
+                            },
+                    ) {
+                        AsyncImage(
+                            model = movie.imageUrl,
+                            contentDescription = "",
+                            modifier =
+                                Modifier
+                                    .height(120.dp)
+                                    .width(80.dp)
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .sharedBounds(
+                                        sharedContentState =
+                                            rememberSharedContentState(
+                                                key =
+                                                    MovieSharedElementKey(
+                                                        snackId = movie.id.toLong(),
+                                                        type = MovieSharedElementType.Image,
+                                                    ),
+                                            ),
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        exit = fadeOut(nonSpatialExpressiveSpring()),
+                                        enter = fadeIn(nonSpatialExpressiveSpring()),
+                                        boundsTransform = movieDetailBoundsTransform,
+                                    ),
                         )
+
+                        Spacer(modifier = Modifier.size(16.dp))
+
+                        Column(modifier = Modifier.align(Alignment.CenterVertically)) {
+                            Text(
+                                text = movie.title,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MoviesWatchProTheme.colors.textInteractive,
+                                modifier = Modifier.padding(top = 4.dp),
+                            )
+                        }
                     }
                 }
             }
-        }
-    }, bottomBar = {})
+        }, bottomBar = {})
+    }
 }

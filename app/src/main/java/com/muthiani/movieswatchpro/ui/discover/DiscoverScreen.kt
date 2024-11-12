@@ -1,5 +1,10 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.muthiani.movieswatchpro.ui.discover
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,10 +30,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
+import com.muthiani.movieswatchpro.LocalSharedTransitionScope
+import com.muthiani.movieswatchpro.MovieSharedElementKey
+import com.muthiani.movieswatchpro.MovieSharedElementType
 import com.muthiani.movieswatchpro.data.Movie
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchScaffold
 import com.muthiani.movieswatchpro.ui.components.SearcheableTopBar
 import com.muthiani.movieswatchpro.ui.home.WatchListViewModel
+import com.muthiani.movieswatchpro.ui.home.movieDetailBoundsTransform
+import com.muthiani.movieswatchpro.ui.home.nonSpatialExpressiveSpring
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable
@@ -53,52 +64,78 @@ fun DiscoverContent(
         modifier = Modifier.padding(bottom = 24.dp),
         content = {
             items(itemsList) { movie ->
-                Column(
-                    modifier =
-                        Modifier.padding(16.dp).clickable {
-                            onMovieSelected(movie.id.toLong())
-                        },
-                ) {
-                    Box(
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .height(220.dp)
-                                .wrapContentHeight(),
-                    ) {
-                        AsyncImage(
-                            model = movie.imageUrl,
-                            contentDescription = "",
-                            modifier =
-                                Modifier
-                                    .fillMaxSize()
-                                    .clip(RoundedCornerShape(8.dp)),
-                            contentScale = ContentScale.Crop,
-                        )
-
-                        Text(
-                            text = movie.rating.toString(),
-                            modifier =
-                                Modifier
-                                    .align(Alignment.TopEnd)
-                                    .background(color = Color.Black.copy(alpha = 0.4f), shape = RoundedCornerShape(4.dp))
-                                    .padding(4.dp),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MoviesWatchProTheme.colors.brand,
-                        )
-                    }
-
-                    Text(
-                        text = movie.title,
-                        modifier =
-                            Modifier
-                                .padding(bottom = 16.dp)
-                                .align(Alignment.CenterHorizontally),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MoviesWatchProTheme.colors.textInteractive,
-                    )
-                }
+                DiscoverItem(movie, onMovieSelected)
             }
         },
     )
+}
+
+@Composable
+fun DiscoverItem(
+    movie: Movie,
+    onMovieSelected: (Long) -> Unit,
+) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalArgumentException("No scope found")
+    val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current ?: throw IllegalArgumentException("No scope found")
+    with(sharedTransitionScope) {
+        Column(
+            modifier =
+                Modifier.padding(16.dp).clickable {
+                    onMovieSelected(movie.id.toLong())
+                },
+        ) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                        .wrapContentHeight(),
+            ) {
+                AsyncImage(
+                    model = movie.imageUrl,
+                    contentDescription = "",
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(8.dp))
+                            .sharedBounds(
+                                sharedContentState =
+                                    rememberSharedContentState(
+                                        key =
+                                            MovieSharedElementKey(
+                                                snackId = movie.id.toLong(),
+                                                type = MovieSharedElementType.Image,
+                                            ),
+                                    ),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                exit = fadeOut(nonSpatialExpressiveSpring()),
+                                enter = fadeIn(nonSpatialExpressiveSpring()),
+                                boundsTransform = movieDetailBoundsTransform,
+                            ),
+                    contentScale = ContentScale.Crop,
+                )
+
+                Text(
+                    text = movie.rating.toString(),
+                    modifier =
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .background(color = Color.Black.copy(alpha = 0.4f), shape = RoundedCornerShape(4.dp))
+                            .padding(4.dp),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MoviesWatchProTheme.colors.brand,
+                )
+            }
+
+            Text(
+                text = movie.title,
+                modifier =
+                    Modifier
+                        .padding(bottom = 16.dp)
+                        .align(Alignment.CenterHorizontally),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MoviesWatchProTheme.colors.textInteractive,
+            )
+        }
+    }
 }

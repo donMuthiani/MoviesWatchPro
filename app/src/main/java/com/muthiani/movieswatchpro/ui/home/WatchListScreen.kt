@@ -1,5 +1,10 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.muthiani.movieswatchpro.ui.home
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,12 +36,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
+import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
+import com.muthiani.movieswatchpro.LocalSharedTransitionScope
+import com.muthiani.movieswatchpro.MovieSharedElementKey
+import com.muthiani.movieswatchpro.MovieSharedElementType
 import com.muthiani.movieswatchpro.data.Movie
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchButton
+import com.muthiani.movieswatchpro.ui.components.MoviesWatchImage
 import com.muthiani.movieswatchpro.ui.components.customHomeTopBar
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
-import timber.log.Timber
 
 @Composable
 fun WatchListScreen(onMovieSelected: (Long) -> Unit) {
@@ -66,6 +74,7 @@ fun WatchListScreen(onMovieSelected: (Long) -> Unit) {
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MoviesWatchList(
     movieList: List<Movie>,
@@ -78,109 +87,133 @@ fun MoviesWatchList(
                 .padding(bottom = 48.dp),
     ) {
         items(movieList) { movie ->
-            Row(
+            MovieItem(movie, onMovieClicked)
+        }
+    }
+}
+
+@Composable
+fun MovieItem(
+    movie: Movie,
+    onMovieClicked: (Long) -> Unit,
+) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalArgumentException("No scope found")
+    val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current ?: throw IllegalArgumentException("No scope found")
+    with(sharedTransitionScope) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                        onClick = {
+                            onMovieClicked(movie.id.toLong())
+                        },
+                    )
+                    .padding(vertical = 32.dp),
+            verticalAlignment = Alignment.Top,
+        ) {
+            MoviesWatchImage(
+                url = movie.imageUrl,
+                contentDescription = "image from url",
                 modifier =
                     Modifier
-                        .fillMaxWidth()
-                        .clickable(
-                            onClick = {
-                                Timber.i("Movie clicked id ${movie.id}")
-                                onMovieClicked(movie.id.toLong())
-                            },
-                        )
-                        .padding(vertical = 32.dp),
-                verticalAlignment = Alignment.Top,
-            ) {
-                AsyncImage(
-                    model = movie.imageUrl,
-                    contentDescription = "image from url",
-                    modifier =
-                        Modifier
-                            .height(120.dp)
-                            .width(90.dp)
-                            .clip(shape = RoundedCornerShape(12.dp)),
-                )
-
-                Column(
-                    modifier =
-                        Modifier
-                            .padding(start = 16.dp),
-                ) {
-                    Text(
-                        text = movie.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MoviesWatchProTheme.colors.textInteractive,
-                    )
-
-                    val annotatedString =
-                        buildAnnotatedString {
-                            append(movie.releaseDate)
-                            append(
-                                AnnotatedString(
-                                    text = ".",
-                                    spanStyle =
-                                        SpanStyle(
-                                            color = MoviesWatchProTheme.colors.brand,
-                                            fontSize = 26.sp,
+                        .height(120.dp)
+                        .width(90.dp)
+                        .clip(shape = RoundedCornerShape(12.dp))
+                        .sharedBounds(
+                            sharedContentState =
+                                rememberSharedContentState(
+                                    key =
+                                        MovieSharedElementKey(
+                                            snackId = movie.id.toLong(),
+                                            type = MovieSharedElementType.Image,
                                         ),
                                 ),
-                            )
-                            append(movie.category)
-                        }
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            exit = fadeOut(nonSpatialExpressiveSpring()),
+                            enter = fadeIn(nonSpatialExpressiveSpring()),
+                            boundsTransform = movieDetailBoundsTransform,
+                        ),
+            )
+            Column(
+                modifier =
+                    Modifier
+                        .padding(start = 16.dp),
+            ) {
+                Text(
+                    text = movie.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MoviesWatchProTheme.colors.textInteractive,
+                )
+
+                val annotatedString =
+                    buildAnnotatedString {
+                        append(movie.releaseDate)
+                        append(
+                            AnnotatedString(
+                                text = ".",
+                                spanStyle =
+                                    SpanStyle(
+                                        color = MoviesWatchProTheme.colors.brand,
+                                        fontSize = 26.sp,
+                                    ),
+                            ),
+                        )
+                        append(movie.category)
+                    }
+                Text(
+                    text = annotatedString,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MoviesWatchProTheme.colors.textInteractive,
+                )
+
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    LinearProgressIndicator(
+                        color = MoviesWatchProTheme.colors.brand,
+                        trackColor = MoviesWatchProTheme.colors.iconSecondary,
+                        progress = { (movie.progress.toFloat() / 100) },
+                        modifier =
+                            Modifier
+                                .height(10.dp)
+                                .align(Alignment.CenterVertically)
+                                .clip(shape = RoundedCornerShape(10.dp))
+                                .weight(1f),
+                    )
+
                     Text(
-                        text = annotatedString,
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterVertically)
+                                .padding(start = 8.dp, end = 8.dp),
+                        text = "3/8",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MoviesWatchProTheme.colors.textInteractive,
                     )
+                }
 
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        LinearProgressIndicator(
-                            color = MoviesWatchProTheme.colors.brand,
-                            trackColor = MoviesWatchProTheme.colors.iconSecondary,
-                            progress = { (movie.progress.toFloat() / 100) },
-                            modifier =
-                                Modifier
-                                    .height(10.dp)
-                                    .align(Alignment.CenterVertically)
-                                    .clip(shape = RoundedCornerShape(10.dp))
-                                    .weight(1f),
-                        )
-
-                        Text(
-                            modifier =
-                                Modifier
-                                    .align(Alignment.CenterVertically)
-                                    .padding(start = 8.dp, end = 8.dp),
-                            text = "3/8",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MoviesWatchProTheme.colors.textInteractive,
-                        )
+                Row(Modifier.padding(top = 8.dp)) {
+                    MoviesWatchButton(
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        onClick = { /*TODO*/ },
+                        border =
+                            BorderStroke(
+                                width = 1.dp,
+                                color = MoviesWatchProTheme.colors.textInteractive,
+                            ),
+                        backgroundGradient = listOf(Color.Transparent, Color.Transparent),
+                    ) {
+                        Text(text = "Episode Info", style = MaterialTheme.typography.bodyLarge)
                     }
 
-                    Row(Modifier.padding(top = 8.dp)) {
-                        MoviesWatchButton(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            onClick = { /*TODO*/ },
-                            border =
-                                BorderStroke(
-                                    width = 1.dp,
-                                    color = MoviesWatchProTheme.colors.textInteractive,
-                                ),
-                            backgroundGradient = listOf(Color.Transparent, Color.Transparent),
-                        ) {
-                            Text(text = "Episode Info", style = MaterialTheme.typography.bodyLarge)
-                        }
-
-                        Text(
-                            text = "5 Left",
-                            style = (MaterialTheme.typography.bodyLarge),
-                            modifier =
-                                Modifier
-                                    .padding(start = 8.dp)
-                                    .align(Alignment.CenterVertically),
-                            color = MoviesWatchProTheme.colors.textInteractive.copy(alpha = 0.4f),
-                        )
-                    }
+                    Text(
+                        text = "5 Left",
+                        style = (MaterialTheme.typography.bodyLarge),
+                        modifier =
+                            Modifier
+                                .padding(start = 8.dp)
+                                .align(Alignment.CenterVertically),
+                        color = MoviesWatchProTheme.colors.textInteractive.copy(alpha = 0.4f),
+                    )
                 }
             }
         }
