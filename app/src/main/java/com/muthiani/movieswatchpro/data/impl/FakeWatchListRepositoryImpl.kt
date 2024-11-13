@@ -1,13 +1,12 @@
 package com.muthiani.movieswatchpro.data.impl
 
-import com.muthiani.movieswatchpro.data.FakeWatchListRepository
-import com.muthiani.movieswatchpro.data.Movie
-import com.muthiani.movieswatchpro.data.Result
+import com.muthiani.movieswatchpro.data.*
+import com.muthiani.movieswatchpro.models.MovieModel
 import javax.inject.Inject
 
 class FakeWatchListRepositoryImpl
     @Inject
-    constructor() : FakeWatchListRepository {
+    constructor(private val moviesWatchApi: MoviesWatchApi) : FakeWatchListRepository {
         private val watchlist =
             listOf(
                 Movie(
@@ -112,5 +111,9 @@ class FakeWatchListRepositoryImpl
 
         override suspend fun getMovie(movieId: Int): Movie? {
             return watchlist.firstOrNull { it.id == movieId }
+        }
+
+        override suspend fun getNowShowingMovies(): ApiResponse<List<MovieModel>> {
+            return moviesWatchApi.getNowShowing()
         }
     }

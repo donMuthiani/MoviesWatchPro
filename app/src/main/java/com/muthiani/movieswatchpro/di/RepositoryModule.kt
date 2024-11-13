@@ -1,6 +1,7 @@
 package com.muthiani.movieswatchpro.di
 
 import com.muthiani.movieswatchpro.data.FakeWatchListRepository
+import com.muthiani.movieswatchpro.data.MoviesWatchApi
 import com.muthiani.movieswatchpro.data.impl.FakeWatchListRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideFakeWatchListRepository(): FakeWatchListRepository {
-        return FakeWatchListRepositoryImpl()
+    fun provideFakeWatchListRepository(moviesWatchApi: MoviesWatchApi): FakeWatchListRepository {
+        return FakeWatchListRepositoryImpl(moviesWatchApi)
     }
 }

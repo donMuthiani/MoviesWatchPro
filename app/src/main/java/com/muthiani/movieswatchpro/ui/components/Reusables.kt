@@ -137,7 +137,8 @@ fun CustomTextField(
                 .padding(24.dp)
                 .background(Color.White, shape = RoundedCornerShape(24.dp)),
         // White background with rounded corners
-        shape = RoundedCornerShape(24.dp), // Rounded corners for the TextField
+        shape = RoundedCornerShape(24.dp),
+        // Rounded corners for the TextField
         colors =
             TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,

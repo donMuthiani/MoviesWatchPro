@@ -1,5 +1,7 @@
 package com.muthiani.movieswatchpro.data
 
+import com.muthiani.movieswatchpro.models.MovieModel
+
 data class Movie(
     val id: Int,
     val title: String,
@@ -21,4 +23,6 @@ interface FakeWatchListRepository {
     suspend fun getMyShows(): Result<List<Movie>>
 
     suspend fun getMovie(movieId: Int): Movie?
+
+    suspend fun getNowShowingMovies(): ApiResponse<List<MovieModel>>
 }

@@ -41,29 +41,35 @@ import com.muthiani.movieswatchpro.LocalSharedTransitionScope
 import com.muthiani.movieswatchpro.MovieSharedElementKey
 import com.muthiani.movieswatchpro.MovieSharedElementType
 import com.muthiani.movieswatchpro.data.Movie
+import com.muthiani.movieswatchpro.models.MovieModel
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchButton
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchImage
 import com.muthiani.movieswatchpro.ui.components.customHomeTopBar
+import com.muthiani.movieswatchpro.ui.discover.DiscoverViewModel
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
+import timber.log.Timber
 
 @Composable
 fun WatchListScreen(onMovieSelected: (Long) -> Unit) {
     val watchListViewModel: WatchListViewModel = hiltViewModel()
+    val discoverViewModel: DiscoverViewModel = hiltViewModel()
+
     val uiState by watchListViewModel.uiState.collectAsState()
+    val discoverViewModelUiState by discoverViewModel.uiState.collectAsState()
+
     MoviesWatchProTheme {
         Scaffold(topBar = { customHomeTopBar(true) }, content = { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
-                when {
-                    uiState.loading -> {
+                when (discoverViewModelUiState) {
+                    is DiscoverViewModel.DiscoverUiState.Loading -> {
                         CircularProgressIndicator()
                     }
 
-                    uiState.error?.isNotEmpty() == true -> {
-                        Text(text = "Error: ${uiState.error}")
-                    }
-
                     else -> {
+                        val nowShowingList = (discoverViewModelUiState as DiscoverViewModel.DiscoverUiState.NowShowing).nowShowingList
+
                         MoviesWatchList(
+                            nowShowingList,
                             uiState.watchList,
                             onMovieSelected,
                         )
@@ -77,9 +83,11 @@ fun WatchListScreen(onMovieSelected: (Long) -> Unit) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MoviesWatchList(
+    nowShowingList: List<MovieModel>,
     movieList: List<Movie>,
     onMovieClicked: (Long) -> Unit,
 ) {
+    Timber.i("nowShowingList: $nowShowingList")
     LazyColumn(
         modifier =
             Modifier
