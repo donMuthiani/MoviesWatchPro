@@ -28,14 +28,34 @@ class DiscoverViewModel
             return fakeWatchListRepository.getMovie(movieId)
         }
 
-        fun getNowShowingMovies() {
+        private fun getNowShowingMovies() {
             _uiState.value = DiscoverUiState.Loading
 
             viewModelScope.launch {
-                val nowShowingMoviesDeferred = async { fakeWatchListRepository.getNowShowingMovies() }
-                val nowShowing = nowShowingMoviesDeferred.await()
+                try {
+                    val nowShowingMoviesDeferred = async { fakeWatchListRepository.getNowShowingMovies() }
+                    val popularDeferred = async { fakeWatchListRepository.getPopularMovies() }
+                    val topRatedDeferred = async { fakeWatchListRepository.getTopRatedMovies() }
+                    val upcomingDeferred = async { fakeWatchListRepository.getUpcomingMovies() }
+                    val trendingDeferred = async { fakeWatchListRepository.getTrendingMovies() }
 
-                _uiState.value = DiscoverUiState.NowShowing(nowShowing.data ?: emptyList())
+                    val nowShowing = nowShowingMoviesDeferred.await()
+                    val popular = popularDeferred.await()
+                    val topRated = topRatedDeferred.await()
+                    val upcoming = upcomingDeferred.await()
+                    val trending = trendingDeferred.await()
+
+                    _uiState.value =
+                        DiscoverUiState.Success(
+                            nowShowing = nowShowing.data ?: emptyList(),
+                            popular = popular.data ?: emptyList(),
+                            topRated = topRated.data ?: emptyList(),
+                            trending = trending.data ?: emptyList(),
+                            upcoming = upcoming.data ?: emptyList(),
+                        )
+                } catch (e: Exception) {
+                    _uiState.value = DiscoverUiState.Error(e.message ?: "An error occurred")
+                }
             }
         }
 
@@ -44,6 +64,14 @@ class DiscoverViewModel
 
             data object Loading : DiscoverUiState()
 
-            data class NowShowing(val nowShowingList: List<MovieModel>) : DiscoverUiState()
+            data class Success(
+                val nowShowing: List<MovieModel>,
+                val popular: List<MovieModel>,
+                val topRated: List<MovieModel>,
+                val trending: List<MovieModel>,
+                val upcoming: List<MovieModel>,
+            ) : DiscoverUiState()
+
+            data class Error(val message: String) : DiscoverUiState()
         }
     }

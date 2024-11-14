@@ -116,4 +116,20 @@ class FakeWatchListRepositoryImpl
         override suspend fun getNowShowingMovies(): ApiResponse<List<MovieModel>> {
             return moviesWatchApi.getNowShowing()
         }
+
+        override suspend fun getPopularMovies(): ApiResponse<List<MovieModel>> {
+            return moviesWatchApi.getPopular()
+        }
+
+        override suspend fun getTopRatedMovies(): ApiResponse<List<MovieModel>> {
+            return moviesWatchApi.getTopRated()
+        }
+
+        override suspend fun getTrendingMovies(): ApiResponse<List<MovieModel>> {
+            return moviesWatchApi.getTrending(timeWindow = "week")
+        }
+
+        override suspend fun getUpcomingMovies(): ApiResponse<List<MovieModel>> {
+            return moviesWatchApi.getUpcoming()
+        }
     }

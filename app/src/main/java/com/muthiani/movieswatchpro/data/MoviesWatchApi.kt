@@ -2,6 +2,7 @@ package com.muthiani.movieswatchpro.data
 
 import com.muthiani.movieswatchpro.models.MovieModel
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MoviesWatchApi {
@@ -15,17 +16,22 @@ interface MoviesWatchApi {
     suspend fun getPopular(
         @Query("language") language: String = "en-US",
         @Query("page") page: String = "1",
-    )
+    ): ApiResponse<List<MovieModel>>
 
     @GET("movie/top_rated")
     suspend fun getTopRated(
         @Query("language") language: String = "en-US",
         @Query("page") page: String = "1",
-    )
+    ): ApiResponse<List<MovieModel>>
 
     @GET("movie/upcoming")
     suspend fun getUpcoming(
         @Query("language") language: String = "en-US",
         @Query("page") page: String = "1",
-    )
+    ): ApiResponse<List<MovieModel>>
+
+    @GET("trending/movie/{time_window}")
+    suspend fun getTrending(
+        @Path("time_window") timeWindow: String = "week",
+    ): ApiResponse<List<MovieModel>>
 }

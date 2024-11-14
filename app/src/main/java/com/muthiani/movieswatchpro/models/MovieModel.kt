@@ -1,5 +1,6 @@
 package com.muthiani.movieswatchpro.models
 
+import androidx.compose.runtime.Immutable
 import com.google.gson.annotations.SerializedName
 
 data class MovieModel(
@@ -17,4 +18,12 @@ data class MovieModel(
     @SerializedName("video") var video: Boolean? = null,
     @SerializedName("vote_average") var voteAverage: Double? = null,
     @SerializedName("vote_count") var voteCount: Int? = null,
+)
+
+@Immutable
+data class MovieCollection(
+    val id: Long = 1,
+    val name: String,
+    val movies: List<MovieModel>,
+    val onMovieClicked: (Long) -> Unit,
 )

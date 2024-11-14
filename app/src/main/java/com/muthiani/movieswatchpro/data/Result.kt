@@ -1,5 +1,6 @@
 package com.muthiani.movieswatchpro.data
 
+import com.google.gson.annotations.SerializedName
 import com.muthiani.movieswatchpro.data.Result.Dates
 
 sealed class Result<T> {
@@ -21,6 +22,7 @@ fun <T> Result<T>.successOr(fallback: T): T {
 }
 
 data class ApiResponse<T>(
+    @SerializedName("results")
     val data: T? = null,
     val totalPages: Int = 1,
     val totalResults: Int = 1,

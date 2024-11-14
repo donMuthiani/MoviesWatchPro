@@ -25,4 +25,12 @@ interface FakeWatchListRepository {
     suspend fun getMovie(movieId: Int): Movie?
 
     suspend fun getNowShowingMovies(): ApiResponse<List<MovieModel>>
+
+    suspend fun getPopularMovies(): ApiResponse<List<MovieModel>>
+
+    suspend fun getTopRatedMovies(): ApiResponse<List<MovieModel>>
+
+    suspend fun getUpcomingMovies(): ApiResponse<List<MovieModel>>
+
+    suspend fun getTrendingMovies(): ApiResponse<List<MovieModel>>
 }
