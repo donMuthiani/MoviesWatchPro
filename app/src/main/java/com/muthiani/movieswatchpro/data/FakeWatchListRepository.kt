@@ -22,7 +22,7 @@ interface FakeWatchListRepository {
     // Get my Shows list
     suspend fun getMyShows(): Result<List<Movie>>
 
-    suspend fun getMovie(movieId: Int): Movie?
+    suspend fun getMovie(movieId: Int): MovieModel?
 
     suspend fun getNowShowingMovies(): ApiResponse<List<MovieModel>>
 
@@ -33,4 +33,6 @@ interface FakeWatchListRepository {
     suspend fun getUpcomingMovies(): ApiResponse<List<MovieModel>>
 
     suspend fun getTrendingMovies(): ApiResponse<List<MovieModel>>
+
+    suspend fun getMovieCategory(category: String): ApiResponse<List<MovieModel>>
 }

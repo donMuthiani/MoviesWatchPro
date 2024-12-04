@@ -1,16 +1,17 @@
 package com.muthiani.movieswatchpro.ui.discover
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muthiani.movieswatchpro.data.FakeWatchListRepository
-import com.muthiani.movieswatchpro.data.Movie
+import com.muthiani.movieswatchpro.models.MovieCollection
 import com.muthiani.movieswatchpro.models.MovieModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,38 +21,39 @@ class DiscoverViewModel
         private val _uiState: MutableStateFlow<DiscoverUiState> = MutableStateFlow(DiscoverUiState.Initial)
         val uiState: StateFlow<DiscoverUiState> = _uiState.asStateFlow()
 
+        private val exceptionHandler =
+            CoroutineExceptionHandler { _, exception ->
+                _uiState.value = DiscoverUiState.Error(exception.message ?: "An error occurred")
+            }
+
         init {
-            getNowShowingMovies()
+            getMovies()
         }
 
-        suspend fun getMovie(movieId: Int): Movie? {
-            return fakeWatchListRepository.getMovie(movieId)
-        }
-
-        private fun getNowShowingMovies() {
+        fun getMovies() {
             _uiState.value = DiscoverUiState.Loading
 
-            viewModelScope.launch {
+            viewModelScope.launch(exceptionHandler) {
                 try {
-                    val nowShowingMoviesDeferred = async { fakeWatchListRepository.getNowShowingMovies() }
-                    val popularDeferred = async { fakeWatchListRepository.getPopularMovies() }
-                    val topRatedDeferred = async { fakeWatchListRepository.getTopRatedMovies() }
-                    val upcomingDeferred = async { fakeWatchListRepository.getUpcomingMovies() }
-                    val trendingDeferred = async { fakeWatchListRepository.getTrendingMovies() }
-
-                    val nowShowing = nowShowingMoviesDeferred.await()
-                    val popular = popularDeferred.await()
-                    val topRated = topRatedDeferred.await()
-                    val upcoming = upcomingDeferred.await()
-                    val trending = trendingDeferred.await()
+                    val (nowShowing, popular, topRated, upcoming, trending) =
+                        listOf(
+                            async { fakeWatchListRepository.getNowShowingMovies() },
+                            async { fakeWatchListRepository.getPopularMovies() },
+                            async { fakeWatchListRepository.getTopRatedMovies() },
+                            async { fakeWatchListRepository.getUpcomingMovies() },
+                            async { fakeWatchListRepository.getTrendingMovies() },
+                        ).map { it.await() }
 
                     _uiState.value =
                         DiscoverUiState.Success(
-                            nowShowing = nowShowing.data ?: emptyList(),
-                            popular = popular.data ?: emptyList(),
-                            topRated = topRated.data ?: emptyList(),
-                            trending = trending.data ?: emptyList(),
-                            upcoming = upcoming.data ?: emptyList(),
+                            collection =
+                                listOf(
+                                    MovieCollection(name = "Now Showing", movies = nowShowing.data ?: emptyList()),
+                                    MovieCollection(name = "Popular", movies = popular.data ?: emptyList()),
+                                    MovieCollection(name = "Trending", movies = trending.data ?: emptyList()),
+                                    MovieCollection(name = "Top Rated", movies = topRated.data ?: emptyList()),
+                                    MovieCollection(name = "Upcoming", movies = upcoming.data ?: emptyList()),
+                                ),
                         )
                 } catch (e: Exception) {
                     _uiState.value = DiscoverUiState.Error(e.message ?: "An error occurred")
@@ -65,13 +67,11 @@ class DiscoverViewModel
             data object Loading : DiscoverUiState()
 
             data class Success(
-                val nowShowing: List<MovieModel>,
-                val popular: List<MovieModel>,
-                val topRated: List<MovieModel>,
-                val trending: List<MovieModel>,
-                val upcoming: List<MovieModel>,
+                val collection: List<MovieCollection>,
             ) : DiscoverUiState()
 
             data class Error(val message: String) : DiscoverUiState()
+
+            data class Movie(val movieModel: MovieModel) : DiscoverUiState()
         }
     }

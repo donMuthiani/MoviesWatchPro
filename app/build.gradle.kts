@@ -127,6 +127,9 @@ dependencies {
     // define any required OkHttp artifacts without version
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+    // lottie
+    implementation(libs.lottie.compose)
 }
 
 kapt {

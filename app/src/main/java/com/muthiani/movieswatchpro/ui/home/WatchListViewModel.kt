@@ -46,7 +46,7 @@ class WatchListViewModel
             }
         }
 
-        suspend fun getMovie(movieId: Int): Movie? {
+        suspend fun getMovie(movieId: Int): MovieModel? {
             return fakeWatchListRepository.getMovie(movieId)
         }
 

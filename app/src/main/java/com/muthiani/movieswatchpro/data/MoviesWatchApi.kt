@@ -34,4 +34,14 @@ interface MoviesWatchApi {
     suspend fun getTrending(
         @Path("time_window") timeWindow: String = "week",
     ): ApiResponse<List<MovieModel>>
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetail(
+        @Path("movie_id") movieId: Int,
+    ): MovieModel
+
+    @GET("https://api.themoviedb.org/3/movie/{category}")
+    suspend fun getMovieCategory(
+        @Path("category") category: String,
+    ): ApiResponse<List<MovieModel>>
 }

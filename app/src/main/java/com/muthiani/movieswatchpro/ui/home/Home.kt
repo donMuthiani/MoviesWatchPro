@@ -136,7 +136,7 @@ fun NavGraphBuilder.addHomeGraph(
     }
 
     composable(HomeSections.DISCOVER.route) {
-        DiscoverScreen(onMovieSelected = { id -> onMovieSelected(id, it) })
+        DiscoverScreen(modifier = modifier, onMovieSelected = { id -> onMovieSelected(id, it) })
     }
 
     composable(HomeSections.STATISTICS.route) {

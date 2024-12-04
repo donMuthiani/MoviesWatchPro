@@ -172,7 +172,7 @@ fun customHomeTopBar(showActions: Boolean = true) {
             ),
         title = {
             Image(
-                modifier = Modifier.padding(vertical = 24.dp),
+                modifier = Modifier.padding(top = 12.dp, bottom = 12.dp),
                 painter = painterResource(id = R.drawable.splash_logo),
                 contentDescription = "Logo",
             )

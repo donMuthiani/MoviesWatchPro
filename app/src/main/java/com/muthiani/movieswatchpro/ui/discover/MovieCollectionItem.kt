@@ -63,7 +63,7 @@ fun Movies(
     modifier: Modifier = Modifier,
 ) {
     LazyRow(modifier = modifier, contentPadding = PaddingValues(start = 24.dp)) {
-        items(movieCollection.movies.take(15)) { movie ->
+        items(items = movieCollection.movies.take(10), key = { it.id ?: 0 }) { movie ->
             DiscoverItem(movie, onMovieClicked)
         }
     }
