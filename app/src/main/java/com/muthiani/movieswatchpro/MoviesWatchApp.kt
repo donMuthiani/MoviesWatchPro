@@ -168,7 +168,7 @@ fun MainContainer(
     ) { padding ->
         NavHost(
             navController = nestedNavController.navController,
-            startDestination = HomeSections.WATCH_LIST.route,
+            startDestination = HomeSections.DISCOVER.route,
         ) {
             addHomeGraph(
                 onMovieSelected = onMovieSelected,

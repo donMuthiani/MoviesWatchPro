@@ -117,9 +117,9 @@ enum class HomeSections(
     val icon: ImageVector,
     val route: String,
 ) {
+    DISCOVER(R.string.discover, Icons.Outlined.Search, "home/discover"),
     WATCH_LIST(R.string.watch_list, Icons.Outlined.Home, "home/watchList"),
     MY_SHOWS(R.string.my_shows, Icons.Outlined.Favorite, "home/myShows"),
-    DISCOVER(R.string.discover, Icons.Outlined.Search, "home/discover"),
     STATISTICS(R.string.statistics, Icons.Outlined.AccountCircle, "home/statistics"),
 }
 
@@ -136,7 +136,7 @@ fun NavGraphBuilder.addHomeGraph(
     }
 
     composable(HomeSections.DISCOVER.route) {
-        DiscoverScreen(onMovieSelected = { id -> onMovieSelected(id, it) })
+        DiscoverScreen(modifier = modifier, onMovieSelected = { id -> onMovieSelected(id, it) })
     }
 
     composable(HomeSections.STATISTICS.route) {

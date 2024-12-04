@@ -137,7 +137,8 @@ fun CustomTextField(
                 .padding(24.dp)
                 .background(Color.White, shape = RoundedCornerShape(24.dp)),
         // White background with rounded corners
-        shape = RoundedCornerShape(24.dp), // Rounded corners for the TextField
+        shape = RoundedCornerShape(24.dp),
+        // Rounded corners for the TextField
         colors =
             TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
@@ -171,7 +172,7 @@ fun customHomeTopBar(showActions: Boolean = true) {
             ),
         title = {
             Image(
-                modifier = Modifier.padding(vertical = 24.dp),
+                modifier = Modifier.padding(top = 12.dp, bottom = 12.dp),
                 painter = painterResource(id = R.drawable.splash_logo),
                 contentDescription = "Logo",
             )

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.muthiani.movieswatchpro.data.FakeWatchListRepository
 import com.muthiani.movieswatchpro.data.Movie
 import com.muthiani.movieswatchpro.data.successOr
+import com.muthiani.movieswatchpro.models.MovieModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +46,11 @@ class WatchListViewModel
             }
         }
 
-        suspend fun getMovie(movieId: Int): Movie? {
+        suspend fun getMovie(movieId: Int): MovieModel? {
             return fakeWatchListRepository.getMovie(movieId)
+        }
+
+        sealed class DiscoverUiState {
+            data class NowShowing(val nowShowingList: List<MovieModel>) : DiscoverUiState()
         }
     }
