@@ -1,16 +1,19 @@
 package com.muthiani.movieswatchpro.data.impl
 
 import com.muthiani.movieswatchpro.data.ApiResponse
-import com.muthiani.movieswatchpro.data.FakeWatchListRepository
+import com.muthiani.movieswatchpro.data.MovieRepository
 import com.muthiani.movieswatchpro.data.Movie
 import com.muthiani.movieswatchpro.data.MoviesWatchApi
 import com.muthiani.movieswatchpro.data.Result
+import com.muthiani.movieswatchpro.data.WatchListResponse
+import com.muthiani.movieswatchpro.models.ManageWatchList
 import com.muthiani.movieswatchpro.models.MovieModel
+import com.muthiani.movieswatchpro.utils.ConstantUtils
 import javax.inject.Inject
 
-class FakeWatchListRepositoryImpl
+class MovieRepositoryImpl
 @Inject
-constructor(private val moviesWatchApi: MoviesWatchApi) : FakeWatchListRepository {
+constructor(private val moviesWatchApi: MoviesWatchApi) : MovieRepository {
     private val watchlist =
         listOf(
             Movie(
@@ -135,6 +138,10 @@ constructor(private val moviesWatchApi: MoviesWatchApi) : FakeWatchListRepositor
 
     override suspend fun getMovieCategory(category: String): ApiResponse<List<MovieModel>> {
         return moviesWatchApi.getMovieCategory(category)
+    }
+
+    override suspend fun manageMovieWatchList(manageWatchList: ManageWatchList): WatchListResponse {
+        return moviesWatchApi.manageWatchList(ConstantUtils.ACCOUNT_ID, manageWatchList)
     }
 
     override suspend fun getUpcomingMovies(): ApiResponse<List<MovieModel>> {

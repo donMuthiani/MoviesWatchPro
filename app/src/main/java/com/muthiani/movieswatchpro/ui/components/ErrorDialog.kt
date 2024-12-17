@@ -12,7 +12,9 @@ fun ErrorScreen(
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+
+        },
         title = {
             Text(text = "Error", style = TextStyle(color = MoviesWatchProTheme.colors.textInteractive))
         },
@@ -24,6 +26,28 @@ fun ErrorScreen(
                 Text(text = "OK", style = TextStyle(color = MoviesWatchProTheme.colors.textInteractive))
             }
         },
-        containerColor = MoviesWatchProTheme.colors.uiBackground,
+        containerColor = MoviesWatchProTheme.colors.error,
+    )
+}
+
+@Composable
+fun SuccessScreen(
+    message: String = "",
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(text = "Success", style = TextStyle(color = MoviesWatchProTheme.colors.textInteractive))
+        },
+        text = {
+            Text(text = message, style = TextStyle(color = MoviesWatchProTheme.colors.textInteractive))
+        },
+        confirmButton = {
+            MoviesWatchButton(onClick = { onDismiss() }) {
+                Text(text = "OK", style = TextStyle(color = MoviesWatchProTheme.colors.textInteractive))
+            }
+        },
+        containerColor = MoviesWatchProTheme.colors.brand,
     )
 }

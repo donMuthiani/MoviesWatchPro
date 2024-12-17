@@ -1,5 +1,6 @@
 package com.muthiani.movieswatchpro.data
 
+import com.muthiani.movieswatchpro.models.ManageWatchList
 import com.muthiani.movieswatchpro.models.MovieModel
 
 data class Movie(
@@ -15,7 +16,7 @@ data class Movie(
     val providers: List<String> = listOf("Netflix", "Hulu", "Disney+", "HBO"),
 )
 
-interface FakeWatchListRepository {
+interface MovieRepository {
     // Get watchList based on profile interests
     suspend fun getWatchList(): Result<List<Movie>>
 
@@ -35,4 +36,6 @@ interface FakeWatchListRepository {
     suspend fun getTrendingMovies(): ApiResponse<List<MovieModel>>
 
     suspend fun getMovieCategory(category: String): ApiResponse<List<MovieModel>>
+
+    suspend fun manageMovieWatchList(manageWatchList: ManageWatchList): WatchListResponse
 }

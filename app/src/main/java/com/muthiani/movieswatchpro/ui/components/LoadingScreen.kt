@@ -11,7 +11,6 @@ import timber.log.Timber
 
 @Composable
 fun LoadingScreen() {
-    Timber.i("Loading screen")
     Box(modifier = Modifier.fillMaxSize()) {
         AnimatedPreloader(modifier = Modifier.align(Alignment.Center))
     }

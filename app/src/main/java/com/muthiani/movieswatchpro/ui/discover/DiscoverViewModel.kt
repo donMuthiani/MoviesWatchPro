@@ -1,10 +1,8 @@
 package com.muthiani.movieswatchpro.ui.discover
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.muthiani.movieswatchpro.data.FakeWatchListRepository
+import com.muthiani.movieswatchpro.data.MovieRepository
 import com.muthiani.movieswatchpro.models.MovieCollection
 import com.muthiani.movieswatchpro.models.MovieModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DiscoverViewModel
     @Inject
-    constructor(private val fakeWatchListRepository: FakeWatchListRepository) : ViewModel() {
+    constructor(private val fakeWatchListRepository: MovieRepository) : ViewModel() {
         private val _uiState: MutableStateFlow<DiscoverUiState> = MutableStateFlow(DiscoverUiState.Initial)
         val uiState: StateFlow<DiscoverUiState> = _uiState.asStateFlow()
 

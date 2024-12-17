@@ -29,3 +29,9 @@ data class ApiResponse<T>(
     val page: Int = 1,
     val dates: Dates? = null,
 )
+
+data class WatchListResponse(
+    val success: Boolean,
+    val status_code: Int,
+    val status_message: String
+)

@@ -2,7 +2,7 @@ package com.muthiani.movieswatchpro.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.muthiani.movieswatchpro.data.FakeWatchListRepository
+import com.muthiani.movieswatchpro.data.MovieRepository
 import com.muthiani.movieswatchpro.data.Movie
 import com.muthiani.movieswatchpro.data.successOr
 import com.muthiani.movieswatchpro.models.MovieModel
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WatchListViewModel
     @Inject
-    constructor(private val fakeWatchListRepository: FakeWatchListRepository) : ViewModel() {
+    constructor(private val fakeWatchListRepository: MovieRepository) : ViewModel() {
         private val _uiState = MutableStateFlow(WatchListUiState(loading = true))
         val uiState: StateFlow<WatchListUiState> = _uiState.asStateFlow()
 

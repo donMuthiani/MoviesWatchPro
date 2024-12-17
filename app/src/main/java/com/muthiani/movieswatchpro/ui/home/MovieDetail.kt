@@ -19,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,11 +27,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -44,12 +49,14 @@ import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
 import com.muthiani.movieswatchpro.LocalSharedTransitionScope
 import com.muthiani.movieswatchpro.MovieSharedElementKey
 import com.muthiani.movieswatchpro.MovieSharedElementType
+import com.muthiani.movieswatchpro.R
 import com.muthiani.movieswatchpro.models.MovieModel
 import com.muthiani.movieswatchpro.models.ProductionCompanies
 import com.muthiani.movieswatchpro.ui.components.ErrorScreen
 import com.muthiani.movieswatchpro.ui.components.LoadingScreen
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchButton
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchDivider
+import com.muthiani.movieswatchpro.ui.components.SuccessScreen
 import com.muthiani.movieswatchpro.ui.discover.MovieDetailViewModel
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 import com.muthiani.movieswatchpro.utils.isMovieRunning
@@ -101,7 +108,7 @@ fun MovieDetailScreen(
         }
 
         is MovieDetailViewModel.MovieDetailUiState.Movie -> {
-            MovieDetailContent(upPress, (uiState as MovieDetailViewModel.MovieDetailUiState.Movie).movieModel)
+            MovieDetailContent(movieDetailViewModel, upPress, (uiState as MovieDetailViewModel.MovieDetailUiState.Movie).movieModel)
         }
 
         is MovieDetailViewModel.MovieDetailUiState.Error -> {
@@ -114,37 +121,52 @@ fun MovieDetailScreen(
 
 @Composable
 fun MovieDetailContent(
+    movieDetailViewModel: MovieDetailViewModel,
     upPress: () -> Unit,
     movie: MovieModel,
 ) {
+
+    val isLoading by movieDetailViewModel.isWatchListLoaderActive // Observe loader state
+    val result by movieDetailViewModel.result
+    var showDialog by remember { mutableStateOf(true) }
     val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalArgumentException("No scope found")
     val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current ?: throw IllegalArgumentException("No scope found")
+
+    result?.let {
+        if(showDialog) {
+            if(!it) {
+                ErrorScreen(errorMessage = "Error adding to watchlist", onDismiss = { showDialog = false })
+            }
+        }
+    }
+
+
     with(sharedTransitionScope) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .sharedBounds(
-                        rememberSharedContentState(
-                            key =
-                                MovieSharedElementKey(
-                                    snackId = movie.id?.toLong() ?: 0,
-                                    type = MovieSharedElementType.Bounds,
-                                ),
+            Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .sharedBounds(
+                    rememberSharedContentState(
+                        key =
+                        MovieSharedElementKey(
+                            snackId = movie.id?.toLong() ?: 0,
+                            type = MovieSharedElementType.Bounds,
                         ),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
-                        boundsTransform = movieDetailBoundsTransform,
-                        exit = fadeOut(nonSpatialExpressiveSpring()),
-                        enter = fadeIn(nonSpatialExpressiveSpring()),
                     ),
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
+                    boundsTransform = movieDetailBoundsTransform,
+                    exit = fadeOut(nonSpatialExpressiveSpring()),
+                    enter = fadeIn(nonSpatialExpressiveSpring()),
+                ),
         ) {
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(250.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .height(250.dp),
             ) {
                 AsyncImage(
                     model = "https://image.tmdb.org/t/p/original${movie.posterPath}",
@@ -159,57 +181,57 @@ fun MovieDetailContent(
                     contentDescription = "Navigate back",
                     tint = Color.White,
                     modifier =
-                        Modifier
-                            .statusBarsPadding()
-                            .padding(start = 8.dp)
-                            .size(36.dp)
-                            .background(Color.White.copy(alpha = 0.3f), shape = CircleShape)
-                            .clickable {
-                                upPress.invoke()
-                            }
-                            .align(Alignment.TopStart)
-                            .padding(8.dp),
+                    Modifier
+                        .statusBarsPadding()
+                        .padding(start = 8.dp)
+                        .size(36.dp)
+                        .background(Color.White.copy(alpha = 0.3f), shape = CircleShape)
+                        .clickable {
+                            upPress.invoke()
+                        }
+                        .align(Alignment.TopStart)
+                        .padding(8.dp),
                 )
             }
 
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 60.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 60.dp),
             ) {
                 Row(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .padding(8.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(8.dp),
                 ) {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/original${movie.backdropPath}",
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
                         modifier =
-                            Modifier
-                                .width(120.dp)
-                                .height(200.dp)
-                                .padding(start = 16.dp)
-                                .offset(y = ((-60).dp))
-                                .clip(RoundedCornerShape(8.dp))
-                                .sharedBounds(
-                                    rememberSharedContentState(
-                                        key =
-                                            MovieSharedElementKey(
-                                                snackId = movie.id?.toLong() ?: 0,
-                                                type = MovieSharedElementType.Image,
-                                            ),
+                        Modifier
+                            .width(120.dp)
+                            .height(200.dp)
+                            .padding(start = 16.dp)
+                            .offset(y = ((-60).dp))
+                            .clip(RoundedCornerShape(8.dp))
+                            .sharedBounds(
+                                rememberSharedContentState(
+                                    key =
+                                    MovieSharedElementKey(
+                                        snackId = movie.id?.toLong() ?: 0,
+                                        type = MovieSharedElementType.Image,
                                     ),
-                                    animatedVisibilityScope = animatedVisibilityScope,
-                                    clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
-                                    boundsTransform = movieDetailBoundsTransform,
-                                    exit = fadeOut(nonSpatialExpressiveSpring()),
-                                    enter = fadeIn(nonSpatialExpressiveSpring()),
                                 ),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
+                                boundsTransform = movieDetailBoundsTransform,
+                                exit = fadeOut(nonSpatialExpressiveSpring()),
+                                enter = fadeIn(nonSpatialExpressiveSpring()),
+                            ),
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -232,6 +254,34 @@ fun MovieDetailContent(
                                 Modifier
                                     .padding(top = 8.dp),
                         )
+
+                        MoviesWatchButton(shape = RoundedCornerShape(16.dp),
+                            backgroundGradient = MoviesWatchProTheme.colors.interactiveSecondary,
+                            onClick = { addToWatchList(movieDetailViewModel, movie.id) },
+                            modifier = Modifier.padding(top = 24.dp)) {
+
+                            if(isLoading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(24.dp),
+                                    color = Color.White, // You can change the color as needed
+                                    strokeWidth = 2.dp
+                                )
+                            } else {
+
+
+                                Icon(
+                                    painter = painterResource(if(result == true) {R.drawable.ic_check} else R.drawable.round_add), // Replace with your icon
+                                    contentDescription = "Start Icon",
+                                    modifier = Modifier.padding(end = 8.dp)
+                                )
+
+
+                                Text(text = if(result == true) "Added to watchlist" else "Add to watchlist",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Center)
+                            }
+                        }
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -242,9 +292,9 @@ fun MovieDetailContent(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MoviesWatchProTheme.colors.textInteractive,
                     modifier =
-                        Modifier
-                            .padding(start = 24.dp)
-                            .offset(y = (-60).dp),
+                    Modifier
+                        .padding(start = 24.dp)
+                        .offset(y = (-60).dp),
                 )
 
                 MoviesWatchDivider(
@@ -253,17 +303,17 @@ fun MovieDetailContent(
 
                 Row(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = "rating",
                         modifier =
-                            Modifier
-                                .size(24.dp)
-                                .align(Alignment.CenterVertically),
+                        Modifier
+                            .size(24.dp)
+                            .align(Alignment.CenterVertically),
                         tint = MoviesWatchProTheme.colors.brand,
                     )
 
@@ -288,11 +338,18 @@ fun MovieDetailContent(
                         style = MaterialTheme.typography.titleLarge,
                         color = MoviesWatchProTheme.colors.textInteractive,
                         modifier =
-                            Modifier
-                                .align(Alignment.CenterVertically)
-                                .padding(8.dp),
+                        Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(8.dp),
                     )
                 }
+                Text(text = "Watch",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MoviesWatchProTheme.colors.textInteractive,
+                    modifier = Modifier
+                        .padding(start = 24.dp)
+                    )
+
                 LazyRow(
                     modifier = Modifier.padding(start = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -310,13 +367,19 @@ fun MovieDetailContent(
                                 text = provider.name.orEmpty(),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = Color.White,
-                                textAlign = TextAlign.Center,
+                                textAlign = TextAlign.Center
                             )
                         }
                     }
                 }
             }
         }
+    }
+}
+
+fun addToWatchList(movieDetailViewModel: MovieDetailViewModel, id: Int?) {
+    if (id != null) {
+        movieDetailViewModel.addToWatchList(id)
     }
 }
 
