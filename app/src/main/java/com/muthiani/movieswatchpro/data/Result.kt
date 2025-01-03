@@ -30,8 +30,16 @@ data class ApiResponse<T>(
     val dates: Dates? = null,
 )
 
-data class WatchListResponse(
+data class WatchListResponse<T>(
+    @SerializedName("results")
+    val results: T? = null,
+    val total_pages: Int = 1,
+    val total_results: Int = 1,
+    val page: Int = 1,
+)
+
+data class ManageWatchListResponse(
     val success: Boolean,
     val status_code: Int,
-    val status_message: String
+    val status_message: String,
 )

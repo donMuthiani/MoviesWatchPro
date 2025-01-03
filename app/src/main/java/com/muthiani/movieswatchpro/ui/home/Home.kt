@@ -25,9 +25,8 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Explore
+import androidx.compose.material.icons.outlined.WatchLater
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -63,7 +62,6 @@ import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
 import com.muthiani.movieswatchpro.R
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchSurface
 import com.muthiani.movieswatchpro.ui.discover.DiscoverScreen
-import com.muthiani.movieswatchpro.ui.myshows.MyShowsScreen
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 import java.util.Locale
 
@@ -117,10 +115,9 @@ enum class HomeSections(
     val icon: ImageVector,
     val route: String,
 ) {
-    DISCOVER(R.string.discover, Icons.Outlined.Search, "home/discover"),
-    WATCH_LIST(R.string.watch_list, Icons.Outlined.Home, "home/watchList"),
-    MY_SHOWS(R.string.my_shows, Icons.Outlined.Favorite, "home/myShows"),
-    STATISTICS(R.string.statistics, Icons.Outlined.AccountCircle, "home/statistics"),
+    DISCOVER(R.string.discover, Icons.Outlined.Explore, "home/discover"),
+    WATCH_LIST(R.string.watch_list, Icons.Outlined.WatchLater, "home/watchList"),
+    PROFILE(R.string.account, Icons.Outlined.AccountCircle, "home/statistics"),
 }
 
 fun NavGraphBuilder.addHomeGraph(
@@ -131,16 +128,12 @@ fun NavGraphBuilder.addHomeGraph(
         WatchListScreen(onMovieSelected = { id -> onMovieSelected(id, backStackEntry) })
     }
 
-    composable(HomeSections.MY_SHOWS.route) {
-        MyShowsScreen(onMovieSelected = { id -> onMovieSelected(id, it) })
-    }
-
     composable(HomeSections.DISCOVER.route) {
         DiscoverScreen(modifier = modifier, onMovieSelected = { id -> onMovieSelected(id, it) })
     }
 
-    composable(HomeSections.STATISTICS.route) {
-        StatisticsScreen(modifier = modifier)
+    composable(HomeSections.PROFILE.route) {
+        ProfileScreen(modifier = modifier)
     }
 }
 

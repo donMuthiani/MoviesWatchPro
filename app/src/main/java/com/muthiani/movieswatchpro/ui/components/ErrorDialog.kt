@@ -13,7 +13,6 @@ fun ErrorScreen(
 ) {
     AlertDialog(
         onDismissRequest = {
-
         },
         title = {
             Text(text = "Error", style = TextStyle(color = MoviesWatchProTheme.colors.textInteractive))

@@ -1,8 +1,8 @@
 package com.muthiani.movieswatchpro.ui.discover.collection
 
 import androidx.lifecycle.ViewModel
-import com.muthiani.movieswatchpro.data.MovieRepository
 import com.muthiani.movieswatchpro.data.Movie
+import com.muthiani.movieswatchpro.data.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

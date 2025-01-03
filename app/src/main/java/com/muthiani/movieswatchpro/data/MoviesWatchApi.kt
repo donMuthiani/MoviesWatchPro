@@ -2,7 +2,6 @@ package com.muthiani.movieswatchpro.data
 
 import com.muthiani.movieswatchpro.models.ManageWatchList
 import com.muthiani.movieswatchpro.models.MovieModel
-import com.muthiani.movieswatchpro.utils.ConstantUtils
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -44,13 +43,19 @@ interface MoviesWatchApi {
         @Path("movie_id") movieId: Int,
     ): MovieModel
 
-    @GET("https://api.themoviedb.org/3/movie/{category}")
+    @GET("movie/{category}")
     suspend fun getMovieCategory(
         @Path("category") category: String,
     ): ApiResponse<List<MovieModel>>
 
-    @POST("https://api.themoviedb.org/3/account/{account_id}/watchlist")
+    @POST("account/{account_id}/watchlist")
     suspend fun manageWatchList(
-        @Path("account_id") account_id: Int, @Body manageWatchList: ManageWatchList
-    ): WatchListResponse
+        @Path("account_id") account_id: Int,
+        @Body manageWatchList: ManageWatchList,
+    ): ManageWatchListResponse
+
+    @GET("account/{account_id}/watchlist/movies")
+    suspend fun getWatchList(
+        @Path("account_id") account_id: Int,
+    ): WatchListResponse<List<MovieModel>>
 }

@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.airbnb.lottie.compose.*
-import timber.log.Timber
 
 @Composable
 fun LoadingScreen() {

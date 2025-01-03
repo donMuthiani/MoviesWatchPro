@@ -17,10 +17,8 @@ data class Movie(
 )
 
 interface MovieRepository {
-    // Get watchList based on profile interests
-    suspend fun getWatchList(): Result<List<Movie>>
+    suspend fun getWatchList(): WatchListResponse<List<MovieModel>>
 
-    // Get my Shows list
     suspend fun getMyShows(): Result<List<Movie>>
 
     suspend fun getMovie(movieId: Int): MovieModel?
@@ -37,5 +35,5 @@ interface MovieRepository {
 
     suspend fun getMovieCategory(category: String): ApiResponse<List<MovieModel>>
 
-    suspend fun manageMovieWatchList(manageWatchList: ManageWatchList): WatchListResponse
+    suspend fun manageMovieWatchList(manageWatchList: ManageWatchList): ManageWatchListResponse
 }

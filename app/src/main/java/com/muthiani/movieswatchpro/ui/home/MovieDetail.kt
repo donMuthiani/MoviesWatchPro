@@ -56,7 +56,6 @@ import com.muthiani.movieswatchpro.ui.components.ErrorScreen
 import com.muthiani.movieswatchpro.ui.components.LoadingScreen
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchButton
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchDivider
-import com.muthiani.movieswatchpro.ui.components.SuccessScreen
 import com.muthiani.movieswatchpro.ui.discover.MovieDetailViewModel
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 import com.muthiani.movieswatchpro.utils.isMovieRunning
@@ -125,7 +124,6 @@ fun MovieDetailContent(
     upPress: () -> Unit,
     movie: MovieModel,
 ) {
-
     val isLoading by movieDetailViewModel.isWatchListLoaderActive // Observe loader state
     val result by movieDetailViewModel.result
     var showDialog by remember { mutableStateOf(true) }
@@ -133,40 +131,39 @@ fun MovieDetailContent(
     val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current ?: throw IllegalArgumentException("No scope found")
 
     result?.let {
-        if(showDialog) {
-            if(!it) {
+        if (showDialog) {
+            if (!it) {
                 ErrorScreen(errorMessage = "Error adding to watchlist", onDismiss = { showDialog = false })
             }
         }
     }
 
-
     with(sharedTransitionScope) {
         Column(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .sharedBounds(
-                    rememberSharedContentState(
-                        key =
-                        MovieSharedElementKey(
-                            snackId = movie.id?.toLong() ?: 0,
-                            type = MovieSharedElementType.Bounds,
+                Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .sharedBounds(
+                        rememberSharedContentState(
+                            key =
+                                MovieSharedElementKey(
+                                    snackId = movie.id?.toLong() ?: 0,
+                                    type = MovieSharedElementType.Bounds,
+                                ),
                         ),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
+                        boundsTransform = movieDetailBoundsTransform,
+                        exit = fadeOut(nonSpatialExpressiveSpring()),
+                        enter = fadeIn(nonSpatialExpressiveSpring()),
                     ),
-                    animatedVisibilityScope = animatedVisibilityScope,
-                    clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
-                    boundsTransform = movieDetailBoundsTransform,
-                    exit = fadeOut(nonSpatialExpressiveSpring()),
-                    enter = fadeIn(nonSpatialExpressiveSpring()),
-                ),
         ) {
             Box(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(250.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .height(250.dp),
             ) {
                 AsyncImage(
                     model = "https://image.tmdb.org/t/p/original${movie.posterPath}",
@@ -181,57 +178,57 @@ fun MovieDetailContent(
                     contentDescription = "Navigate back",
                     tint = Color.White,
                     modifier =
-                    Modifier
-                        .statusBarsPadding()
-                        .padding(start = 8.dp)
-                        .size(36.dp)
-                        .background(Color.White.copy(alpha = 0.3f), shape = CircleShape)
-                        .clickable {
-                            upPress.invoke()
-                        }
-                        .align(Alignment.TopStart)
-                        .padding(8.dp),
+                        Modifier
+                            .statusBarsPadding()
+                            .padding(start = 8.dp)
+                            .size(36.dp)
+                            .background(Color.White.copy(alpha = 0.3f), shape = CircleShape)
+                            .clickable {
+                                upPress.invoke()
+                            }
+                            .align(Alignment.TopStart)
+                            .padding(8.dp),
                 )
             }
 
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 60.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 60.dp),
             ) {
                 Row(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(8.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(8.dp),
                 ) {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/original${movie.backdropPath}",
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
                         modifier =
-                        Modifier
-                            .width(120.dp)
-                            .height(200.dp)
-                            .padding(start = 16.dp)
-                            .offset(y = ((-60).dp))
-                            .clip(RoundedCornerShape(8.dp))
-                            .sharedBounds(
-                                rememberSharedContentState(
-                                    key =
-                                    MovieSharedElementKey(
-                                        snackId = movie.id?.toLong() ?: 0,
-                                        type = MovieSharedElementType.Image,
+                            Modifier
+                                .width(120.dp)
+                                .height(200.dp)
+                                .padding(start = 16.dp)
+                                .offset(y = ((-60).dp))
+                                .clip(RoundedCornerShape(8.dp))
+                                .sharedBounds(
+                                    rememberSharedContentState(
+                                        key =
+                                            MovieSharedElementKey(
+                                                snackId = movie.id?.toLong() ?: 0,
+                                                type = MovieSharedElementType.Image,
+                                            ),
                                     ),
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                    clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
+                                    boundsTransform = movieDetailBoundsTransform,
+                                    exit = fadeOut(nonSpatialExpressiveSpring()),
+                                    enter = fadeIn(nonSpatialExpressiveSpring()),
                                 ),
-                                animatedVisibilityScope = animatedVisibilityScope,
-                                clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
-                                boundsTransform = movieDetailBoundsTransform,
-                                exit = fadeOut(nonSpatialExpressiveSpring()),
-                                enter = fadeIn(nonSpatialExpressiveSpring()),
-                            ),
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -255,31 +252,39 @@ fun MovieDetailContent(
                                     .padding(top = 8.dp),
                         )
 
-                        MoviesWatchButton(shape = RoundedCornerShape(16.dp),
+                        MoviesWatchButton(
+                            shape = RoundedCornerShape(16.dp),
                             backgroundGradient = MoviesWatchProTheme.colors.interactiveSecondary,
                             onClick = { addToWatchList(movieDetailViewModel, movie.id) },
-                            modifier = Modifier.padding(top = 24.dp)) {
-
-                            if(isLoading) {
+                            modifier = Modifier.padding(top = 24.dp),
+                        ) {
+                            if (isLoading) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(24.dp),
                                     color = Color.White, // You can change the color as needed
-                                    strokeWidth = 2.dp
+                                    strokeWidth = 2.dp,
                                 )
                             } else {
-
-
                                 Icon(
-                                    painter = painterResource(if(result == true) {R.drawable.ic_check} else R.drawable.round_add), // Replace with your icon
+                                    painter =
+                                        painterResource(
+                                            if (result == true) {
+                                                R.drawable.ic_check
+                                            } else {
+                                                R.drawable.round_add
+                                            },
+                                        ),
+                                    // Replace with your icon
                                     contentDescription = "Start Icon",
-                                    modifier = Modifier.padding(end = 8.dp)
+                                    modifier = Modifier.padding(end = 8.dp),
                                 )
 
-
-                                Text(text = if(result == true) "Added to watchlist" else "Add to watchlist",
+                                Text(
+                                    text = if (result == true) "Added to watchlist" else "Add to watchlist",
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Color.Black,
-                                    textAlign = TextAlign.Center)
+                                    textAlign = TextAlign.Center,
+                                )
                             }
                         }
                     }
@@ -292,9 +297,9 @@ fun MovieDetailContent(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MoviesWatchProTheme.colors.textInteractive,
                     modifier =
-                    Modifier
-                        .padding(start = 24.dp)
-                        .offset(y = (-60).dp),
+                        Modifier
+                            .padding(start = 24.dp)
+                            .offset(y = (-60).dp),
                 )
 
                 MoviesWatchDivider(
@@ -303,17 +308,17 @@ fun MovieDetailContent(
 
                 Row(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = "rating",
                         modifier =
-                        Modifier
-                            .size(24.dp)
-                            .align(Alignment.CenterVertically),
+                            Modifier
+                                .size(24.dp)
+                                .align(Alignment.CenterVertically),
                         tint = MoviesWatchProTheme.colors.brand,
                     )
 
@@ -338,17 +343,19 @@ fun MovieDetailContent(
                         style = MaterialTheme.typography.titleLarge,
                         color = MoviesWatchProTheme.colors.textInteractive,
                         modifier =
-                        Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(8.dp),
+                            Modifier
+                                .align(Alignment.CenterVertically)
+                                .padding(8.dp),
                     )
                 }
-                Text(text = "Watch",
+                Text(
+                    text = "Watch",
                     style = MaterialTheme.typography.titleMedium,
                     color = MoviesWatchProTheme.colors.textInteractive,
-                    modifier = Modifier
-                        .padding(start = 24.dp)
-                    )
+                    modifier =
+                        Modifier
+                            .padding(start = 24.dp),
+                )
 
                 LazyRow(
                     modifier = Modifier.padding(start = 16.dp),
@@ -367,7 +374,7 @@ fun MovieDetailContent(
                                 text = provider.name.orEmpty(),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = Color.White,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
                             )
                         }
                     }
@@ -377,7 +384,10 @@ fun MovieDetailContent(
     }
 }
 
-fun addToWatchList(movieDetailViewModel: MovieDetailViewModel, id: Int?) {
+fun addToWatchList(
+    movieDetailViewModel: MovieDetailViewModel,
+    id: Int?,
+) {
     if (id != null) {
         movieDetailViewModel.addToWatchList(id)
     }

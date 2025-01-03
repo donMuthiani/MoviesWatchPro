@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.muthiani.movieswatchpro.R
 
 @Composable
-fun StatisticsScreen(modifier: Modifier = Modifier) {
+fun ProfileScreen(modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier =
