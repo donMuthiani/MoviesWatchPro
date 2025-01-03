@@ -405,7 +405,7 @@ fun noAccountSignUp() {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Text(text = "Don't have an account?")
+        Text(text = "Don't have an account?", color = MoviesWatchProTheme.colors.textInteractive)
         TextButton(onClick = { }) {
             Text(text = "Sign Up", color = MoviesWatchProTheme.colors.brand)
         }
