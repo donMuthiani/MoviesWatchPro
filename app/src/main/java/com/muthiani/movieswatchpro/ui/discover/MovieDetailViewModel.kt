@@ -1,8 +1,10 @@
 package com.muthiani.movieswatchpro.ui.discover
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.muthiani.movieswatchpro.data.FakeWatchListRepository
+import com.muthiani.movieswatchpro.data.MovieRepository
+import com.muthiani.movieswatchpro.models.ManageWatchList
 import com.muthiani.movieswatchpro.models.MovieModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -17,9 +19,12 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailViewModel
     @Inject
-    constructor(private val fakeWatchListRepository: FakeWatchListRepository) : ViewModel() {
+    constructor(private val movieRepository: MovieRepository) : ViewModel() {
         private val _uiState: MutableStateFlow<MovieDetailUiState> = MutableStateFlow(MovieDetailUiState.Initial)
         val uiState: StateFlow<MovieDetailUiState> = _uiState.asStateFlow()
+
+        var isWatchListLoaderActive = mutableStateOf(false)
+        val result = mutableStateOf<Boolean?>(null) // Use null when no result is available
 
         private val exceptionHandler =
             CoroutineExceptionHandler { _, exception ->
@@ -30,12 +35,31 @@ class MovieDetailViewModel
             viewModelScope.launch(exceptionHandler) {
                 _uiState.value = MovieDetailUiState.Loading
 
-                val movie = withContext(Dispatchers.IO) { fakeWatchListRepository.getMovie(movieId) }
+                val movie = withContext(Dispatchers.IO) { movieRepository.getMovie(movieId) }
 
                 if (movie != null) {
                     _uiState.value = MovieDetailUiState.Movie(movie)
                 } else {
                     _uiState.value = MovieDetailUiState.Error("Movie not found")
+                }
+            }
+        }
+
+        fun addToWatchList(id: Int) {
+            isWatchListLoaderActive.value = true
+            viewModelScope.launch(exceptionHandler) {
+                val response =
+                    withContext(Dispatchers.IO) {
+                        movieRepository.manageMovieWatchList(
+                            ManageWatchList(media_id = id, watchlist = true),
+                        )
+                    }
+                if (response.success) {
+                    isWatchListLoaderActive.value = false
+                    result.value = true
+                } else {
+                    isWatchListLoaderActive.value = false
+                    result.value = false
                 }
             }
         }

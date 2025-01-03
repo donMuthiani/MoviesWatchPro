@@ -1,10 +1,8 @@
 package com.muthiani.movieswatchpro.ui.discover
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.muthiani.movieswatchpro.data.FakeWatchListRepository
+import com.muthiani.movieswatchpro.data.MovieRepository
 import com.muthiani.movieswatchpro.models.MovieCollection
 import com.muthiani.movieswatchpro.models.MovieModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DiscoverViewModel
     @Inject
-    constructor(private val fakeWatchListRepository: FakeWatchListRepository) : ViewModel() {
+    constructor(private val movieRepository: MovieRepository) : ViewModel() {
         private val _uiState: MutableStateFlow<DiscoverUiState> = MutableStateFlow(DiscoverUiState.Initial)
         val uiState: StateFlow<DiscoverUiState> = _uiState.asStateFlow()
 
@@ -37,11 +35,11 @@ class DiscoverViewModel
                 try {
                     val (nowShowing, popular, topRated, upcoming, trending) =
                         listOf(
-                            async { fakeWatchListRepository.getNowShowingMovies() },
-                            async { fakeWatchListRepository.getPopularMovies() },
-                            async { fakeWatchListRepository.getTopRatedMovies() },
-                            async { fakeWatchListRepository.getUpcomingMovies() },
-                            async { fakeWatchListRepository.getTrendingMovies() },
+                            async { movieRepository.getNowShowingMovies() },
+                            async { movieRepository.getPopularMovies() },
+                            async { movieRepository.getTopRatedMovies() },
+                            async { movieRepository.getUpcomingMovies() },
+                            async { movieRepository.getTrendingMovies() },
                         ).map { it.await() }
 
                     _uiState.value =
@@ -71,7 +69,5 @@ class DiscoverViewModel
             ) : DiscoverUiState()
 
             data class Error(val message: String) : DiscoverUiState()
-
-            data class Movie(val movieModel: MovieModel) : DiscoverUiState()
         }
     }
