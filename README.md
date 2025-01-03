@@ -19,6 +19,7 @@ MoviesWatchPro is an Android application that fetches and displays movies from a
 ![Home Screen](discover.png)
 ![WatchList](watchlist.png)
 ![Detail](detail.png)
+![Sign up](sign_up.png)
 
 - **Home Screen**: Displays categorized movies.
 - **Movie Details**: View detailed information about each movie.
