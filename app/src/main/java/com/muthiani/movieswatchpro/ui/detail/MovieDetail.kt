@@ -143,6 +143,7 @@ fun MovieDetailContent(
             modifier =
                 Modifier
                     .fillMaxWidth()
+                    .background(color = MoviesWatchProTheme.colors.uiBackground)
                     .verticalScroll(rememberScrollState())
                     .sharedBounds(
                         rememberSharedContentState(
@@ -364,6 +365,7 @@ fun MovieDetailContent(
                 ) {
                     itemsIndexed(movie.productionCompanies) { _, provider ->
                         MoviesWatchButton(
+                            backgroundGradient = listOf(MoviesWatchProTheme.colors.brand, MoviesWatchProTheme.colors.brand),
                             onClick = { navigateToProvider(provider) },
                             modifier =
                                 Modifier
