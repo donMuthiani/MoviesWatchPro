@@ -3,23 +3,8 @@ package com.muthiani.movieswatchpro.data
 import com.muthiani.movieswatchpro.models.ManageWatchList
 import com.muthiani.movieswatchpro.models.MovieModel
 
-data class Movie(
-    val id: Int,
-    val title: String,
-    val description: String,
-    val imageUrl: String,
-    val category: String,
-    val releaseDate: String,
-    val progress: String,
-    val promoImage: String = "",
-    val rating: Float = 8.1f,
-    val providers: List<String> = listOf("Netflix", "Hulu", "Disney+", "HBO"),
-)
-
 interface MovieRepository {
     suspend fun getWatchList(): WatchListResponse<List<MovieModel>>
-
-    suspend fun getMyShows(): Result<List<Movie>>
 
     suspend fun getMovie(movieId: Int): MovieModel?
 
