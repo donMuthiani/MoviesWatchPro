@@ -29,8 +29,8 @@ import com.muthiani.movieswatchpro.MovieSharedElementKey
 import com.muthiani.movieswatchpro.MovieSharedElementType
 import com.muthiani.movieswatchpro.R
 import com.muthiani.movieswatchpro.models.MovieModel
-import com.muthiani.movieswatchpro.ui.home.movieDetailBoundsTransform
-import com.muthiani.movieswatchpro.ui.home.nonSpatialExpressiveSpring
+import com.muthiani.movieswatchpro.ui.detail.movieDetailBoundsTransform
+import com.muthiani.movieswatchpro.ui.detail.nonSpatialExpressiveSpring
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
 @Composable

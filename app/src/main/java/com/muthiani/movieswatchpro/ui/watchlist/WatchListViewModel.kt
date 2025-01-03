@@ -1,4 +1,4 @@
-package com.muthiani.movieswatchpro.ui.home
+package com.muthiani.movieswatchpro.ui.watchlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

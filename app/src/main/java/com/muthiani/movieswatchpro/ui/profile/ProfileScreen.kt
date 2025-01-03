@@ -1,4 +1,4 @@
-package com.muthiani.movieswatchpro.ui.home
+package com.muthiani.movieswatchpro.ui.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

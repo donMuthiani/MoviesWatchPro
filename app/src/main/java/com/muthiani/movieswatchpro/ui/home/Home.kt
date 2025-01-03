@@ -61,8 +61,12 @@ import androidx.navigation.compose.composable
 import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
 import com.muthiani.movieswatchpro.R
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchSurface
+import com.muthiani.movieswatchpro.ui.detail.nonSpatialExpressiveSpring
+import com.muthiani.movieswatchpro.ui.detail.spatialExpressiveSpring
 import com.muthiani.movieswatchpro.ui.discover.DiscoverScreen
+import com.muthiani.movieswatchpro.ui.profile.ProfileScreen
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
+import com.muthiani.movieswatchpro.ui.watchlist.WatchListScreen
 import java.util.Locale
 
 fun NavGraphBuilder.composableWithCompositionLocal(
