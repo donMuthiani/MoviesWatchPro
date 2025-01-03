@@ -373,7 +373,7 @@ fun BottomViews() {
                     .weight(1f),
         ) {
             Text(
-                text = "Remember for 30 days",
+                text = "Remember for 30 days", color = MoviesWatchProTheme.colors.textInteractive,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
