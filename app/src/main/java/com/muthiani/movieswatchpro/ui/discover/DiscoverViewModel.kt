@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muthiani.movieswatchpro.data.MovieRepository
 import com.muthiani.movieswatchpro.models.MovieCollection
-import com.muthiani.movieswatchpro.models.MovieModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow

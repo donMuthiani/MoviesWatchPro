@@ -1,5 +1,7 @@
 package com.muthiani.movieswatchpro.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class BelongsToCollection(
@@ -26,14 +28,16 @@ data class ProductionCountries(
     @SerializedName("name") var name: String? = null,
 )
 
+@Entity(tableName = "movies")
 data class MovieModel(
+    @PrimaryKey
+    @SerializedName("id") var id: Int,
     @SerializedName("adult") var adult: Boolean? = null,
     @SerializedName("backdrop_path") var backdropPath: String? = null,
     @SerializedName("belongs_to_collection") var belongsToCollection: BelongsToCollection? = BelongsToCollection(),
     @SerializedName("budget") var budget: Int? = null,
     @SerializedName("genres") var genres: ArrayList<Genres> = arrayListOf(),
     @SerializedName("homepage") var homepage: String? = null,
-    @SerializedName("id") var id: Int? = null,
     @SerializedName("imdb_id") var imdbId: String? = null,
     @SerializedName("origin_country") var originCountry: ArrayList<String> = arrayListOf(),
     @SerializedName("original_language") var originalLanguage: String? = null,

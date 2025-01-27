@@ -10,7 +10,7 @@ interface MovieRepository {
 
     suspend fun getNowShowingMovies(): ApiResponse<List<MovieModel>>
 
-    suspend fun getPopularMovies(): ApiResponse<List<MovieModel>>
+    suspend fun getPopularMovies(page: Int = 1): ApiResponse<List<MovieModel>>
 
     suspend fun getTopRatedMovies(): ApiResponse<List<MovieModel>>
 
@@ -21,4 +21,6 @@ interface MovieRepository {
     suspend fun getMovieCategory(category: String): ApiResponse<List<MovieModel>>
 
     suspend fun manageMovieWatchList(manageWatchList: ManageWatchList): ManageWatchListResponse
+
+//    suspend fun getDiscoverMovies(manageWatchList: ManageWatchList): ManageWatchListResponse
 }

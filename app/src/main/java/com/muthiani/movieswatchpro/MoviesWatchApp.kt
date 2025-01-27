@@ -26,13 +26,13 @@ import androidx.navigation.navArgument
 import com.muthiani.movieswatchpro.navigation.MainDestinations
 import com.muthiani.movieswatchpro.navigation.rememberMoviesWatchNavController
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchScaffold
-import com.muthiani.movieswatchpro.ui.home.HomeSections
 import com.muthiani.movieswatchpro.ui.detail.MovieDetailScreen
+import com.muthiani.movieswatchpro.ui.detail.nonSpatialExpressiveSpring
+import com.muthiani.movieswatchpro.ui.detail.spatialExpressiveSpring
+import com.muthiani.movieswatchpro.ui.home.HomeSections
 import com.muthiani.movieswatchpro.ui.home.MoviesWatchBottomBar
 import com.muthiani.movieswatchpro.ui.home.addHomeGraph
 import com.muthiani.movieswatchpro.ui.home.composableWithCompositionLocal
-import com.muthiani.movieswatchpro.ui.detail.nonSpatialExpressiveSpring
-import com.muthiani.movieswatchpro.ui.detail.spatialExpressiveSpring
 import com.muthiani.movieswatchpro.ui.intro.OnboardingScreen
 import com.muthiani.movieswatchpro.ui.signup.SignUpScreen
 import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel

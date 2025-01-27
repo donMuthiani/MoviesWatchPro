@@ -58,4 +58,9 @@ interface MoviesWatchApi {
     suspend fun getWatchList(
         @Path("account_id") account_id: Int,
     ): WatchListResponse<List<MovieModel>>
+
+    @GET("discover/movie")
+    suspend fun getDiscoverMovies(
+        @Path("time_window") timeWindow: String = "week",
+    ): ApiResponse<List<MovieModel>>
 }

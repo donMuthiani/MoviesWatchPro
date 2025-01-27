@@ -13,7 +13,6 @@ import javax.inject.Inject
 class MovieRepositoryImpl
     @Inject
     constructor(private val moviesWatchApi: MoviesWatchApi) : MovieRepository {
-
         override suspend fun getWatchList(): WatchListResponse<List<MovieModel>> {
             return moviesWatchApi.getWatchList(account_id = ConstantUtils.ACCOUNT_ID)
         }
@@ -26,8 +25,8 @@ class MovieRepositoryImpl
             return moviesWatchApi.getNowShowing()
         }
 
-        override suspend fun getPopularMovies(): ApiResponse<List<MovieModel>> {
-            return moviesWatchApi.getPopular()
+        override suspend fun getPopularMovies(page: Int): ApiResponse<List<MovieModel>> {
+            return moviesWatchApi.getPopular(page.toString())
         }
 
         override suspend fun getTopRatedMovies(): ApiResponse<List<MovieModel>> {

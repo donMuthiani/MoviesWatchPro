@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
     id("com.google.gms.google-services")
-    id("kotlin-kapt")
 }
 
 android {
@@ -81,7 +81,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     // sharedPreferences
     implementation(libs.androidx.preference.ktx)
 
@@ -130,8 +130,14 @@ dependencies {
 
     // lottie
     implementation(libs.lottie.compose)
+
+    // room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
 }
 
-kapt {
-    correctErrorTypes = true
-}
+// kapt {
+//    correctErrorTypes = true
+// }
