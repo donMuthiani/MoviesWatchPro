@@ -15,9 +15,11 @@ object MainDestinations {
     const val HOME_ROUTE = "home"
     const val MOVIE_DETAIL_ROUTE = "movie"
     const val MOVIE_ID_KEY = "movieId"
+    const val API_CALL_TYPE = "apiCallType"
     const val ORIGIN = "origin"
     const val LOGIN_ROUTE = "login"
     const val ONBOARDING_ROUTE = "onboarding"
+    const val MOVIE_LIST_VIEWER = "list_viewer"
 }
 
 @Composable
@@ -49,12 +51,16 @@ class MoviesWatchNavController(
 
     fun navigateToMovieDetail(
         movieID: Long,
-        from: NavBackStackEntry,
+        from: NavBackStackEntry? = null,
     ) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-        if (from.lifecycleIsResumed()) {
+        if (from?.lifecycleIsResumed() == true) {
             navController.navigate("${MainDestinations.MOVIE_DETAIL_ROUTE}/$movieID")
         }
+    }
+
+    fun navigateToMovieViewer(apiCallType: String) {
+        navController.navigate("${MainDestinations.MOVIE_LIST_VIEWER}/$apiCallType")
     }
 
     fun navigateToRoute(

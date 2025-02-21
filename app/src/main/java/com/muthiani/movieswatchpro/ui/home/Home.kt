@@ -126,6 +126,7 @@ enum class HomeSections(
 
 fun NavGraphBuilder.addHomeGraph(
     onMovieSelected: (Long, NavBackStackEntry) -> Unit,
+    onMoreClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     composable(HomeSections.WATCH_LIST.route) { backStackEntry ->
@@ -133,7 +134,7 @@ fun NavGraphBuilder.addHomeGraph(
     }
 
     composable(HomeSections.DISCOVER.route) {
-        DiscoverScreen(modifier = modifier, onMovieSelected = { id -> onMovieSelected(id, it) })
+        DiscoverScreen(modifier = modifier, onMovieSelected = { id -> onMovieSelected(id, it) }, onMoreClicked = { type -> onMoreClicked(type) })
     }
 
     composable(HomeSections.PROFILE.route) {

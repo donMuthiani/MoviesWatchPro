@@ -47,7 +47,7 @@ fun DiscoverItem(
                     .padding(16.dp)
                     .width(120.dp)
                     .clickable {
-                        onMovieSelected(movie.id?.toLong() ?: 0)
+                        onMovieSelected(movie.id.toLong())
                     }
                     .sharedBounds(
                         rememberSharedContentState(

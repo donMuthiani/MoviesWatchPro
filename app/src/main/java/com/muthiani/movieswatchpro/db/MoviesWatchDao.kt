@@ -12,9 +12,18 @@ interface MoviesWatchDao {
     @Query("DELETE FROM movies")
     suspend fun clearAll()
 
-    @Query("SELECT * FROM movies WHERE title LIKE :query")
-    fun pagingSource(query: String): PagingSource<Int, MovieModel>
+    @Query("SELECT * FROM movies")
+    fun pagingSource(): PagingSource<Int, MovieModel>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovies(users: List<MovieModel>)
+
+    @Query("SELECT * FROM movies ORDER BY popularity DESC")
+    fun getPopularPagingSource(): PagingSource<Int, MovieModel>
+
+    @Query("SELECT * FROM movies ORDER BY releaseDate DESC")
+    fun getNowShowingPagingSource(): PagingSource<Int, MovieModel>
+
+    @Query("SELECT * FROM movies WHERE releaseDate >= DATE(:today, '-14 days')")
+    fun getUpcomingPagingSource(today: String): PagingSource<Int, MovieModel>
 }

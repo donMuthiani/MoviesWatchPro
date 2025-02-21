@@ -7,6 +7,7 @@ import com.muthiani.movieswatchpro.db.MoviesWatchDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -15,8 +16,16 @@ import javax.inject.Singleton
 object DatabaseModule {
     @Provides
     @Singleton
+    fun provideContext(
+        @ApplicationContext context: Context,
+    ): Context {
+        return context
+    }
+
+    @Provides
+    @Singleton
     fun providesDatabase(context: Context): MoviesWatchDatabase {
-        return Room.databaseBuilder(context, MoviesWatchDatabase::class.java, "app_db").build()
+        return Room.databaseBuilder(context, MoviesWatchDatabase::class.java, "movie_db").fallbackToDestructiveMigration().build()
     }
 
     @Provides

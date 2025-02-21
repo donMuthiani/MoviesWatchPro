@@ -10,13 +10,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.muthiani.movieswatchpro.models.MovieModel
 import com.muthiani.movieswatchpro.ui.components.LoadingScreen
 import com.muthiani.movieswatchpro.ui.components.MoviesWatchScaffold
@@ -39,10 +45,10 @@ fun WatchListScreen(onMovieSelected: (Long) -> Unit) {
                     }
 
                     else -> {
-                        MoviesWatchList(
-                            (uiState as WatchListViewModel.WatchListUiState.WatchList).watchList,
-                            onMovieSelected,
-                        )
+//                        MoviesWatchList(
+//                            (uiState as WatchListViewModel.WatchListUiState.WatchList),
+//                            onMovieSelected,
+//                        )
                     }
                 }
             }
@@ -53,7 +59,7 @@ fun WatchListScreen(onMovieSelected: (Long) -> Unit) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MoviesWatchList(
-    movieList: List<MovieModel>,
+    movieList: LazyPagingItems<MovieModel>,
     onMovieClicked: (Long) -> Unit,
 ) {
     LazyVerticalGrid(
@@ -63,8 +69,28 @@ fun MoviesWatchList(
             .padding(bottom = 48.dp),
         contentPadding = PaddingValues(16.dp),
     ) {
-        items(movieList) { movie ->
-            DiscoverItem(movie, onMovieClicked)
+        items(movieList.itemCount) {
+            movieList[it]?.let { movie ->
+                DiscoverItem(movie, onMovieClicked)
+            }
+        }
+
+        movieList.apply {
+            when (loadState.append) {
+                is LoadState.Loading -> {
+                    item {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is LoadState.Error -> {
+                    item {
+                        Text("Error loading more movies!", color = Color.Red)
+                    }
+                }
+
+                else -> {}
+            }
         }
     }
 }

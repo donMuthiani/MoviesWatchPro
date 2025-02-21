@@ -12,7 +12,7 @@ interface MoviesWatchApi {
     @GET("movie/now_playing")
     suspend fun getNowShowing(
         @Query("language") language: String = "en-US",
-        @Query("page") page: String = "1",
+        @Query("page") page: Int = 1,
     ): ApiResponse<List<MovieModel>>
 
     @GET("movie/popular")
@@ -30,7 +30,7 @@ interface MoviesWatchApi {
     @GET("movie/upcoming")
     suspend fun getUpcoming(
         @Query("language") language: String = "en-US",
-        @Query("page") page: String = "1",
+        @Query("page") page: Int = 1,
     ): ApiResponse<List<MovieModel>>
 
     @GET("trending/movie/{time_window}")
@@ -61,6 +61,11 @@ interface MoviesWatchApi {
 
     @GET("discover/movie")
     suspend fun getDiscoverMovies(
-        @Path("time_window") timeWindow: String = "week",
+        @Query("include_adult") include_adult: Boolean = false,
+        @Query("include_video") include_video: Boolean = false,
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int = 1,
+        @Query("query_type") sort_by: String = "popularity.desc",
+        @Query("release_type") release_type: String = "2|3",
     ): ApiResponse<List<MovieModel>>
 }

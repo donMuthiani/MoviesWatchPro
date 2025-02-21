@@ -1,8 +1,12 @@
 package com.muthiani.movieswatchpro.ui.discover
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material3.Icon
@@ -14,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.muthiani.movieswatchpro.models.MovieCollection
 import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 
@@ -21,6 +26,7 @@ import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
 fun MovieCollectionItem(
     movieCollection: MovieCollection,
     modifier: Modifier = Modifier,
+    onMoreClicked: (String) -> Unit = {},
 ) {
     Column(modifier) {
         Row(
@@ -42,7 +48,9 @@ fun MovieCollectionItem(
                         .wrapContentWidth(Alignment.Start),
             )
             IconButton(
-                onClick = { /* todo */ },
+                onClick = {
+                    onMoreClicked(movieCollection.name)
+                },
                 modifier = Modifier.align(Alignment.CenterVertically),
             ) {
                 Icon(
@@ -62,9 +70,13 @@ fun Movies(
     onMovieClicked: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val movies = movieCollection.movies.collectAsLazyPagingItems()
+
     LazyRow(modifier = modifier, contentPadding = PaddingValues(start = 24.dp)) {
-        items(items = movieCollection.movies.take(10), key = { it.id ?: 0 }) { movie ->
-            DiscoverItem(movie, onMovieClicked)
+        items(movies.itemCount) { index ->
+            movies[index]?.let { movie ->
+                DiscoverItem(movie, onMovieClicked)
+            }
         }
     }
 }

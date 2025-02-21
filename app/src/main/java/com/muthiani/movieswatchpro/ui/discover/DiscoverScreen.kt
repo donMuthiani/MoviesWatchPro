@@ -17,6 +17,7 @@ import com.muthiani.movieswatchpro.ui.components.*
 fun DiscoverScreen(
     onMovieSelected: (Long) -> Unit,
     modifier: Modifier = Modifier,
+    onMoreClicked: (String) -> Unit,
 ) {
     val discoverViewModel: DiscoverViewModel = hiltViewModel()
     val uiState = discoverViewModel.uiState.collectAsState().value
@@ -28,7 +29,7 @@ fun DiscoverScreen(
             when (uiState) {
                 is DiscoverViewModel.DiscoverUiState.Success -> {
                     showProgress = false
-                    DiscoverContent(uiState.collection, onMovieSelected)
+                    DiscoverContent(uiState.collection, onMovieSelected, onMoreClicked)
                 }
 
                 is DiscoverViewModel.DiscoverUiState.Loading -> {
@@ -46,7 +47,6 @@ fun DiscoverScreen(
                         }, errorMessage = uiState.message)
                     }
                 }
-
                 else -> {}
             }
         }
@@ -57,14 +57,16 @@ fun DiscoverScreen(
 fun DiscoverContent(
     uiState: List<MovieCollection>,
     onMovieSelected: (Long) -> Unit,
+    onMoreClicked: (String) -> Unit,
 ) {
-    ContentList(uiState, onMovieSelected)
+    ContentList(uiState, onMovieSelected, onMoreClicked)
 }
 
 @Composable
 fun ContentList(
     uiState: List<MovieCollection>,
     onMovieSelected: (Long) -> Unit,
+    onMoreClicked: (String) -> Unit,
 ) {
     LazyColumn(modifier = Modifier) {
         itemsIndexed(uiState) { index, collection ->
@@ -79,6 +81,7 @@ fun ContentList(
                         movies = collection.movies,
                         onMovieClicked = onMovieSelected,
                     ),
+                onMoreClicked = onMoreClicked,
             )
         }
     }

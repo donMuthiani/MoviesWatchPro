@@ -43,3 +43,9 @@ data class ManageWatchListResponse(
     val status_code: Int,
     val status_message: String,
 )
+
+enum class ApiCallType {
+    POPULAR,
+    NOW_SHOWING,
+    UPCOMING,
+}

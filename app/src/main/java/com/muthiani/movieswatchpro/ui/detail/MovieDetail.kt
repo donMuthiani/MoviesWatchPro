@@ -149,7 +149,7 @@ fun MovieDetailContent(
                         rememberSharedContentState(
                             key =
                                 MovieSharedElementKey(
-                                    snackId = movie.id?.toLong() ?: 0,
+                                    snackId = movie.id.toLong(),
                                     type = MovieSharedElementType.Bounds,
                                 ),
                         ),
@@ -336,7 +336,7 @@ fun MovieDetailContent(
                                         ),
                                 ),
                             )
-                            append(movie.genres.first().name)
+                            append(movie.genres?.first()?.name)
                         }
 
                     Text(
@@ -363,7 +363,7 @@ fun MovieDetailContent(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = PaddingValues(16.dp),
                 ) {
-                    itemsIndexed(movie.productionCompanies) { _, provider ->
+                    itemsIndexed(movie.productionCompanies.orEmpty()) { _, provider ->
                         MoviesWatchButton(
                             backgroundGradient = listOf(MoviesWatchProTheme.colors.brand, MoviesWatchProTheme.colors.brand),
                             onClick = { navigateToProvider(provider) },

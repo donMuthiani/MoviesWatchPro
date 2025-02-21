@@ -12,12 +12,13 @@ import retrofit2.HttpException
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
-class MoviesWatchRemoteMediator(
-    val query: String = "",
+class NowShowingRemoteMediator(
+    private val query: String = "",
     val repository: MovieRepository,
     val moviesWatchDatabase: MoviesWatchDatabase,
 ) : RemoteMediator<Int, MovieModel>() {
     private val moviesWatchDao = moviesWatchDatabase.moviesDao()
+    private val remoteKeysDao = moviesWatchDatabase.remoteKeysDao()
 
     override suspend fun load(
         loadType: LoadType,
@@ -29,19 +30,34 @@ class MoviesWatchRemoteMediator(
                     LoadType.REFRESH -> null
                     LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                     LoadType.APPEND -> {
-                        val lastItem = state.lastItemOrNull() ?: return MediatorResult.Success(endOfPaginationReached = true)
-                        lastItem.id
+                        val remoteKey =
+                            moviesWatchDatabase.withTransaction {
+                                remoteKeysDao.remoteKeyByQuery(query)
+                            }
+                        if (remoteKey.nextKey == null) {
+                            return MediatorResult.Success(
+                                endOfPaginationReached = true,
+                            )
+                        }
+                        remoteKey.nextKey
                     }
                 }
 
-            val response = loadKey?.let { repository.getPopularMovies(page = it) }
+            val response = repository.getNowShowingMovies(page = loadKey ?: 1)
             moviesWatchDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    moviesWatchDao.clearAll()
+                    remoteKeysDao.deleteByQuery(query)
                 }
-                moviesWatchDao.insertMovies(response?.data.orEmpty())
+
+                val nextKey = (response.page) + 1
+
+                remoteKeysDao.insertOrReplace(
+                    RemoteKeys(0, query, nextKey),
+                )
+
+                moviesWatchDao.insertMovies(response.data.orEmpty())
             }
-            MediatorResult.Success(endOfPaginationReached = (response?.page ?: 0) <= (response?.totalPages ?: 0))
+            MediatorResult.Success(endOfPaginationReached = (response.page ?: 0) >= (response.totalPages ?: 0))
         } catch (e: IOException) {
             MediatorResult.Error(e)
         } catch (e: HttpException) {

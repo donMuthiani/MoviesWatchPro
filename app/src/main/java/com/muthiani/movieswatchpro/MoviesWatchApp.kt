@@ -34,6 +34,7 @@ import com.muthiani.movieswatchpro.ui.home.MoviesWatchBottomBar
 import com.muthiani.movieswatchpro.ui.home.addHomeGraph
 import com.muthiani.movieswatchpro.ui.home.composableWithCompositionLocal
 import com.muthiani.movieswatchpro.ui.intro.OnboardingScreen
+import com.muthiani.movieswatchpro.ui.list_viewer.GenericMovieListScreen
 import com.muthiani.movieswatchpro.ui.signup.SignUpScreen
 import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel
 
@@ -92,6 +93,25 @@ fun MoviesWatchApp() {
                 ) { backStackEntry ->
                     MainContainer(
                         onMovieSelected = navController::navigateToMovieDetail,
+                        onMoreClicked = navController::navigateToMovieViewer,
+                    )
+                }
+
+                composableWithCompositionLocal(
+                    route = "${MainDestinations.MOVIE_LIST_VIEWER}/{${MainDestinations.API_CALL_TYPE}}",
+                    arguments =
+                        listOf(
+                            navArgument(MainDestinations.API_CALL_TYPE) {
+                                type = NavType.StringType
+                            },
+                        ),
+                ) { backStackEntry ->
+                    val apiCallType = backStackEntry.arguments?.getString(MainDestinations.API_CALL_TYPE)
+                    GenericMovieListScreen(
+                        modifier = Modifier,
+                        onMovieSelected = navController::navigateToMovieDetail,
+                        apiCallType = apiCallType ?: "",
+                        upPress = { navController.upPress() },
                     )
                 }
 
@@ -121,6 +141,7 @@ fun MoviesWatchApp() {
 fun MainContainer(
     modifier: Modifier = Modifier,
     onMovieSelected: (Long, NavBackStackEntry) -> Unit,
+    onMoreClicked: (String) -> Unit = {},
 ) {
     val nestedNavController = rememberMoviesWatchNavController()
     val navBackStackEntry by nestedNavController.navController.currentBackStackEntryAsState()
@@ -176,6 +197,7 @@ fun MainContainer(
                     Modifier
                         .padding(padding)
                         .consumeWindowInsets(padding),
+                onMoreClicked = onMoreClicked,
             )
         }
     }
