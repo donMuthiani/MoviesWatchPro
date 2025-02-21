@@ -5,9 +5,7 @@ MoviesWatchPro is an Android application that fetches and displays movies from a
 ## Features
 
 - **Movies Categorized**:
-  - New Movies
   - Upcoming Movies
-  - Trending Movies
   - Now Showing
   - Popular Movies
 - **Modern UI**: Designed using Jetpack Compose for a sleek and responsive user experience.
