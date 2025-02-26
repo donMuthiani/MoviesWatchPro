@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.muthiani.movieswatchpro.ui.theme.MoviesWatchProTheme
+import com.muthiani.movieswatchpro.presentation.theme.MoviesWatchProTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

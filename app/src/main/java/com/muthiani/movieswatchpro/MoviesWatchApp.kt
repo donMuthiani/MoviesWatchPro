@@ -23,20 +23,20 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.muthiani.movieswatchpro.navigation.MainDestinations
-import com.muthiani.movieswatchpro.navigation.rememberMoviesWatchNavController
-import com.muthiani.movieswatchpro.ui.components.MoviesWatchScaffold
-import com.muthiani.movieswatchpro.ui.detail.MovieDetailScreen
-import com.muthiani.movieswatchpro.ui.detail.nonSpatialExpressiveSpring
-import com.muthiani.movieswatchpro.ui.detail.spatialExpressiveSpring
-import com.muthiani.movieswatchpro.ui.home.HomeSections
-import com.muthiani.movieswatchpro.ui.home.MoviesWatchBottomBar
-import com.muthiani.movieswatchpro.ui.home.addHomeGraph
-import com.muthiani.movieswatchpro.ui.home.composableWithCompositionLocal
-import com.muthiani.movieswatchpro.ui.intro.OnboardingScreen
-import com.muthiani.movieswatchpro.ui.list_viewer.GenericMovieListScreen
-import com.muthiani.movieswatchpro.ui.signup.SignUpScreen
-import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel
+import com.muthiani.movieswatchpro.presentation.components.MoviesWatchScaffold
+import com.muthiani.movieswatchpro.presentation.detail.MovieDetailScreen
+import com.muthiani.movieswatchpro.presentation.detail.nonSpatialExpressiveSpring
+import com.muthiani.movieswatchpro.presentation.detail.spatialExpressiveSpring
+import com.muthiani.movieswatchpro.presentation.home.HomeSections
+import com.muthiani.movieswatchpro.presentation.home.MoviesWatchBottomBar
+import com.muthiani.movieswatchpro.presentation.home.addHomeGraph
+import com.muthiani.movieswatchpro.presentation.home.composableWithCompositionLocal
+import com.muthiani.movieswatchpro.presentation.intro.OnboardingScreen
+import com.muthiani.movieswatchpro.presentation.navigation.MainDestinations
+import com.muthiani.movieswatchpro.presentation.navigation.rememberMoviesWatchNavController
+import com.muthiani.movieswatchpro.presentation.signup.SignUpScreen
+import com.muthiani.movieswatchpro.presentation.splash_screen.SplashScreenViewModel
+import com.muthiani.movieswatchpro.presentation.view_more.GenericMovieListScreen
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
