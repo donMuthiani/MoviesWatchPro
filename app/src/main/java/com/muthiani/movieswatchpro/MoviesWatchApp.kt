@@ -23,23 +23,25 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import com.muthiani.movieswatchpro.navigation.MainDestinations
-import com.muthiani.movieswatchpro.navigation.rememberMoviesWatchNavController
-import com.muthiani.movieswatchpro.ui.components.MoviesWatchScaffold
-import com.muthiani.movieswatchpro.ui.home.HomeSections
-import com.muthiani.movieswatchpro.ui.detail.MovieDetailScreen
-import com.muthiani.movieswatchpro.ui.home.MoviesWatchBottomBar
-import com.muthiani.movieswatchpro.ui.home.addHomeGraph
-import com.muthiani.movieswatchpro.ui.home.composableWithCompositionLocal
-import com.muthiani.movieswatchpro.ui.detail.nonSpatialExpressiveSpring
-import com.muthiani.movieswatchpro.ui.detail.spatialExpressiveSpring
-import com.muthiani.movieswatchpro.ui.intro.OnboardingScreen
-import com.muthiani.movieswatchpro.ui.signup.SignUpScreen
-import com.muthiani.movieswatchpro.ui.splash_screen.SplashScreenViewModel
+import com.muthiani.movieswatchpro.data.config.ApiLoadTypeHolder
+import com.muthiani.movieswatchpro.presentation.components.MoviesWatchScaffold
+import com.muthiani.movieswatchpro.presentation.detail.MovieDetailScreen
+import com.muthiani.movieswatchpro.presentation.detail.nonSpatialExpressiveSpring
+import com.muthiani.movieswatchpro.presentation.detail.spatialExpressiveSpring
+import com.muthiani.movieswatchpro.presentation.home.HomeSections
+import com.muthiani.movieswatchpro.presentation.home.MoviesWatchBottomBar
+import com.muthiani.movieswatchpro.presentation.home.addHomeGraph
+import com.muthiani.movieswatchpro.presentation.home.composableWithCompositionLocal
+import com.muthiani.movieswatchpro.presentation.intro.OnboardingScreen
+import com.muthiani.movieswatchpro.presentation.navigation.MainDestinations
+import com.muthiani.movieswatchpro.presentation.navigation.rememberMoviesWatchNavController
+import com.muthiani.movieswatchpro.presentation.signup.SignUpScreen
+import com.muthiani.movieswatchpro.presentation.splash_screen.SplashScreenViewModel
+import com.muthiani.movieswatchpro.presentation.viewMore.GenericMovieListScreen
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun MoviesWatchApp() {
+fun MoviesWatchApp(apiTypeHolder: ApiLoadTypeHolder) {
     val splashViewModel: SplashScreenViewModel = hiltViewModel()
     val isOnboarded = splashViewModel.isUserOnboarded
     val isLoggedIn by splashViewModel.loggedIn.collectAsState()
@@ -92,6 +94,25 @@ fun MoviesWatchApp() {
                 ) { backStackEntry ->
                     MainContainer(
                         onMovieSelected = navController::navigateToMovieDetail,
+                        onMoreClicked = navController::navigateToMovieViewer,
+                    )
+                }
+
+                composableWithCompositionLocal(
+                    route = "${MainDestinations.MOVIE_LIST_VIEWER}/{${MainDestinations.API_CALL_TYPE}}",
+                    arguments =
+                        listOf(
+                            navArgument(MainDestinations.API_CALL_TYPE) {
+                                type = NavType.StringType
+                            },
+                        ),
+                ) { backStackEntry ->
+                    val apiCallType = backStackEntry.arguments?.getString(MainDestinations.API_CALL_TYPE)
+                    GenericMovieListScreen(
+                        apiTypeHolder = apiTypeHolder,
+                        onMovieSelected = navController::navigateToMovieDetail,
+                        apiCallType = apiCallType ?: "",
+                        upPress = { navController.upPress() },
                     )
                 }
 
@@ -121,6 +142,7 @@ fun MoviesWatchApp() {
 fun MainContainer(
     modifier: Modifier = Modifier,
     onMovieSelected: (Long, NavBackStackEntry) -> Unit,
+    onMoreClicked: (String) -> Unit = {},
 ) {
     val nestedNavController = rememberMoviesWatchNavController()
     val navBackStackEntry by nestedNavController.navController.currentBackStackEntryAsState()
@@ -176,6 +198,7 @@ fun MainContainer(
                     Modifier
                         .padding(padding)
                         .consumeWindowInsets(padding),
+                onMoreClicked = onMoreClicked,
             )
         }
     }

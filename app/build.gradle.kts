@@ -1,16 +1,27 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
     id("com.google.gms.google-services")
-    id("kotlin-kapt")
 }
+
+val localProperties =
+    Properties().apply {
+        load(rootProject.file("local.properties").inputStream())
+    }
 
 android {
     namespace = "com.muthiani.movieswatchpro"
     compileSdk = 34
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.muthiani.movieswatchpro"
@@ -52,6 +63,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    defaultConfig {
+        buildConfigField("String", "API_TOKEN", "\"${localProperties.getProperty("API_TOKEN")}\"")
+    }
 }
 
 dependencies {
@@ -81,7 +96,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     // sharedPreferences
     implementation(libs.androidx.preference.ktx)
 
@@ -130,8 +145,15 @@ dependencies {
 
     // lottie
     implementation(libs.lottie.compose)
+
+    // room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.paging.compose) // Latest stable version
 }
 
-kapt {
-    correctErrorTypes = true
-}
+// kapt {
+//    correctErrorTypes = true
+// }
