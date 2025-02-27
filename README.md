@@ -38,7 +38,7 @@ MoviesWatchPro is an Android application that fetches and displays movies from a
 
 1.  **Clone the repository**:
     ```bash
-    git clone [https://github.com/donMuthiani/MoviesWatchPro.git](https://github.com/donMuthiani/MoviesWatchPro.git)
+    git clone [repository](https://github.com/donMuthiani/MoviesWatchPro.git)
     cd MoviesWatchPro
     ```
 
