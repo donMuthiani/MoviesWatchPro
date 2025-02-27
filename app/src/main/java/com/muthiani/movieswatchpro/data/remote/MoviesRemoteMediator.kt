@@ -12,11 +12,12 @@ import com.muthiani.movieswatchpro.data.mapper.toMovieEntity
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class PopularMovieRemoteMediator
+class MoviesRemoteMediator
     @Inject
     constructor(
         val api: MoviesWatchApi,
         val moviesWatchDatabase: MoviesWatchDatabase,
+        private val apiType: String, // Now a static parameter
     ) : RemoteMediator<Int, MovieEntity>() {
         private val REMOTE_KEY_ID = "movie"
 
@@ -40,7 +41,12 @@ class PopularMovieRemoteMediator
                             remoteKey.nextKey
                         }
                     }
-                val apiResponse = api.getPopular(page = loadKey ?: 1)
+                val apiResponse =
+                    when (apiType) {
+                        "popular" -> api.getPopular(page = loadKey ?: 1)
+                        "now_playing" -> api.getNowShowing(page = loadKey ?: 1)
+                        else -> api.getUpcoming(page = loadKey ?: 1)
+                    }
 
                 val results = apiResponse.data ?: emptyList()
                 val nextPage = apiResponse.page + 1
@@ -55,7 +61,8 @@ class PopularMovieRemoteMediator
 
                     moviesWatchDatabase.remoteKeysDao().insertOrReplace(RemoteKeysEntity(REMOTE_KEY_ID, nextPage))
                 }
-                MediatorResult.Success(endOfPaginationReached = apiResponse.page >= apiResponse.totalPages)
+                val endOfPaginationReached = apiResponse.page >= apiResponse.total_pages
+                MediatorResult.Success(endOfPaginationReached)
             } catch (e: Exception) {
                 MediatorResult.Error(e)
             }

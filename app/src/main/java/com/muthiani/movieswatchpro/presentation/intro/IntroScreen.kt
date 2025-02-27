@@ -20,7 +20,7 @@ import com.muthiani.movieswatchpro.domain.entity.IntroModel
 import com.muthiani.movieswatchpro.presentation.theme.MoviesWatchProTheme
 
 @Composable
-fun introScreen(introModel: IntroModel) {
+fun IntroScreen(introModel: IntroModel) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.size(80.dp))
 
@@ -60,18 +60,18 @@ fun introScreen(introModel: IntroModel) {
 
 @Preview(showBackground = true)
 @Composable
-fun introScreenPreview1() {
-    introScreen(introModel = IntroModel.FirstIntro)
+fun IntroScreenPreview1() {
+    IntroScreen(introModel = IntroModel.FirstIntro)
 }
 
 @Preview(showBackground = true)
 @Composable
-fun introScreenPreview2() {
-    introScreen(introModel = IntroModel.SecondIntro)
+fun IntroScreenPreview2() {
+    IntroScreen(introModel = IntroModel.SecondIntro)
 }
 
 @Preview(showBackground = true)
 @Composable
-fun introScreenPreview3() {
-    introScreen(introModel = IntroModel.ThirdIntro)
+fun IntroScreenPreview3() {
+    IntroScreen(introModel = IntroModel.ThirdIntro)
 }

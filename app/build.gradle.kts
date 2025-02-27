@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -8,9 +10,18 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+val localProperties =
+    Properties().apply {
+        load(rootProject.file("local.properties").inputStream())
+    }
+
 android {
     namespace = "com.muthiani.movieswatchpro"
     compileSdk = 34
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.muthiani.movieswatchpro"
@@ -51,6 +62,10 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+
+    defaultConfig {
+        buildConfigField("String", "API_TOKEN", "\"${localProperties.getProperty("API_TOKEN")}\"")
     }
 }
 

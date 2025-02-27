@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -18,17 +20,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.muthiani.movieswatchpro.domain.entity.MovieModel
 import com.muthiani.movieswatchpro.presentation.theme.MoviesWatchProTheme
+import java.util.UUID
 
 @Composable
 fun MovieCollectionItem(
-    movies: LazyPagingItems<MovieModel>,
-    onMovieClicked: (Long) -> Unit,
     modifier: Modifier = Modifier,
+    movies: LazyPagingItems<MovieModel>,
+    name: String = "",
+    onMovieClicked: (Long) -> Unit,
     onMoreClicked: (String) -> Unit = {},
 ) {
+    println("Recomposition: $name") // Log to check
     Column(modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -38,7 +44,7 @@ fun MovieCollectionItem(
                     .heightIn(min = 56.dp),
         ) {
             Text(
-                text = "Popular",
+                text = name,
                 style = MaterialTheme.typography.titleLarge,
                 color = MoviesWatchProTheme.colors.brand,
                 maxLines = 1,
@@ -50,7 +56,7 @@ fun MovieCollectionItem(
             )
             IconButton(
                 onClick = {
-                    onMoreClicked("Popular")
+                    onMoreClicked(name)
                 },
                 modifier = Modifier.align(Alignment.CenterVertically),
             ) {
@@ -72,9 +78,25 @@ fun Movies(
     modifier: Modifier = Modifier,
 ) {
     LazyRow(modifier = modifier, contentPadding = PaddingValues(start = 24.dp)) {
-        items(movies.itemCount) { index ->
-            movies[index]?.let { movie ->
+        val limitedMovies = movies.itemSnapshotList.take(15)
+        items(items = limitedMovies, key = { movie -> movie?.id ?: UUID.randomUUID().toString() }) { movie ->
+            movie?.let {
                 DiscoverItem(movie, onMovieClicked)
+            }
+        }
+
+        movies.apply {
+            when {
+                loadState.refresh is LoadState.Loading -> {
+                    item { CircularProgressIndicator(modifier = Modifier.padding(8.dp)) }
+                }
+                loadState.append is LoadState.Loading -> {
+                    item { CircularProgressIndicator(modifier = Modifier.padding(8.dp)) }
+                }
+                loadState.refresh is LoadState.Error -> {
+                    val e = loadState.refresh as LoadState.Error
+                    item { Text("Error: ${e.error.localizedMessage}", modifier = Modifier.padding(8.dp)) }
+                }
             }
         }
     }

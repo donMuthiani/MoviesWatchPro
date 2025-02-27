@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.muthiani.movieswatchpro.presentation.theme.MoviesWatchProTheme
 
 @Composable
-fun indicatorUi(
+fun IndicatorUi(
     pageSize: Int,
     currentPage: Int,
     selectedColor: Color = MoviesWatchProTheme.colors.iconInteractive,
@@ -43,18 +43,18 @@ fun indicatorUi(
 
 @Preview
 @Composable
-fun indicator1() {
-    indicatorUi(pageSize = 3, currentPage = 1)
+fun Indicator1() {
+    IndicatorUi(pageSize = 3, currentPage = 1)
 }
 
 @Preview
 @Composable
-fun indicator2() {
-    indicatorUi(pageSize = 3, currentPage = 2)
+fun Indicator2() {
+    IndicatorUi(pageSize = 3, currentPage = 2)
 }
 
 @Preview
 @Composable
-fun indicator3() {
-    indicatorUi(pageSize = 3, currentPage = 3)
+fun Indicator3() {
+    IndicatorUi(pageSize = 3, currentPage = 3)
 }

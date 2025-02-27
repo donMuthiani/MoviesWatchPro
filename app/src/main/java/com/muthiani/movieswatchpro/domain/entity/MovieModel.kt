@@ -1,9 +1,8 @@
 package com.muthiani.movieswatchpro.domain.entity
 
-import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import kotlinx.coroutines.flow.Flow
 
 data class BelongsToCollection(
     @SerializedName("id") var id: Int? = null,
@@ -67,6 +66,6 @@ data class SpokenLanguages(
 
 data class MovieCollection(
     val name: String,
-    val movies: Flow<PagingData<MovieModel>>,
+    val movies: LazyPagingItems<MovieModel>,
     val onMovieClicked: (Long) -> Unit = {},
 )

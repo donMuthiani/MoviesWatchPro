@@ -1,11 +1,24 @@
 package com.muthiani.movieswatchpro.presentation.utils
 
-import java.time.LocalDate
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 fun String.isMovieRunning(): String {
-    val localDate = LocalDate.parse(this)
-    val oneMonthAgo = LocalDate.now().minusMonths(1)
-    return if (localDate.isBefore(oneMonthAgo)) "Running" else "Not running"
+    val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return try {
+        val date = format.parse(this) ?: return "Not running"
+        val calendar = Calendar.getInstance().apply { time = date }
+
+        val oneMonthAgo =
+            Calendar.getInstance().apply {
+                add(Calendar.MONTH, -1)
+            }
+
+        if (calendar.before(oneMonthAgo)) "Running" else "Not running"
+    } catch (e: Exception) {
+        "Invalid date"
+    }
 }
 
 fun String.toCamelCase(): String {

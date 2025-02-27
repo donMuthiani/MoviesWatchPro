@@ -48,7 +48,7 @@ fun DiscoverItem(
                     .padding(16.dp)
                     .width(120.dp)
                     .clickable {
-                        Timber.i("Movie selected: ${movie.title}")
+                        Timber.i("Movie selected: ${movie.id}")
                         onMovieSelected(movie.id.toLong())
                     }
                     .sharedBounds(

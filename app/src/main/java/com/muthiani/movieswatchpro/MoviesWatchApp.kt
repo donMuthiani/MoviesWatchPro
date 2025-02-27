@@ -23,6 +23,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.muthiani.movieswatchpro.data.config.ApiLoadTypeHolder
 import com.muthiani.movieswatchpro.presentation.components.MoviesWatchScaffold
 import com.muthiani.movieswatchpro.presentation.detail.MovieDetailScreen
 import com.muthiani.movieswatchpro.presentation.detail.nonSpatialExpressiveSpring
@@ -36,11 +37,11 @@ import com.muthiani.movieswatchpro.presentation.navigation.MainDestinations
 import com.muthiani.movieswatchpro.presentation.navigation.rememberMoviesWatchNavController
 import com.muthiani.movieswatchpro.presentation.signup.SignUpScreen
 import com.muthiani.movieswatchpro.presentation.splash_screen.SplashScreenViewModel
-import com.muthiani.movieswatchpro.presentation.view_more.GenericMovieListScreen
+import com.muthiani.movieswatchpro.presentation.viewMore.GenericMovieListScreen
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun MoviesWatchApp() {
+fun MoviesWatchApp(apiTypeHolder: ApiLoadTypeHolder) {
     val splashViewModel: SplashScreenViewModel = hiltViewModel()
     val isOnboarded = splashViewModel.isUserOnboarded
     val isLoggedIn by splashViewModel.loggedIn.collectAsState()
@@ -108,7 +109,7 @@ fun MoviesWatchApp() {
                 ) { backStackEntry ->
                     val apiCallType = backStackEntry.arguments?.getString(MainDestinations.API_CALL_TYPE)
                     GenericMovieListScreen(
-                        modifier = Modifier,
+                        apiTypeHolder = apiTypeHolder,
                         onMovieSelected = navController::navigateToMovieDetail,
                         apiCallType = apiCallType ?: "",
                         upPress = { navController.upPress() },

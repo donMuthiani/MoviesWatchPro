@@ -5,62 +5,62 @@ import com.muthiani.movieswatchpro.domain.entity.MovieModel
 
 fun MovieModel.toMovieEntity(): MovieEntity {
     return MovieEntity(
-        id = this.id, // Int
-        adult = this.adult, // Boolean?
-        backdropPath = this.backdropPath, // String?
-        belongsToCollection = this.belongsToCollection, // BelongsToCollection?
-        budget = this.budget, // Int?
-        genres = this.genres, // ArrayList<Genres>?
-        homepage = this.homepage, // String?
-        imdbId = this.imdbId, // String?
-        originCountry = this.originCountry, // ArrayList<String>?
-        originalLanguage = this.originalLanguage, // String?
-        originalTitle = this.originalTitle, // String?
-        overview = this.overview, // String?
-        popularity = this.popularity, // Double?
-        posterPath = this.posterPath, // String?
-        productionCompanies = this.productionCompanies, // ArrayList<ProductionCompanies>?
-        productionCountries = this.productionCountries, // ArrayList<ProductionCountries>?
-        releaseDate = this.releaseDate, // String?
-        revenue = this.revenue, // Int?
-        runtime = this.runtime, // Int?
-        spokenLanguages = this.spokenLanguages, // ArrayList<SpokenLanguages>?
-        status = this.status, // String?
-        tagline = this.tagline, // String?
-        title = this.title, // String?
-        video = this.video, // Boolean?
-        voteAverage = this.voteAverage, // Double?
-        voteCount = this.voteCount, // Int?
+        id = this.id,
+        adult = this.adult,
+        backdropPath = this.backdropPath,
+        belongsToCollection = this.belongsToCollection,
+        budget = this.budget,
+        genres = this.genres,
+        homepage = this.homepage,
+        imdbId = this.imdbId,
+        originCountry = this.originCountry,
+        originalLanguage = this.originalLanguage,
+        originalTitle = this.originalTitle,
+        overview = this.overview,
+        popularity = this.popularity,
+        posterPath = this.posterPath,
+        productionCompanies = this.productionCompanies,
+        productionCountries = this.productionCountries,
+        releaseDate = this.releaseDate,
+        revenue = this.revenue,
+        runtime = this.runtime,
+        spokenLanguages = this.spokenLanguages,
+        status = this.status,
+        tagline = this.tagline,
+        title = this.title,
+        video = this.video,
+        voteAverage = this.voteAverage,
+        voteCount = this.voteCount,
     )
 }
 
 fun MovieEntity.toMovieModel(): MovieModel {
     return MovieModel(
-        id = this.id, // Int
-        adult = this.adult, // Boolean?
-        backdropPath = this.backdropPath, // String?
-        belongsToCollection = this.belongsToCollection, // BelongsToCollection?
-        budget = this.budget, // Int?
-        genres = this.genres, // ArrayList<Genres>?
-        homepage = this.homepage, // String?
-        imdbId = this.imdbId, // String?
-        originCountry = this.originCountry, // ArrayList<String>?
-        originalLanguage = this.originalLanguage, // String?
-        originalTitle = this.originalTitle, // String?
-        overview = this.overview, // String?
-        popularity = this.popularity, // Double?
-        posterPath = this.posterPath, // String?
-        productionCompanies = this.productionCompanies, // ArrayList<ProductionCompanies>?
-        productionCountries = this.productionCountries, // ArrayList<ProductionCountries>?
-        releaseDate = this.releaseDate, // String?
-        revenue = this.revenue, // Int?
-        runtime = this.runtime, // Int?
-        spokenLanguages = this.spokenLanguages, // ArrayList<SpokenLanguages>?
-        status = this.status, // String?
-        tagline = this.tagline, // String?
-        title = this.title, // String?
-        video = this.video, // Boolean?
-        voteAverage = this.voteAverage, // Double?
-        voteCount = this.voteCount, // Int?
+        id = this.id,
+        adult = this.adult,
+        backdropPath = this.backdropPath,
+        belongsToCollection = this.belongsToCollection,
+        budget = this.budget,
+        genres = this.genres,
+        homepage = this.homepage,
+        imdbId = this.imdbId,
+        originCountry = this.originCountry,
+        originalLanguage = this.originalLanguage,
+        originalTitle = this.originalTitle,
+        overview = this.overview,
+        popularity = this.popularity,
+        posterPath = this.posterPath,
+        productionCompanies = this.productionCompanies,
+        productionCountries = this.productionCountries,
+        releaseDate = this.releaseDate,
+        revenue = this.revenue,
+        runtime = this.runtime,
+        spokenLanguages = this.spokenLanguages,
+        status = this.status,
+        tagline = this.tagline,
+        title = this.title,
+        video = this.video,
+        voteAverage = this.voteAverage,
+        voteCount = this.voteCount,
     )
 }

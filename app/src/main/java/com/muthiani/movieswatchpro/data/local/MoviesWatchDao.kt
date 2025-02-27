@@ -23,6 +23,6 @@ interface MoviesWatchDao {
     @Query("SELECT * FROM movies ORDER BY releaseDate DESC")
     fun getNowShowingPagingSource(): PagingSource<Int, MovieEntity>
 
-    @Query("SELECT * FROM movies WHERE releaseDate >= DATE(:today, '-14 days')")
-    fun getUpcomingPagingSource(today: String): PagingSource<Int, MovieEntity>
+    @Query("SELECT * FROM movies WHERE releaseDate >= DATE(CURRENT_DATE, '-30 days')")
+    fun getUpcomingPagingSource(): PagingSource<Int, MovieEntity>
 }

@@ -9,7 +9,7 @@ import com.muthiani.movieswatchpro.domain.entity.ProductionCompanies
 import com.muthiani.movieswatchpro.domain.entity.ProductionCountries
 import com.muthiani.movieswatchpro.domain.entity.SpokenLanguages
 
-class BelongsToCollectionConverter {
+class MoviesConverters {
     @TypeConverter
     fun fromBelongsToCollection(belongsToCollection: BelongsToCollection?): String? {
         return belongsToCollection?.let { Gson().toJson(it) }

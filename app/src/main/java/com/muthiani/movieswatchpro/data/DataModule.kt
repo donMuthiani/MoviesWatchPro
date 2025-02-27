@@ -6,11 +6,13 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.Room
+import com.muthiani.movieswatchpro.BuildConfig
+import com.muthiani.movieswatchpro.data.config.ApiLoadTypeHolder
 import com.muthiani.movieswatchpro.data.local.MovieEntity
 import com.muthiani.movieswatchpro.data.local.MoviesWatchDao
 import com.muthiani.movieswatchpro.data.local.MoviesWatchDatabase
+import com.muthiani.movieswatchpro.data.remote.MoviesRemoteMediator
 import com.muthiani.movieswatchpro.data.remote.MoviesWatchApi
-import com.muthiani.movieswatchpro.data.remote.PopularMovieRemoteMediator
 import com.muthiani.movieswatchpro.data.repository.MovieRepositoryImpl
 import com.muthiani.movieswatchpro.data.sharedPrefs.MyPreferences
 import com.muthiani.movieswatchpro.domain.repository.MovieRepository
@@ -24,6 +26,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -45,7 +48,8 @@ object DataModule {
                 chain.request().newBuilder()
                     .addHeader(
                         "Authorization",
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmYxYjI0OWI4MGJhMzBlYjc4ZDMwNmExYzAzMmM2NyIsIm5iZiI6MTczMTQ4NTg3Ni4xNDU5ODU4LCJzdWIiOiI1ODFkYThjMzkyNTE0MTBlZTMwMDc0MmEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.IUABnE-zmd8PzLCuYl6QrtIww_kRn7qeKZ3utogjWMY",
+                        BuildConfig.API_TOKEN,
+//                        ApiConstants.TOKEN
                     )
                     .build()
             chain.proceed(request)
@@ -99,32 +103,103 @@ object DataModule {
         return database.moviesDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideApiTypeHolder(): ApiLoadTypeHolder {
+        return ApiLoadTypeHolder() // Provide the instance
+    }
+
     @OptIn(ExperimentalPagingApi::class)
     @Provides
     @Singleton
-    fun providesPager(
+    @Named("view_more")
+    fun providesViewMorePager(
+        moviesWatchApi: MoviesWatchApi,
+        moviesWatchDatabase: MoviesWatchDatabase,
+        apiTypeHolder: ApiLoadTypeHolder,
+    ): Pager<Int, MovieEntity> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            remoteMediator =
+                MoviesRemoteMediator(
+                    api = moviesWatchApi,
+                    moviesWatchDatabase = moviesWatchDatabase,
+                    apiType = apiTypeHolder.apiType,
+                ),
+            pagingSourceFactory = { moviesWatchDatabase.moviesDao().pagingSource() },
+        )
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    @Provides
+    @Singleton
+    @Named("popular")
+    fun providesPopularPager(
         moviesWatchApi: MoviesWatchApi,
         moviesWatchDatabase: MoviesWatchDatabase,
     ): Pager<Int, MovieEntity> {
         return Pager(
             config = PagingConfig(pageSize = 20),
             remoteMediator =
-                PopularMovieRemoteMediator(
+                MoviesRemoteMediator(
                     api = moviesWatchApi,
                     moviesWatchDatabase = moviesWatchDatabase,
+                    apiType = "popular",
                 ),
             pagingSourceFactory = { moviesWatchDatabase.moviesDao().getPopularPagingSource() },
+        )
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    @Provides
+    @Singleton
+    @Named("upcoming")
+    fun providesUpcomingPager(
+        moviesWatchApi: MoviesWatchApi,
+        moviesWatchDatabase: MoviesWatchDatabase,
+    ): Pager<Int, MovieEntity> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            remoteMediator =
+                MoviesRemoteMediator(
+                    api = moviesWatchApi,
+                    moviesWatchDatabase = moviesWatchDatabase,
+                    apiType = "upcoming",
+                ),
+            pagingSourceFactory = { moviesWatchDatabase.moviesDao().getUpcomingPagingSource() },
+        )
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    @Provides
+    @Singleton
+    @Named("now_showing")
+    fun providesNowShowingPager(
+        moviesWatchApi: MoviesWatchApi,
+        moviesWatchDatabase: MoviesWatchDatabase,
+    ): Pager<Int, MovieEntity> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            remoteMediator =
+                MoviesRemoteMediator(
+                    api = moviesWatchApi,
+                    moviesWatchDatabase = moviesWatchDatabase,
+                    apiType = "now_showing",
+                ),
+            pagingSourceFactory = { moviesWatchDatabase.moviesDao().getNowShowingPagingSource() },
         )
     }
 
     @Provides
     @Singleton
     fun provideMovieRepository(
-        moviePager: Pager<Int, MovieEntity>,
+        @Named("popular") popularPager: Pager<Int, MovieEntity>,
+        @Named("upcoming") upcomingPager: Pager<Int, MovieEntity>,
+        @Named("now_showing") nowShowingPager: Pager<Int, MovieEntity>,
+        @Named("view_more") viewMorePager: Pager<Int, MovieEntity>,
         moviesWatchApi: MoviesWatchApi,
-        moviesWatchDatabase: MoviesWatchDatabase,
     ): MovieRepository {
-        return MovieRepositoryImpl(moviePager, moviesWatchApi, moviesWatchDatabase)
+        return MovieRepositoryImpl(popularPager, upcomingPager, nowShowingPager, viewMorePager, moviesWatchApi)
     }
 
     @Singleton

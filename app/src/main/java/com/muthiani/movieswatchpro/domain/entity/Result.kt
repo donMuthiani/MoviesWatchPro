@@ -24,8 +24,8 @@ fun <T> Result<T>.successOr(fallback: T): T {
 data class ApiResponse<T>(
     @SerializedName("results")
     val data: T? = null,
-    val totalPages: Int = 1,
-    val totalResults: Int = 1,
+    val total_pages: Int = 1,
+    val total_results: Int = 1,
     val page: Int = 1,
     val dates: Dates? = null,
 )

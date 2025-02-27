@@ -82,7 +82,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                     }
 
                     Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                        indicatorUi(pageSize = pages.size, currentPage = pagerState.currentPage)
+                        IndicatorUi(pageSize = pages.size, currentPage = pagerState.currentPage)
                     }
 
                     Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
@@ -105,7 +105,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             content = {
                 Column(Modifier.padding(it)) {
                     HorizontalPager(state = pagerState) { index ->
-                        introScreen(introModel = pages[index])
+                        IntroScreen(introModel = pages[index])
                     }
                 }
             },

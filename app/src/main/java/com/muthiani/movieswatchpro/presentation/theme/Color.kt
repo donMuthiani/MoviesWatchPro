@@ -91,5 +91,3 @@ val FunctionalRedDark = Color(0xffEA6D7E) // Darker red for contrast
 val FunctionalGreen = Color(0xff52C41A) // Bright functional green
 val FunctionalGrey = Color(0xffF6F6F6) // Light functional grey
 val FunctionalDarkGrey = Color(0xff2E2E2E) // Dark functional grey
-
-const val AlphaNearOpaque = 0.95f

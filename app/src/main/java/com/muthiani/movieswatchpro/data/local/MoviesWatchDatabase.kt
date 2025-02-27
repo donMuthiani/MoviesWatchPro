@@ -5,9 +5,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(entities = [MovieEntity::class, RemoteKeysEntity::class], version = 3, exportSchema = true)
-@TypeConverters(BelongsToCollectionConverter::class)
+@TypeConverters(MoviesConverters::class)
 abstract class MoviesWatchDatabase : RoomDatabase() {
     abstract fun moviesDao(): MoviesWatchDao
 
-    abstract fun remoteKeysDao(): RemoteKeyDao
+    abstract fun remoteKeysDao(): RemoteKeysDao
 }
