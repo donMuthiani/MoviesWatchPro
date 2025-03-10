@@ -23,12 +23,13 @@ fun <T> Result<T>.successOr(fallback: T): T {
 
 data class ApiResponse<T>(
     @SerializedName("results")
+    val results: T? = null,
     val data: T? = null,
     val total_pages: Int = 1,
     val total_results: Int = 1,
     val page: Int = 1,
     val dates: Dates? = null,
-)
+    )
 
 data class WatchListResponse<T>(
     @SerializedName("results")

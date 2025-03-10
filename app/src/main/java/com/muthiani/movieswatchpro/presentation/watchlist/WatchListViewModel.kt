@@ -2,47 +2,20 @@ package com.muthiani.movieswatchpro.presentation.watchlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.muthiani.movieswatchpro.domain.entity.MovieModel
-import com.muthiani.movieswatchpro.domain.repository.MovieRepository
+import com.muthiani.movieswatchpro.domain.useCase.GetMovies
+import com.muthiani.movieswatchpro.domain.useCase.GetWatchList
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
 class WatchListViewModel
     @Inject
-    constructor(private val fakeWatchListRepository: MovieRepository) : ViewModel() {
-        private val _uiState: MutableStateFlow<WatchListUiState> = MutableStateFlow(WatchListUiState.Initial)
-        val uiState: StateFlow<WatchListUiState> = _uiState.asStateFlow()
-
-        private val exceptionHandler =
-            CoroutineExceptionHandler { _, exception ->
-                _uiState.value = WatchListUiState.Error(exception.message ?: "An error occurred")
-            }
-
-        init {
-            getWatchList()
-        }
-
-        private fun getWatchList() {
-            viewModelScope.launch(exceptionHandler) {
-                _uiState.value = WatchListUiState.Loading(show = true)
-                val result = fakeWatchListRepository.getWatchList()
-                _uiState.value = WatchListUiState.WatchList(result.results.orEmpty())
-            }
-        }
-
-        sealed class WatchListUiState {
-            data object Initial : WatchListUiState()
-
-            data class Loading(val show: Boolean) : WatchListUiState()
-
-            data class WatchList(val watchList: List<MovieModel>) : WatchListUiState()
-
-            data class Error(val message: String) : WatchListUiState()
-        }
+    constructor(
+        getWatchList: GetWatchList,
+    ) : ViewModel() {
+        val watchListMoviesPagingDataFlow: Flow<PagingData<MovieModel>> = getWatchList.getWatchList().cachedIn(viewModelScope)
     }

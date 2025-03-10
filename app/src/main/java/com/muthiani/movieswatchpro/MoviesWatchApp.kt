@@ -93,8 +93,10 @@ fun MoviesWatchApp(apiTypeHolder: ApiLoadTypeHolder) {
                     route = MainDestinations.HOME_ROUTE,
                 ) { backStackEntry ->
                     MainContainer(
+                        apiTypeHolder = apiTypeHolder,
                         onMovieSelected = navController::navigateToMovieDetail,
                         onMoreClicked = navController::navigateToMovieViewer,
+                        upPress = {navController.upPress()}
                     )
                 }
 
@@ -140,6 +142,8 @@ fun MoviesWatchApp(apiTypeHolder: ApiLoadTypeHolder) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MainContainer(
+    upPress: () -> Unit,
+    apiTypeHolder: ApiLoadTypeHolder,
     modifier: Modifier = Modifier,
     onMovieSelected: (Long, NavBackStackEntry) -> Unit,
     onMoreClicked: (String) -> Unit = {},
@@ -193,6 +197,8 @@ fun MainContainer(
             startDestination = HomeSections.DISCOVER.route,
         ) {
             addHomeGraph(
+                upPress = upPress,
+                apiTypeHolder = apiTypeHolder,
                 onMovieSelected = onMovieSelected,
                 modifier =
                     Modifier

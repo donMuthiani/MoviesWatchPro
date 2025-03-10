@@ -62,6 +62,7 @@ interface MoviesWatchApi {
 
     @GET("account/{account_id}/watchlist/movies")
     suspend fun getWatchList(
-        @Path("account_id") account_id: Int,
-    ): WatchListResponse<List<MovieModel>>
+        @Path("account_id") account_id: Int? = ApiConstants.ACCOUNT_ID,
+        @Query("page") page: Int = 1,
+        ): ApiResponse<List<MovieModel>>
 }

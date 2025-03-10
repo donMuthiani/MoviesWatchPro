@@ -10,9 +10,9 @@ import com.muthiani.movieswatchpro.domain.entity.ProductionCompanies
 import com.muthiani.movieswatchpro.domain.entity.ProductionCountries
 import com.muthiani.movieswatchpro.domain.entity.SpokenLanguages
 
-@TypeConverters(MoviesConverters::class)
-@Entity(tableName = "movies")
-data class MovieEntity(
+@TypeConverters
+@Entity(tableName = "watchlist")
+data class MovieEntityWatchList(
     @PrimaryKey
     var id: Int,
     var adult: Boolean? = null,
@@ -27,5 +27,5 @@ data class MovieEntity(
     var title: String? = null,
     var video: Boolean? = null,
     var voteAverage: Double? = null,
-    var voteCount: Int? = null,
-)
+    var voteCount: Int? = null
+    )

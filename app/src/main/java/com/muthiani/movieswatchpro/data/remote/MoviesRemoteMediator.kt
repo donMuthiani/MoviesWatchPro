@@ -48,7 +48,7 @@ class MoviesRemoteMediator
                         else -> api.getUpcoming(page = loadKey ?: 1)
                     }
 
-                val results = apiResponse.data ?: emptyList()
+                val results = apiResponse.results ?: apiResponse.data ?: emptyList()
                 val nextPage = apiResponse.page + 1
 
                 moviesWatchDatabase.withTransaction {

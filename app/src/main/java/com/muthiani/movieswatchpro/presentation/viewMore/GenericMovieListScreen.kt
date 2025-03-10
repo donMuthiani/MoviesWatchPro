@@ -35,7 +35,7 @@ import com.muthiani.movieswatchpro.domain.entity.MovieModel
 import com.muthiani.movieswatchpro.presentation.components.MoviesWatchScaffold
 import com.muthiani.movieswatchpro.presentation.components.customHomeTopBar
 import com.muthiani.movieswatchpro.presentation.discover.DiscoverItem
-import com.muthiani.movieswatchpro.presentation.discover.DiscoverViewModel
+import com.muthiani.movieswatchpro.presentation.discover.MoviesWatchViewModel
 import com.muthiani.movieswatchpro.presentation.theme.MoviesWatchProTheme
 import com.muthiani.movieswatchpro.presentation.utils.toCamelCase
 
@@ -48,7 +48,7 @@ fun GenericMovieListScreen(
 ) {
     apiTypeHolder.apiType = apiCallType
 
-    val viewModel = hiltViewModel<DiscoverViewModel>()
+    val viewModel = hiltViewModel<MoviesWatchViewModel>()
 
     val viewMoreMoviesPagingItems = viewModel.viewMoreMoviesPagingDataFlow.collectAsLazyPagingItems()
 

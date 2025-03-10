@@ -10,8 +10,8 @@ data class RemoteKeysEntity(
     val nextKey: Int?,
 )
 
-@Entity(tableName = "remote_keys_view_more")
-data class RemoteKeysViewMore(
+@Entity(tableName = "remote_keys_watchList")
+data class RemoteKeysWatchList(
     @PrimaryKey
     val id: String,
     val nextKey: Int?,

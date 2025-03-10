@@ -16,7 +16,6 @@ class GetMovies
         fun upcoming(): Flow<PagingData<MovieModel>> = repository.getUpcomingMovies().flowOn(Dispatchers.IO)
 
         fun nowPlaying(): Flow<PagingData<MovieModel>> = repository.getNowShowingMovies().flowOn(Dispatchers.IO)
-//        operator fun invoke(): Flow<PagingData<MovieModel>> = repository.getPopularMovies().flowOn(Dispatchers.IO)
 
         fun viewMore(): Flow<PagingData<MovieModel>> = repository.getMoreMovies().flowOn(Dispatchers.IO)
     }

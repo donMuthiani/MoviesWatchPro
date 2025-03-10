@@ -8,7 +8,7 @@ import com.muthiani.movieswatchpro.domain.entity.WatchListResponse
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    suspend fun getWatchList(): WatchListResponse<List<MovieModel>>
+    fun getWatchList(page: Int = 1): Flow<PagingData<MovieModel>>
 
     suspend fun getMovie(movieId: Int): MovieModel?
 

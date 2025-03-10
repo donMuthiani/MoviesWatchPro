@@ -54,7 +54,6 @@ import com.muthiani.movieswatchpro.presentation.components.ErrorScreen
 import com.muthiani.movieswatchpro.presentation.components.LoadingScreen
 import com.muthiani.movieswatchpro.presentation.components.MoviesWatchButton
 import com.muthiani.movieswatchpro.presentation.components.MoviesWatchDivider
-import com.muthiani.movieswatchpro.presentation.discover.MovieDetailViewModel
 import com.muthiani.movieswatchpro.presentation.theme.MoviesWatchProTheme
 import com.muthiani.movieswatchpro.presentation.utils.MovieSharedElementKey
 import com.muthiani.movieswatchpro.presentation.utils.MovieSharedElementType
@@ -220,7 +219,7 @@ fun MovieDetailContent(
                                     rememberSharedContentState(
                                         key =
                                             MovieSharedElementKey(
-                                                snackId = movie.id?.toLong() ?: 0,
+                                                snackId = movie.id.toLong(),
                                                 type = MovieSharedElementType.Image,
                                             ),
                                     ),
@@ -336,7 +335,7 @@ fun MovieDetailContent(
                                         ),
                                 ),
                             )
-                            append(movie.genres?.first()?.name)
+//                            append(movie.genreIds.first().toString())
                         }
 
                     Text(
@@ -349,38 +348,38 @@ fun MovieDetailContent(
                                 .padding(8.dp),
                     )
                 }
-                Text(
-                    text = "Watch",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MoviesWatchProTheme.colors.textInteractive,
-                    modifier =
-                        Modifier
-                            .padding(start = 24.dp),
-                )
+//                Text(
+//                    text = "Watch",
+//                    style = MaterialTheme.typography.titleMedium,
+//                    color = MoviesWatchProTheme.colors.textInteractive,
+//                    modifier =
+//                        Modifier
+//                            .padding(start = 24.dp),
+//                )
 
-                LazyRow(
-                    modifier = Modifier.padding(start = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(16.dp),
-                ) {
-                    itemsIndexed(movie.productionCompanies.orEmpty()) { _, provider ->
-                        MoviesWatchButton(
-                            backgroundGradient = listOf(MoviesWatchProTheme.colors.brand, MoviesWatchProTheme.colors.brand),
-                            onClick = { navigateToProvider(provider) },
-                            modifier =
-                                Modifier
-                                    .wrapContentSize(),
-                            shape = RoundedCornerShape(16.dp),
-                        ) {
-                            Text(
-                                text = provider.name.orEmpty(),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color.White,
-                                textAlign = TextAlign.Center,
-                            )
-                        }
-                    }
-                }
+//                LazyRow(
+//                    modifier = Modifier.padding(start = 16.dp),
+//                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+//                    contentPadding = PaddingValues(16.dp),
+//                ) {
+//                    itemsIndexed(movie.productionCompanies.orEmpty()) { _, provider ->
+//                        MoviesWatchButton(
+//                            backgroundGradient = listOf(MoviesWatchProTheme.colors.brand, MoviesWatchProTheme.colors.brand),
+//                            onClick = { navigateToProvider(provider) },
+//                            modifier =
+//                                Modifier
+//                                    .wrapContentSize(),
+//                            shape = RoundedCornerShape(16.dp),
+//                        ) {
+//                            Text(
+//                                text = provider.name.orEmpty(),
+//                                style = MaterialTheme.typography.titleMedium,
+//                                color = Color.White,
+//                                textAlign = TextAlign.Center,
+//                            )
+//                        }
+//                    }
+//                }
             }
         }
     }

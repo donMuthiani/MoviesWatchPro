@@ -21,66 +21,79 @@ class MoviesConverters {
     }
 
     @TypeConverter
-    fun fromGenresList(genresList: ArrayList<Genres>?): String? {
+    fun fromGenresIds(genresList: List<Int>?): String? {
         return genresList?.let { Gson().toJson(it) }
     }
 
     @TypeConverter
-    fun toGenresList(genresListString: String?): ArrayList<Genres>? {
+    fun toGenresIds(genresListString: String?): List<Int>? {
         return genresListString?.let {
-            val listType = object : TypeToken<ArrayList<Genres>>() {}.type
+            val listType = object : TypeToken<List<Int>>() {}.type
             Gson().fromJson(it, listType)
         }
     }
 
     @TypeConverter
-    fun fromSpokenLanguagesList(spokenLanguagesList: ArrayList<SpokenLanguages>?): String? {
+    fun fromGenresList(genresList: List<Genres>?): String? {
+        return genresList?.let { Gson().toJson(it) }
+    }
+
+    @TypeConverter
+    fun toGenresList(genresListString: String?): List<Genres>? {
+        return genresListString?.let {
+            val listType = object : TypeToken<List<Genres>>() {}.type
+            Gson().fromJson(it, listType)
+        }
+    }
+
+    @TypeConverter
+    fun fromSpokenLanguagesList(spokenLanguagesList: List<SpokenLanguages>?): String? {
         return spokenLanguagesList?.let { Gson().toJson(it) }
     }
 
     @TypeConverter
-    fun toSpokenLanguagesList(spokenLanguagesListString: String?): ArrayList<SpokenLanguages>? {
+    fun toSpokenLanguagesList(spokenLanguagesListString: String?): List<SpokenLanguages>? {
         return spokenLanguagesListString?.let {
-            val listType = object : TypeToken<ArrayList<SpokenLanguages>>() {}.type
+            val listType = object : TypeToken<List<SpokenLanguages>>() {}.type
             Gson().fromJson(it, listType)
         }
     }
 
     @TypeConverter
-    fun fromProductionCompanies(productionCompanies: ArrayList<ProductionCompanies>?): String? {
+    fun fromProductionCompanies(productionCompanies: List<ProductionCompanies>?): String? {
         return productionCompanies?.let { Gson().toJson(it) }
     }
 
     @TypeConverter
-    fun toProductionCompanies(productionCompanies: String?): ArrayList<ProductionCompanies>? {
+    fun toProductionCompanies(productionCompanies: String?): List<ProductionCompanies>? {
         return productionCompanies?.let {
-            val listType = object : TypeToken<ArrayList<ProductionCompanies>>() {}.type
+            val listType = object : TypeToken<List<ProductionCompanies>>() {}.type
             Gson().fromJson(it, listType)
         }
     }
 
     @TypeConverter
-    fun fromProductionCountries(productionCountries: ArrayList<ProductionCountries>?): String? {
+    fun fromProductionCountries(productionCountries: List<ProductionCountries>?): String? {
         return productionCountries?.let { Gson().toJson(it) }
     }
 
     @TypeConverter
-    fun toProductionCountries(productionCountries: String?): ArrayList<ProductionCountries>? {
+    fun toProductionCountries(productionCountries: String?): List<ProductionCountries>? {
         return productionCountries?.let {
-            val listType = object : TypeToken<ArrayList<ProductionCountries>>() {}.type
+            val listType = object : TypeToken<List<ProductionCountries>>() {}.type
             Gson().fromJson(it, listType)
         }
     }
 
     @TypeConverter
-    fun fromStringList(stringList: ArrayList<String>?): String? {
+    fun fromStringList(stringList: List<String>?): String? {
         return stringList?.let { Gson().toJson(it) }
     }
 
     @TypeConverter
-    fun toStringList(stringListString: String?): ArrayList<String>? {
+    fun toStringList(stringListString: String?): List<String>? {
         return stringListString?.let {
-            val listType = object : TypeToken<ArrayList<String>>() {}.type
+            val listType = object : TypeToken<List<String>>() {}.type
             Gson().fromJson(it, listType)
         }
     }

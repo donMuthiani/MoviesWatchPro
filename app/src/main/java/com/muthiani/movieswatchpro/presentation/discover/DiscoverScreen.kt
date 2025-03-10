@@ -17,11 +17,10 @@ fun DiscoverScreen(
     modifier: Modifier = Modifier,
     onMoreClicked: (String) -> Unit,
 ) {
-    val discoverViewModel: DiscoverViewModel = hiltViewModel()
+    val discoverViewModel: MoviesWatchViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
 
     val popularMoviesPagingItems = discoverViewModel.popularMoviesPagingDataFlow.collectAsLazyPagingItems()
-    val upcomingMoviesPagingItems = discoverViewModel.upcomingMoviesPagingDataFlow.collectAsLazyPagingItems()
     val nowShowingMoviesPagingItems = discoverViewModel.nowShowingMoviesPagingDataFlow.collectAsLazyPagingItems()
 
     if (popularMoviesPagingItems.loadState.refresh is LoadState.Error) {

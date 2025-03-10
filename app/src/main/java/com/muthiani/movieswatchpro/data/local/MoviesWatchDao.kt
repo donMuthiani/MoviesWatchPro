@@ -25,4 +25,19 @@ interface MoviesWatchDao {
 
     @Query("SELECT * FROM movies WHERE releaseDate >= DATE(CURRENT_DATE, '-30 days')")
     fun getUpcomingPagingSource(): PagingSource<Int, MovieEntity>
+
+    @Query("DELETE FROM watchlist")
+    suspend fun clearAllWatchList()
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertWatchListMovies(users: List<MovieEntityWatchList>)
+
+    @Query("SELECT * FROM watchlist")
+    fun watchLisPagingSource(): PagingSource<Int, MovieEntityWatchList>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertWatchListMovie(movie: MovieEntityWatchList)
+
+    @Query("DELETE FROM watchlist WHERE id = :id")
+    fun deleteWatchListMovie(id: Int)
 }

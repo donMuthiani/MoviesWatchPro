@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class DiscoverViewModel
+class MoviesWatchViewModel
     @Inject
     constructor(
         getMovies: GetMovies,

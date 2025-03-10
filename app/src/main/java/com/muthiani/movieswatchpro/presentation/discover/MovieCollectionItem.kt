@@ -24,6 +24,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.muthiani.movieswatchpro.domain.entity.MovieModel
 import com.muthiani.movieswatchpro.presentation.theme.MoviesWatchProTheme
+import timber.log.Timber
 import java.util.UUID
 
 @Composable
@@ -95,7 +96,8 @@ fun Movies(
                 }
                 loadState.refresh is LoadState.Error -> {
                     val e = loadState.refresh as LoadState.Error
-                    item { Text("Error: ${e.error.localizedMessage}", modifier = Modifier.padding(8.dp)) }
+                    Timber.i("error ${e.error.message}")
+                    item { Text("Error: ${e.error.localizedMessage}", modifier = Modifier.padding(16.dp)) }
                 }
             }
         }

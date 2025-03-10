@@ -1,4 +1,4 @@
-package com.muthiani.movieswatchpro.presentation.discover
+package com.muthiani.movieswatchpro.presentation.detail
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

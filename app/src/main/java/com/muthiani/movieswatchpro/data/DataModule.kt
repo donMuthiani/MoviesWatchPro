@@ -9,10 +9,12 @@ import androidx.room.Room
 import com.muthiani.movieswatchpro.BuildConfig
 import com.muthiani.movieswatchpro.data.config.ApiLoadTypeHolder
 import com.muthiani.movieswatchpro.data.local.MovieEntity
+import com.muthiani.movieswatchpro.data.local.MovieEntityWatchList
 import com.muthiani.movieswatchpro.data.local.MoviesWatchDao
 import com.muthiani.movieswatchpro.data.local.MoviesWatchDatabase
 import com.muthiani.movieswatchpro.data.remote.MoviesRemoteMediator
 import com.muthiani.movieswatchpro.data.remote.MoviesWatchApi
+import com.muthiani.movieswatchpro.data.remote.WatchListRemoteMediator
 import com.muthiani.movieswatchpro.data.repository.MovieRepositoryImpl
 import com.muthiani.movieswatchpro.data.sharedPrefs.MyPreferences
 import com.muthiani.movieswatchpro.domain.repository.MovieRepository
@@ -190,6 +192,25 @@ object DataModule {
         )
     }
 
+    @OptIn(ExperimentalPagingApi::class)
+    @Provides
+    @Singleton
+    @Named("watchlist")
+    fun providesWatchListPager(
+        moviesWatchApi: MoviesWatchApi,
+        moviesWatchDatabase: MoviesWatchDatabase,
+    ): Pager<Int, MovieEntityWatchList> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            remoteMediator =
+            WatchListRemoteMediator(
+                api = moviesWatchApi,
+                moviesWatchDatabase = moviesWatchDatabase
+            ),
+            pagingSourceFactory = { moviesWatchDatabase.moviesDao().watchLisPagingSource() },
+        )
+    }
+
     @Provides
     @Singleton
     fun provideMovieRepository(
@@ -197,9 +218,10 @@ object DataModule {
         @Named("upcoming") upcomingPager: Pager<Int, MovieEntity>,
         @Named("now_showing") nowShowingPager: Pager<Int, MovieEntity>,
         @Named("view_more") viewMorePager: Pager<Int, MovieEntity>,
+        @Named("watchlist") watchListPager: Pager<Int, MovieEntityWatchList>,
         moviesWatchApi: MoviesWatchApi,
     ): MovieRepository {
-        return MovieRepositoryImpl(popularPager, upcomingPager, nowShowingPager, viewMorePager, moviesWatchApi)
+        return MovieRepositoryImpl(popularPager, upcomingPager, nowShowingPager, viewMorePager, watchListPager, moviesWatchApi)
     }
 
     @Singleton

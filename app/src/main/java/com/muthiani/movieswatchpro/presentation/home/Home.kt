@@ -60,6 +60,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
 import com.muthiani.movieswatchpro.R
+import com.muthiani.movieswatchpro.data.config.ApiLoadTypeHolder
 import com.muthiani.movieswatchpro.presentation.components.MoviesWatchSurface
 import com.muthiani.movieswatchpro.presentation.detail.nonSpatialExpressiveSpring
 import com.muthiani.movieswatchpro.presentation.detail.spatialExpressiveSpring
@@ -125,12 +126,14 @@ enum class HomeSections(
 }
 
 fun NavGraphBuilder.addHomeGraph(
+    apiTypeHolder: ApiLoadTypeHolder,
     onMovieSelected: (Long, NavBackStackEntry) -> Unit,
     onMoreClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
+    upPress: () -> Unit,
 ) {
     composable(HomeSections.WATCH_LIST.route) { backStackEntry ->
-        WatchListScreen(onMovieSelected = { id -> onMovieSelected(id, backStackEntry) })
+        WatchListScreen(onMovieSelected = { id -> onMovieSelected(id, backStackEntry) }, apiTypeHolder = apiTypeHolder)
     }
 
     composable(HomeSections.DISCOVER.route) {
