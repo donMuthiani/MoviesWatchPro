@@ -3,12 +3,6 @@ package com.muthiani.movieswatchpro.data.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.google.gson.annotations.SerializedName
-import com.muthiani.movieswatchpro.domain.entity.BelongsToCollection
-import com.muthiani.movieswatchpro.domain.entity.Genres
-import com.muthiani.movieswatchpro.domain.entity.ProductionCompanies
-import com.muthiani.movieswatchpro.domain.entity.ProductionCountries
-import com.muthiani.movieswatchpro.domain.entity.SpokenLanguages
 
 @TypeConverters(MoviesConverters::class)
 @Entity(tableName = "movies")

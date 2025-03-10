@@ -1,8 +1,6 @@
 package com.muthiani.movieswatchpro.domain.entity
 
 import androidx.paging.compose.LazyPagingItems
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 
 data class BelongsToCollection(
@@ -43,7 +41,7 @@ data class MovieModel(
     @SerializedName("title") var title: String? = null,
     @SerializedName("video") var video: Boolean? = null,
     @SerializedName("vote_average") var voteAverage: Double? = null,
-    @SerializedName("vote_count") var voteCount: Int? = null
+    @SerializedName("vote_count") var voteCount: Int? = null,
 )
 
 data class SpokenLanguages(

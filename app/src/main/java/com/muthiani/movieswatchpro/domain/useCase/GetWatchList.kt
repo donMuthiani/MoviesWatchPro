@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class GetWatchList
-@Inject constructor(private val movieRepository: MovieRepository) {
-    fun getWatchList(): Flow<PagingData<MovieModel>> = movieRepository.getWatchList().flowOn(Dispatchers.IO)
-}
+    @Inject
+    constructor(private val movieRepository: MovieRepository) {
+        fun getWatchList(): Flow<PagingData<MovieModel>> = movieRepository.getWatchList().flowOn(Dispatchers.IO)
+    }

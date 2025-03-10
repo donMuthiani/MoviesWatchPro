@@ -96,7 +96,7 @@ fun MoviesWatchApp(apiTypeHolder: ApiLoadTypeHolder) {
                         apiTypeHolder = apiTypeHolder,
                         onMovieSelected = navController::navigateToMovieDetail,
                         onMoreClicked = navController::navigateToMovieViewer,
-                        upPress = {navController.upPress()}
+                        upPress = { navController.upPress() },
                     )
                 }
 

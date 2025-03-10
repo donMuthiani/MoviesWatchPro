@@ -4,7 +4,6 @@ import com.muthiani.movieswatchpro.domain.entity.ApiResponse
 import com.muthiani.movieswatchpro.domain.entity.ManageWatchList
 import com.muthiani.movieswatchpro.domain.entity.ManageWatchListResponse
 import com.muthiani.movieswatchpro.domain.entity.MovieModel
-import com.muthiani.movieswatchpro.domain.entity.WatchListResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -64,5 +63,5 @@ interface MoviesWatchApi {
     suspend fun getWatchList(
         @Path("account_id") account_id: Int? = ApiConstants.ACCOUNT_ID,
         @Query("page") page: Int = 1,
-        ): ApiResponse<List<MovieModel>>
+    ): ApiResponse<List<MovieModel>>
 }

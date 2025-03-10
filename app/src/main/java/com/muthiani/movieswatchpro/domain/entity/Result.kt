@@ -29,7 +29,7 @@ data class ApiResponse<T>(
     val total_results: Int = 1,
     val page: Int = 1,
     val dates: Dates? = null,
-    )
+)
 
 data class WatchListResponse<T>(
     @SerializedName("results")

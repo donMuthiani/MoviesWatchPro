@@ -19,7 +19,7 @@ fun MovieModel.toMovieEntity(): MovieEntity {
         title = this.title,
         video = this.video,
         voteAverage = this.voteAverage,
-        voteCount = this.voteCount
+        voteCount = this.voteCount,
     )
 }
 
@@ -79,5 +79,3 @@ fun MovieEntityWatchList.toMovieModel(): MovieModel {
         voteCount = this.voteCount,
     )
 }
-
-

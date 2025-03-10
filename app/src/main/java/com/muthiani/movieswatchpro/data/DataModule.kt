@@ -203,10 +203,10 @@ object DataModule {
         return Pager(
             config = PagingConfig(pageSize = 20),
             remoteMediator =
-            WatchListRemoteMediator(
-                api = moviesWatchApi,
-                moviesWatchDatabase = moviesWatchDatabase
-            ),
+                WatchListRemoteMediator(
+                    api = moviesWatchApi,
+                    moviesWatchDatabase = moviesWatchDatabase,
+                ),
             pagingSourceFactory = { moviesWatchDatabase.moviesDao().watchLisPagingSource() },
         )
     }

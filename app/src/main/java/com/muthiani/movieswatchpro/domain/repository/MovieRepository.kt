@@ -4,7 +4,6 @@ import androidx.paging.PagingData
 import com.muthiani.movieswatchpro.domain.entity.ManageWatchList
 import com.muthiani.movieswatchpro.domain.entity.ManageWatchListResponse
 import com.muthiani.movieswatchpro.domain.entity.MovieModel
-import com.muthiani.movieswatchpro.domain.entity.WatchListResponse
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
