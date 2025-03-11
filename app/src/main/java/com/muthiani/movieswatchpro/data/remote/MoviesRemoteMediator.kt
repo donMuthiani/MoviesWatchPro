@@ -17,7 +17,7 @@ class MoviesRemoteMediator
     constructor(
         val api: MoviesWatchApi,
         val moviesWatchDatabase: MoviesWatchDatabase,
-        private val apiType: String
+        private val apiType: String,
     ) : RemoteMediator<Int, MovieEntity>() {
         private val REMOTE_KEY_ID = "movie"
 

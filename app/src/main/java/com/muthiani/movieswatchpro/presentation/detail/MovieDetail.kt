@@ -9,7 +9,19 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,7 +59,6 @@ import com.muthiani.movieswatchpro.LocalNavAnimatedVisibilityScope
 import com.muthiani.movieswatchpro.LocalSharedTransitionScope
 import com.muthiani.movieswatchpro.R
 import com.muthiani.movieswatchpro.domain.entity.MovieModel
-import com.muthiani.movieswatchpro.domain.entity.ProductionCompanies
 import com.muthiani.movieswatchpro.presentation.components.ErrorScreen
 import com.muthiani.movieswatchpro.presentation.components.LoadingScreen
 import com.muthiani.movieswatchpro.presentation.components.MoviesWatchButton
@@ -259,7 +270,7 @@ fun MovieDetailContent(
                             if (isLoading) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(24.dp),
-                                    color = Color.White, // You can change the color as needed
+                                    color = Color.White,
                                     strokeWidth = 2.dp,
                                 )
                             } else {
@@ -346,38 +357,6 @@ fun MovieDetailContent(
                                 .padding(8.dp),
                     )
                 }
-//                Text(
-//                    text = "Watch",
-//                    style = MaterialTheme.typography.titleMedium,
-//                    color = MoviesWatchProTheme.colors.textInteractive,
-//                    modifier =
-//                        Modifier
-//                            .padding(start = 24.dp),
-//                )
-
-//                LazyRow(
-//                    modifier = Modifier.padding(start = 16.dp),
-//                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-//                    contentPadding = PaddingValues(16.dp),
-//                ) {
-//                    itemsIndexed(movie.productionCompanies.orEmpty()) { _, provider ->
-//                        MoviesWatchButton(
-//                            backgroundGradient = listOf(MoviesWatchProTheme.colors.brand, MoviesWatchProTheme.colors.brand),
-//                            onClick = { navigateToProvider(provider) },
-//                            modifier =
-//                                Modifier
-//                                    .wrapContentSize(),
-//                            shape = RoundedCornerShape(16.dp),
-//                        ) {
-//                            Text(
-//                                text = provider.name.orEmpty(),
-//                                style = MaterialTheme.typography.titleMedium,
-//                                color = Color.White,
-//                                textAlign = TextAlign.Center,
-//                            )
-//                        }
-//                    }
-//                }
             }
         }
     }
@@ -390,7 +369,4 @@ fun addToWatchList(
     if (id != null) {
         movieDetailViewModel.addToWatchList(id)
     }
-}
-
-fun navigateToProvider(provider: ProductionCompanies) {
 }
