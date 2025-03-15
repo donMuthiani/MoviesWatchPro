@@ -4,5 +4,5 @@ import javax.inject.Singleton
 
 @Singleton
 class ApiLoadTypeHolder {
-    var apiType: String = "popular" // Default value
+    var apiType: String = "popular"
 }

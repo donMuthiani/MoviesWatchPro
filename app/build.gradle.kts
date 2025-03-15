@@ -82,13 +82,6 @@ dependencies {
 //    implementation(libs.okhttp.bom)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
     // splash screen
     implementation(libs.androidx.core.splashScreen)
@@ -152,8 +145,24 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.paging.compose) // Latest stable version
-}
 
-// kapt {
-//    correctErrorTypes = true
-// }
+    // Testing dependencies
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    // Mockito for mocking
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.kotlin)
+
+    testImplementation(libs.kotlinx.coroutines.test)
+    // LiveData testing
+    testImplementation(libs.androidx.core.testing)
+    // Room testing
+    testImplementation(libs.androidx.room.testing)
+
+    // Hilt testing
+    testImplementation("com.google.dagger:hilt-android-testing:2.44")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+}
