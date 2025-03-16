@@ -157,6 +157,7 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
 
     testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
     // LiveData testing
     testImplementation(libs.androidx.core.testing)
     // Room testing
