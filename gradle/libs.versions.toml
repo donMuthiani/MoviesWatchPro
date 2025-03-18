@@ -25,6 +25,7 @@ materialIconsExtended = "1.6.8"
 mockitoCore = "5.2.0"
 mockitoInline = "5.2.0"
 mockitoKotlin = "5.1.0"
+mockk = "1.13.8"
 pagingCompose = "3.3.5"
 preferenceKtx = "1.2.1"
 roomCompiler = "2.6.1"
@@ -41,6 +42,7 @@ ui = "1.7.4"
 retrofit = "2.11.0"
 converterGson = "2.11.0"
 okhttpBom = "4.10.0"
+junitJunit = "4.12"
 
 
 [libraries]
@@ -88,6 +90,7 @@ lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -95,6 +98,7 @@ converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", ve
 #okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttpBom" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttpBom"}
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpBom"}
+junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 
 
 [plugins]

@@ -17,10 +17,11 @@ class MoviesWatchDaoTest {
 
     @Before
     fun createDatabase() {
-        db = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            MoviesWatchDatabase::class.java
-        ).allowMainThreadQueries().build()
+        db =
+            Room.inMemoryDatabaseBuilder(
+                ApplicationProvider.getApplicationContext(),
+                MoviesWatchDatabase::class.java,
+            ).allowMainThreadQueries().build()
         dao = db.moviesDao()
     }
 
@@ -34,23 +35,25 @@ class MoviesWatchDaoTest {
     fun insertMoviesAndPopularPagingSourceReturnsCorrectData() {
         runTest {
             // Given
-            val movies = listOf(
-                MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
-                MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200)
-            )
+            val movies =
+                listOf(
+                    MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
+                    MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200),
+                )
 
             // When
             dao.insertMovies(movies)
             val pagingSource = dao.getPopularPagingSource()
-            val loadResult = pagingSource.load(
-                PagingSource.LoadParams.Refresh(
-                    key = null,
-                    loadSize = 2,
-                    placeholdersEnabled = false
+            val loadResult =
+                pagingSource.load(
+                    PagingSource.LoadParams.Refresh(
+                        key = null,
+                        loadSize = 2,
+                        placeholdersEnabled = false,
+                    ),
                 )
-            )
 
-            //Then
+            // Then
             assertTrue(loadResult is PagingSource.LoadResult.Page)
             val loadedData = (loadResult as PagingSource.LoadResult.Page).data
             assertEquals(2, loadedData.size)
@@ -63,51 +66,55 @@ class MoviesWatchDaoTest {
     fun clearAllMoviesWorksCorrectly() {
         runTest {
             // Given
-            val movies = listOf(
-                MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
-                MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200)
-            )
+            val movies =
+                listOf(
+                    MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
+                    MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200),
+                )
             dao.insertMovies(movies)
 
-            //When
+            // When
             dao.clearAll()
             val pagingSource = dao.getPopularPagingSource()
-            val loadResult = pagingSource.load(
-                PagingSource.LoadParams.Refresh(
-                    key = null,
-                    loadSize = 2,
-                    placeholdersEnabled = false
+            val loadResult =
+                pagingSource.load(
+                    PagingSource.LoadParams.Refresh(
+                        key = null,
+                        loadSize = 2,
+                        placeholdersEnabled = false,
+                    ),
                 )
-            )
 
-            //Then
+            // Then
             assertTrue(loadResult is PagingSource.LoadResult.Page)
             val loadedData = (loadResult as PagingSource.LoadResult.Page).data
             assertTrue(loadedData.isEmpty())
         }
     }
 
-
     @Test
     fun insertMoviesAndViewMorePagingSourceReturnsCorrectData() {
         runTest {
-            //Given
-            val movies = listOf(
-                MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
-                MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200)
-            )
+            // Given
+            val movies =
+                listOf(
+                    MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
+                    MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200),
+                )
 
-
-            //When
+            // When
             dao.insertMovies(movies)
             val pagingSource = dao.pagingSource()
-            val loadResult = pagingSource.load(
-                PagingSource.LoadParams.Refresh(
-                    key = null,
-                    loadSize = 2,
-                    placeholdersEnabled = false))
+            val loadResult =
+                pagingSource.load(
+                    PagingSource.LoadParams.Refresh(
+                        key = null,
+                        loadSize = 2,
+                        placeholdersEnabled = false,
+                    ),
+                )
 
-            //Then
+            // Then
             assertTrue(loadResult is PagingSource.LoadResult.Page)
             val loadedData = (loadResult as PagingSource.LoadResult.Page).data
             assertEquals(2, loadedData.size)
@@ -119,23 +126,26 @@ class MoviesWatchDaoTest {
     @Test
     fun insertWatchListMoviesAndWatchListPagingSourceReturnsCorrectData() {
         runTest {
-            //Given
-            val movies = listOf(
-                MovieEntityWatchList(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
-                MovieEntityWatchList(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200)
-            )
+            // Given
+            val movies =
+                listOf(
+                    MovieEntityWatchList(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
+                    MovieEntityWatchList(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200),
+                )
 
-
-            //When
+            // When
             dao.insertWatchListMovies(movies)
             val pagingSource = dao.watchLisPagingSource()
-            val loadResult = pagingSource.load(
-                PagingSource.LoadParams.Refresh(
-                    key = null,
-                    loadSize = 2,
-                    placeholdersEnabled = false))
+            val loadResult =
+                pagingSource.load(
+                    PagingSource.LoadParams.Refresh(
+                        key = null,
+                        loadSize = 2,
+                        placeholdersEnabled = false,
+                    ),
+                )
 
-            //Then
+            // Then
             assertTrue(loadResult is PagingSource.LoadResult.Page)
             val loadedData = (loadResult as PagingSource.LoadResult.Page).data
             assertEquals(2, loadedData.size)
@@ -148,24 +158,26 @@ class MoviesWatchDaoTest {
     fun clearAllWatchListWorksCorrectly() {
         runTest {
             // Given
-            val movies = listOf(
-                MovieEntityWatchList(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
-                MovieEntityWatchList(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200)
-            )
+            val movies =
+                listOf(
+                    MovieEntityWatchList(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title 1", false, 8.0, 100),
+                    MovieEntityWatchList(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2023-02-01", "Title 2", true, 9.0, 200),
+                )
             dao.insertWatchListMovies(movies)
 
-            //When
+            // When
             dao.clearAllWatchList()
             val pagingSource = dao.watchLisPagingSource()
-            val loadResult = pagingSource.load(
-                PagingSource.LoadParams.Refresh(
-                    key = null,
-                    loadSize = 2,
-                    placeholdersEnabled = false
+            val loadResult =
+                pagingSource.load(
+                    PagingSource.LoadParams.Refresh(
+                        key = null,
+                        loadSize = 2,
+                        placeholdersEnabled = false,
+                    ),
                 )
-            )
 
-            //Then
+            // Then
             assertTrue(loadResult is PagingSource.LoadResult.Page)
             val loadedData = (loadResult as PagingSource.LoadResult.Page).data
             assertTrue(loadedData.isEmpty())
@@ -175,23 +187,26 @@ class MoviesWatchDaoTest {
     @Test
     fun insertMoviesAndUpcomingPagingSourceReturnsCorrectData() {
         runTest {
-            //Given
-            val movies = listOf(
-                MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title 1", false, 8.0, 100),
-                MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2025-04-10", "Title 2", true, 9.0, 200)
-            )
+            // Given
+            val movies =
+                listOf(
+                    MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title 1", false, 8.0, 100),
+                    MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2025-04-10", "Title 2", true, 9.0, 200),
+                )
 
-
-            //When
+            // When
             dao.insertMovies(movies)
             val pagingSource = dao.getUpcomingPagingSource()
-            val loadResult = pagingSource.load(
-                PagingSource.LoadParams.Refresh(
-                    key = null,
-                    loadSize = 2,
-                    placeholdersEnabled = false))
+            val loadResult =
+                pagingSource.load(
+                    PagingSource.LoadParams.Refresh(
+                        key = null,
+                        loadSize = 2,
+                        placeholdersEnabled = false,
+                    ),
+                )
 
-            //Then
+            // Then
             assertTrue(loadResult is PagingSource.LoadResult.Page)
             val loadedData = (loadResult as PagingSource.LoadResult.Page).data
             assertEquals(2, loadedData.size)
@@ -203,23 +218,26 @@ class MoviesWatchDaoTest {
     @Test
     fun insertMoviesAndNowShowingPagingSourceReturnsCorrectData() {
         runTest {
-            //Given
-            val movies = listOf(
-                MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title 1", false, 8.0, 100),
-                MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2025-04-10", "Title 2", true, 9.0, 200)
-            )
+            // Given
+            val movies =
+                listOf(
+                    MovieEntity(1, false, "/backdrop1.jpg", listOf(1, 2), "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title 1", false, 8.0, 100),
+                    MovieEntity(2, true, "/backdrop2.jpg", listOf(3, 4), "es", "Original Title 2", "Overview 2", 12.0, "/poster2.jpg", "2025-04-10", "Title 2", true, 9.0, 200),
+                )
 
-
-            //When
+            // When
             dao.insertMovies(movies)
             val pagingSource = dao.getNowShowingPagingSource()
-            val loadResult = pagingSource.load(
-                PagingSource.LoadParams.Refresh(
-                    key = null,
-                    loadSize = 2,
-                    placeholdersEnabled = false))
+            val loadResult =
+                pagingSource.load(
+                    PagingSource.LoadParams.Refresh(
+                        key = null,
+                        loadSize = 2,
+                        placeholdersEnabled = false,
+                    ),
+                )
 
-            //Then
+            // Then
             assertTrue(loadResult is PagingSource.LoadResult.Page)
             val loadedData = (loadResult as PagingSource.LoadResult.Page).data
             assertEquals(2, loadedData.size)

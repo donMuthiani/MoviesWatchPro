@@ -13,13 +13,19 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="insertMoviesAndPagingSourceReturnsCorrectData()">
+      <SelectionState runConfigName="clearAll_deletesAllRemoteKeys()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="insertMoviesAndPopularPagingSourceReturnsCorrectData()">
+      <SelectionState runConfigName="refreshLoadReturnsSuccessResultWhenMoreDataIsPresent()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="clearAllMoviesWorksCorrectly()">
+      <SelectionState runConfigName="clearAllWatchListKeys_deletesAllWatchListRemoteKeys()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="MoviesRemoteMediatorTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="loadREFRESHsuccessinsertsmoviesandremotekeys()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

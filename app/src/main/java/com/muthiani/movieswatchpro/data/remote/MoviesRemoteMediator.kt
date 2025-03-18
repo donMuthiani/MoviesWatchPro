@@ -9,6 +9,7 @@ import com.muthiani.movieswatchpro.data.local.MovieEntity
 import com.muthiani.movieswatchpro.data.local.MoviesWatchDatabase
 import com.muthiani.movieswatchpro.data.local.RemoteKeysEntity
 import com.muthiani.movieswatchpro.data.mapper.toMovieEntity
+import timber.log.Timber
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -26,6 +27,7 @@ class MoviesRemoteMediator
             state: PagingState<Int, MovieEntity>,
         ): MediatorResult {
             return try {
+                Timber.d("MoviesRemoteMediator load() called with loadType: $loadType api call -> $apiType")
                 val loadKey =
                     when (loadType) {
                         LoadType.REFRESH -> null
@@ -35,7 +37,7 @@ class MoviesRemoteMediator
                                 moviesWatchDatabase.withTransaction {
                                     moviesWatchDatabase.remoteKeysDao().remoteKeyByQuery(REMOTE_KEY_ID)
                                 }
-                            if (remoteKey.nextKey == null || remoteKey.nextKey == 0) {
+                            if (remoteKey?.nextKey == null || remoteKey.nextKey == 0) {
                                 return MediatorResult.Success(endOfPaginationReached = true)
                             }
                             remoteKey.nextKey
@@ -47,23 +49,33 @@ class MoviesRemoteMediator
                         "now_playing" -> api.getNowShowing(page = loadKey ?: 1)
                         else -> api.getUpcoming(page = loadKey ?: 1)
                     }
+                Timber.d("MoviesRemoteMediator API response received. Total results: ${apiResponse.results?.size}")
 
                 val results = apiResponse.results ?: apiResponse.data ?: emptyList()
                 val nextPage = apiResponse.page + 1
 
-                moviesWatchDatabase.withTransaction {
-                    if (loadType == LoadType.REFRESH) {
-                        moviesWatchDatabase.remoteKeysDao().clearAll()
-                        moviesWatchDatabase.moviesDao().clearAll()
+                Timber.d("MoviesRemoteMediator Preparing to start database transaction")
+
+                try {
+                    moviesWatchDatabase.withTransaction {
+                        if (loadType == LoadType.REFRESH) {
+                            Timber.d("MoviesRemoteMediator Clearing old data")
+                            moviesWatchDatabase.remoteKeysDao().clearAll()
+                            moviesWatchDatabase.moviesDao().clearAll()
+                        }
+
+                        moviesWatchDatabase.moviesDao().insertMovies(results.map { it.toMovieEntity() })
+
+                        moviesWatchDatabase.remoteKeysDao().insertOrReplace(RemoteKeysEntity(REMOTE_KEY_ID, nextPage))
                     }
-
-                    moviesWatchDatabase.moviesDao().insertMovies(results.map { it.toMovieEntity() })
-
-                    moviesWatchDatabase.remoteKeysDao().insertOrReplace(RemoteKeysEntity(REMOTE_KEY_ID, nextPage))
+                } catch (e: Exception) {
+                    Timber.d("MoviesRemoteMediator Error: ${e.message}")
                 }
+
                 val endOfPaginationReached = apiResponse.page >= apiResponse.total_pages
                 MediatorResult.Success(endOfPaginationReached)
             } catch (e: Exception) {
+                Timber.d("MoviesRemoteMediator Error: ${e.message}")
                 MediatorResult.Error(e)
             }
         }

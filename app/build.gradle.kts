@@ -61,6 +61,10 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes.add("META-INF/LICENSE.md")
+            excludes.add("META-INF/LICENSE-notice.md")
+            excludes.add("META-INF/LICENSE-notice.txt")
+            excludes.add("META-INF/LICENSE.txt")
         }
     }
 
@@ -160,10 +164,13 @@ dependencies {
     androidTestImplementation(libs.kotlinx.coroutines.test)
     // LiveData testing
     testImplementation(libs.androidx.core.testing)
+    androidTestImplementation(libs.androidx.core.testing)
     // Room testing
     testImplementation(libs.androidx.room.testing)
 
     // Hilt testing
     testImplementation("com.google.dagger:hilt-android-testing:2.44")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+
+    androidTestImplementation("io.mockk:mockk-android:1.13.12")
 }

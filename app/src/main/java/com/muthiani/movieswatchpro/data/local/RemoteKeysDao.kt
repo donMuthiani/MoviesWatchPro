@@ -14,7 +14,7 @@ interface RemoteKeysDao {
     suspend fun insertOrReplaceWatchList(remoteKey: RemoteKeysWatchList)
 
     @Query("SELECT * FROM remote_keys WHERE id = :query")
-    suspend fun remoteKeyByQuery(query: String): RemoteKeysEntity
+    suspend fun remoteKeyByQuery(query: String): RemoteKeysEntity?
 
     @Query("SELECT * FROM remote_keys_watchList WHERE id = :query")
     suspend fun remoteWatchListKeyByQuery(query: String): RemoteKeysWatchList

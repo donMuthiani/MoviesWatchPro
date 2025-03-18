@@ -89,7 +89,7 @@ class MovieMappersKtTest {
     }
 
     @Test
-    fun `test MovieModel toMovieEntityWatchList works correctly`()  {
+    fun `test MovieModel toMovieEntityWatchList works correctly`() {
         val movieModel =
             MovieModel(
                 id = 1,
@@ -127,7 +127,7 @@ class MovieMappersKtTest {
     }
 
     @Test
-    fun `test MovieModelWatchList toMovieModel works correctly`()  {
+    fun `test MovieModelWatchList toMovieModel works correctly`() {
         val movieEntityWatchList =
             MovieEntityWatchList(
                 id = 1,

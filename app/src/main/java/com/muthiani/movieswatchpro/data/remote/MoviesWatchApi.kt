@@ -14,14 +14,14 @@ interface MoviesWatchApi {
     @GET("movie/now_playing")
     suspend fun getNowShowing(
         @Query("language") language: String = "en-US",
-        @Query("include_adult") includeAdult: Boolean = true,
+        @Query("include_adult") includeAdult: Boolean = false,
         @Query("page") page: Int = 1,
     ): ApiResponse<List<MovieModel>>
 
     @GET("movie/popular")
     suspend fun getPopular(
         @Query("language") language: String = "en-US",
-        @Query("include_adult") includeAdult: Boolean = true,
+        @Query("include_adult") includeAdult: Boolean = false,
         @Query("page") page: Int = 1,
     ): ApiResponse<List<MovieModel>>
 
@@ -34,7 +34,7 @@ interface MoviesWatchApi {
     @GET("movie/upcoming")
     suspend fun getUpcoming(
         @Query("language") language: String = "en-US",
-        @Query("include_adult") includeAdult: Boolean = true,
+        @Query("include_adult") includeAdult: Boolean = false,
         @Query("page") page: Int = 1,
     ): ApiResponse<List<MovieModel>>
 
