@@ -17,13 +17,16 @@ interface MoviesWatchDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovies(users: List<MovieEntity>)
 
+    @Query("SELECT * FROM movies")
+    fun getALlMovies(): List<MovieEntity>
+
     @Query("SELECT * FROM movies ORDER BY popularity DESC")
     fun getPopularPagingSource(): PagingSource<Int, MovieEntity>
 
     @Query("SELECT * FROM movies ORDER BY releaseDate DESC")
     fun getNowShowingPagingSource(): PagingSource<Int, MovieEntity>
 
-    @Query("SELECT * FROM movies WHERE releaseDate >= DATE(CURRENT_DATE, '-30 days')")
+    @Query("SELECT * FROM movies WHERE releaseDate >= DATE('now', '+30 days')")
     fun getUpcomingPagingSource(): PagingSource<Int, MovieEntity>
 
     @Query("DELETE FROM watchlist")

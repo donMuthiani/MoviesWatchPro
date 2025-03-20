@@ -27,7 +27,6 @@ class MoviesRemoteMediator
             state: PagingState<Int, MovieEntity>,
         ): MediatorResult {
             return try {
-                Timber.d("MoviesRemoteMediator load() called with loadType: $loadType api call -> $apiType")
                 val loadKey =
                     when (loadType) {
                         LoadType.REFRESH -> null
@@ -43,18 +42,16 @@ class MoviesRemoteMediator
                             remoteKey.nextKey
                         }
                     }
+
                 val apiResponse =
                     when (apiType) {
                         "popular" -> api.getPopular(page = loadKey ?: 1)
                         "now_playing" -> api.getNowShowing(page = loadKey ?: 1)
                         else -> api.getUpcoming(page = loadKey ?: 1)
                     }
-                Timber.d("MoviesRemoteMediator API response received. Total results: ${apiResponse.results?.size}")
 
                 val results = apiResponse.results ?: apiResponse.data ?: emptyList()
                 val nextPage = apiResponse.page + 1
-
-                Timber.d("MoviesRemoteMediator Preparing to start database transaction")
 
                 try {
                     moviesWatchDatabase.withTransaction {

@@ -25,7 +25,22 @@ class FakeMoviesWatchApi : MoviesWatchApi {
         return if (shouldReturnError) {
             throw Exception("Test Exception")
         } else {
-            ApiResponse(results = movies, page = page, total_pages = 10)
+            ApiResponse(
+                total_pages = 3,
+                results =
+                    if (page == 2) {
+                        listOf(
+                            MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 3, "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                            MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 4, "en", "Original Title 2", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                        )
+                    } else {
+                        listOf(
+                            MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 1, "en", "Original Title 3", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                            MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 2, "en", "Original Title 4", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                        )
+                    },
+                page = page,
+            )
         }
     }
 
@@ -34,7 +49,22 @@ class FakeMoviesWatchApi : MoviesWatchApi {
         includeAdult: Boolean,
         page: Int,
     ): ApiResponse<List<MovieModel>> {
-        return getNowShowing(language, includeAdult, page)
+        return ApiResponse(
+            total_pages = 3,
+            results =
+                if (page == 2) {
+                    listOf(
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 3, "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 4, "en", "Original Title 2", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
+                    )
+                } else {
+                    listOf(
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 1, "en", "Original Title 3", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 2, "en", "Original Title 4", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
+                    )
+                },
+            page = page,
+        )
     }
 
     override suspend fun getTopRated(
@@ -49,7 +79,22 @@ class FakeMoviesWatchApi : MoviesWatchApi {
         includeAdult: Boolean,
         page: Int,
     ): ApiResponse<List<MovieModel>> {
-        return getNowShowing(language, includeAdult, page)
+        return ApiResponse(
+            total_pages = 3,
+            results =
+                if (page == 2) {
+                    listOf(
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 3, "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 4, "en", "Original Title 2", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                    )
+                } else {
+                    listOf(
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 1, "en", "Original Title 3", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 2, "en", "Original Title 4", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                    )
+                },
+            page = page,
+        )
     }
 
     override suspend fun getTrending(timeWindow: String): ApiResponse<List<MovieModel>> {
