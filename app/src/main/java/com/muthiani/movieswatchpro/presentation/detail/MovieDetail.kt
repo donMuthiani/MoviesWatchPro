@@ -149,95 +149,95 @@ fun MovieDetailContent(
     with(sharedTransitionScope) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = MoviesWatchProTheme.colors.uiBackground)
-                    .verticalScroll(rememberScrollState())
-                    .sharedBounds(
-                        rememberSharedContentState(
-                            key =
-                                MovieSharedElementKey(
-                                    snackId = movie.id.toLong(),
-                                    type = MovieSharedElementType.Bounds,
-                                ),
+            Modifier
+                .fillMaxWidth()
+                .background(color = MoviesWatchProTheme.colors.uiBackground)
+                .verticalScroll(rememberScrollState())
+                .sharedBounds(
+                    rememberSharedContentState(
+                        key =
+                        MovieSharedElementKey(
+                            snackId = movie.id.toLong(),
+                            type = MovieSharedElementType.Bounds,
                         ),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
-                        boundsTransform = movieDetailBoundsTransform,
-                        exit = fadeOut(nonSpatialExpressiveSpring()),
-                        enter = fadeIn(nonSpatialExpressiveSpring()),
                     ),
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
+                    boundsTransform = movieDetailBoundsTransform,
+                    exit = fadeOut(nonSpatialExpressiveSpring()),
+                    enter = fadeIn(nonSpatialExpressiveSpring()),
+                ),
         ) {
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(250.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .height(250.dp),
             ) {
                 AsyncImage(
                     model = "https://image.tmdb.org/t/p/original${movie.posterPath}",
                     contentDescription = "",
                     contentScale = ContentScale.Crop,
                     modifier =
-                        Modifier
-                            .fillMaxSize(),
+                    Modifier
+                        .fillMaxSize(),
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = "Navigate back",
                     tint = Color.White,
                     modifier =
-                        Modifier
-                            .statusBarsPadding()
-                            .padding(start = 8.dp)
-                            .size(36.dp)
-                            .background(Color.White.copy(alpha = 0.3f), shape = CircleShape)
-                            .clickable {
-                                upPress.invoke()
-                            }
-                            .align(Alignment.TopStart)
-                            .padding(8.dp),
+                    Modifier
+                        .statusBarsPadding()
+                        .padding(start = 8.dp)
+                        .size(36.dp)
+                        .background(Color.White.copy(alpha = 0.3f), shape = CircleShape)
+                        .clickable {
+                            upPress.invoke()
+                        }
+                        .align(Alignment.TopStart)
+                        .padding(8.dp),
                 )
             }
 
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 60.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 60.dp),
             ) {
                 Row(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .padding(8.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(8.dp),
                 ) {
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/original${movie.backdropPath}",
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
                         modifier =
-                            Modifier
-                                .width(120.dp)
-                                .height(200.dp)
-                                .padding(start = 16.dp)
-                                .offset(y = ((-60).dp))
-                                .clip(RoundedCornerShape(8.dp))
-                                .sharedBounds(
-                                    rememberSharedContentState(
-                                        key =
-                                            MovieSharedElementKey(
-                                                snackId = movie.id.toLong(),
-                                                type = MovieSharedElementType.Image,
-                                            ),
+                        Modifier
+                            .width(120.dp)
+                            .height(200.dp)
+                            .padding(start = 16.dp)
+                            .offset(y = ((-60).dp))
+                            .clip(RoundedCornerShape(8.dp))
+                            .sharedBounds(
+                                rememberSharedContentState(
+                                    key =
+                                    MovieSharedElementKey(
+                                        snackId = movie.id.toLong(),
+                                        type = MovieSharedElementType.Image,
                                     ),
-                                    animatedVisibilityScope = animatedVisibilityScope,
-                                    clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
-                                    boundsTransform = movieDetailBoundsTransform,
-                                    exit = fadeOut(nonSpatialExpressiveSpring()),
-                                    enter = fadeIn(nonSpatialExpressiveSpring()),
                                 ),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
+                                boundsTransform = movieDetailBoundsTransform,
+                                exit = fadeOut(nonSpatialExpressiveSpring()),
+                                enter = fadeIn(nonSpatialExpressiveSpring()),
+                            ),
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -248,8 +248,8 @@ fun MovieDetailContent(
                             style = MaterialTheme.typography.titleLarge,
                             color = MoviesWatchProTheme.colors.textInteractive,
                             modifier =
-                                Modifier
-                                    .padding(top = 8.dp),
+                            Modifier
+                                .padding(top = 8.dp),
                         )
 
                         Text(
@@ -257,8 +257,8 @@ fun MovieDetailContent(
                             style = MaterialTheme.typography.titleSmall,
                             color = MoviesWatchProTheme.colors.textSecondary,
                             modifier =
-                                Modifier
-                                    .padding(top = 8.dp),
+                            Modifier
+                                .padding(top = 8.dp),
                         )
 
                         MoviesWatchButton(
@@ -276,13 +276,13 @@ fun MovieDetailContent(
                             } else {
                                 Icon(
                                     painter =
-                                        painterResource(
-                                            if (result == true) {
-                                                R.drawable.ic_check
-                                            } else {
-                                                R.drawable.round_add
-                                            },
-                                        ),
+                                    painterResource(
+                                        if (result == true) {
+                                            R.drawable.ic_check
+                                        } else {
+                                            R.drawable.round_add
+                                        },
+                                    ),
                                     // Replace with your icon
                                     contentDescription = "Start Icon",
                                     modifier = Modifier.padding(end = 8.dp),
@@ -306,9 +306,9 @@ fun MovieDetailContent(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MoviesWatchProTheme.colors.textInteractive,
                     modifier =
-                        Modifier
-                            .padding(start = 24.dp)
-                            .offset(y = (-60).dp),
+                    Modifier
+                        .padding(start = 24.dp)
+                        .offset(y = (-60).dp),
                 )
 
                 MoviesWatchDivider(
@@ -317,17 +317,17 @@ fun MovieDetailContent(
 
                 Row(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(24.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Star,
                         contentDescription = "rating",
                         modifier =
-                            Modifier
-                                .size(24.dp)
-                                .align(Alignment.CenterVertically),
+                        Modifier
+                            .size(24.dp)
+                            .align(Alignment.CenterVertically),
                         tint = MoviesWatchProTheme.colors.brand,
                     )
 
@@ -338,10 +338,10 @@ fun MovieDetailContent(
                                 AnnotatedString(
                                     text = " · ",
                                     spanStyle =
-                                        SpanStyle(
-                                            color = MoviesWatchProTheme.colors.brand,
-                                            fontSize = 36.sp,
-                                        ),
+                                    SpanStyle(
+                                        color = MoviesWatchProTheme.colors.brand,
+                                        fontSize = 36.sp,
+                                    ),
                                 ),
                             )
 //                            append(movie.genreIds.first().toString())
@@ -352,9 +352,9 @@ fun MovieDetailContent(
                         style = MaterialTheme.typography.titleLarge,
                         color = MoviesWatchProTheme.colors.textInteractive,
                         modifier =
-                            Modifier
-                                .align(Alignment.CenterVertically)
-                                .padding(8.dp),
+                        Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(8.dp),
                     )
                 }
             }

@@ -36,20 +36,20 @@ import com.muthiani.movieswatchpro.presentation.theme.MoviesWatchProTheme
 fun Header() {
     Column(
         modifier =
-            Modifier
-                .fillMaxWidth(),
+        Modifier
+            .fillMaxWidth(),
     ) {
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = MoviesWatchProTheme.colors.brand),
+            Modifier
+                .fillMaxWidth()
+                .background(color = MoviesWatchProTheme.colors.brand),
         ) {
             Image(
                 modifier =
-                    Modifier
-                        .padding(vertical = 64.dp, horizontal = 16.dp)
-                        .align(Alignment.CenterStart),
+                Modifier
+                    .padding(vertical = 64.dp, horizontal = 16.dp)
+                    .align(Alignment.CenterStart),
                 painter = painterResource(id = R.drawable.splash_logo),
                 contentDescription = null,
             )
@@ -61,10 +61,10 @@ fun Header() {
 fun bottomPanel() {
     Box(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-                .background(MoviesWatchProTheme.colors.brand),
+        Modifier
+            .fillMaxWidth()
+            .height(64.dp)
+            .background(MoviesWatchProTheme.colors.brand),
     )
 }
 
@@ -76,9 +76,9 @@ fun customHomeTopBar(showActions: Boolean = true) {
 
     MediumTopAppBar(
         colors =
-            TopAppBarDefaults.topAppBarColors(
-                containerColor = MoviesWatchProTheme.colors.brand,
-            ),
+        TopAppBarDefaults.topAppBarColors(
+            containerColor = MoviesWatchProTheme.colors.brand,
+        ),
         title = {
             Image(
                 modifier = Modifier.padding(top = 12.dp, bottom = 12.dp),

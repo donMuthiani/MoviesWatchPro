@@ -72,10 +72,10 @@ fun GenericMovieListScreen(
                 ) {
                     Row(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .statusBarsPadding()
-                                .padding(start = 8.dp, bottom = 8.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .statusBarsPadding()
+                            .padding(start = 8.dp, bottom = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
@@ -83,11 +83,11 @@ fun GenericMovieListScreen(
                             contentDescription = "Navigate back",
                             tint = MoviesWatchProTheme.colors.textInteractive,
                             modifier =
-                                Modifier
-                                    .size(24.dp)
-                                    .clickable {
-                                        upPress.invoke()
-                                    },
+                            Modifier
+                                .size(24.dp)
+                                .clickable {
+                                    upPress.invoke()
+                                },
                         )
 
                         Text(
@@ -95,8 +95,8 @@ fun GenericMovieListScreen(
                             style = MaterialTheme.typography.titleLarge,
                             color = MoviesWatchProTheme.colors.brand,
                             modifier =
-                                Modifier
-                                    .padding(start = 12.dp),
+                            Modifier
+                                .padding(start = 12.dp),
                         )
                     }
 

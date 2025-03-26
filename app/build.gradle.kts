@@ -167,7 +167,6 @@ dependencies {
     androidTestImplementation(libs.androidx.core.testing)
     // Room testing
     testImplementation(libs.androidx.room.testing)
-
     // Hilt testing
     testImplementation("com.google.dagger:hilt-android-testing:2.44")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")

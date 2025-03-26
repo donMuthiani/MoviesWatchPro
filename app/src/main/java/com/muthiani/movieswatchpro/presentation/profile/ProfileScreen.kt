@@ -24,10 +24,10 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier =
-            modifier
-                .fillMaxSize()
-                .wrapContentSize()
-                .padding(24.dp),
+        modifier
+            .fillMaxSize()
+            .wrapContentSize()
+            .padding(24.dp),
     ) {
         Image(
             painterResource(R.drawable.empty_state_search),

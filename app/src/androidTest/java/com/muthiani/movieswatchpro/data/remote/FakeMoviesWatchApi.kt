@@ -28,17 +28,17 @@ class FakeMoviesWatchApi : MoviesWatchApi {
             ApiResponse(
                 total_pages = 3,
                 results =
-                    if (page == 2) {
-                        listOf(
-                            MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 3, "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
-                            MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 4, "en", "Original Title 2", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
-                        )
-                    } else {
-                        listOf(
-                            MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 1, "en", "Original Title 3", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
-                            MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 2, "en", "Original Title 4", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
-                        )
-                    },
+                if (page == 2) {
+                    listOf(
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 3, "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 4, "en", "Original Title 2", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                    )
+                } else {
+                    listOf(
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 1, "en", "Original Title 3", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 2, "en", "Original Title 4", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                    )
+                },
                 page = page,
             )
         }
@@ -52,17 +52,17 @@ class FakeMoviesWatchApi : MoviesWatchApi {
         return ApiResponse(
             total_pages = 3,
             results =
-                if (page == 2) {
-                    listOf(
-                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 3, "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
-                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 4, "en", "Original Title 2", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
-                    )
-                } else {
-                    listOf(
-                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 1, "en", "Original Title 3", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
-                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 2, "en", "Original Title 4", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
-                    )
-                },
+            if (page == 2) {
+                listOf(
+                    MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 3, "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
+                    MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 4, "en", "Original Title 2", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
+                )
+            } else {
+                listOf(
+                    MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 1, "en", "Original Title 3", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
+                    MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 2, "en", "Original Title 4", "Overview 1", 10.0, "/poster1.jpg", "2023-01-01", "Title"),
+                )
+            },
             page = page,
         )
     }
@@ -82,17 +82,17 @@ class FakeMoviesWatchApi : MoviesWatchApi {
         return ApiResponse(
             total_pages = 3,
             results =
-                if (page == 2) {
-                    listOf(
-                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 3, "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
-                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 4, "en", "Original Title 2", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
-                    )
-                } else {
-                    listOf(
-                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 1, "en", "Original Title 3", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
-                        MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 2, "en", "Original Title 4", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
-                    )
-                },
+            if (page == 2) {
+                listOf(
+                    MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 3, "en", "Original Title 1", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                    MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 4, "en", "Original Title 2", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                )
+            } else {
+                listOf(
+                    MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 1, "en", "Original Title 3", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                    MovieModel(false, "/backdrop1.jpg", listOf(1, 2), 2, "en", "Original Title 4", "Overview 1", 10.0, "/poster1.jpg", "2025-04-04", "Title"),
+                )
+            },
             page = page,
         )
     }

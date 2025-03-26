@@ -23,13 +23,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
+import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -123,11 +123,11 @@ object DataModule {
         return Pager(
             config = PagingConfig(pageSize = 20),
             remoteMediator =
-                MoviesRemoteMediator(
-                    api = moviesWatchApi,
-                    moviesWatchDatabase = moviesWatchDatabase,
-                    apiType = apiTypeHolder.apiType,
-                ),
+            MoviesRemoteMediator(
+                api = moviesWatchApi,
+                moviesWatchDatabase = moviesWatchDatabase,
+                apiType = apiTypeHolder.apiType,
+            ),
             pagingSourceFactory = { moviesWatchDatabase.moviesDao().pagingSource() },
         )
     }
@@ -143,11 +143,11 @@ object DataModule {
         return Pager(
             config = PagingConfig(pageSize = 20),
             remoteMediator =
-                MoviesRemoteMediator(
-                    api = moviesWatchApi,
-                    moviesWatchDatabase = moviesWatchDatabase,
-                    apiType = "popular",
-                ),
+            MoviesRemoteMediator(
+                api = moviesWatchApi,
+                moviesWatchDatabase = moviesWatchDatabase,
+                apiType = "popular",
+            ),
             pagingSourceFactory = { moviesWatchDatabase.moviesDao().getPopularPagingSource() },
         )
     }
@@ -163,11 +163,11 @@ object DataModule {
         return Pager(
             config = PagingConfig(pageSize = 20),
             remoteMediator =
-                MoviesRemoteMediator(
-                    api = moviesWatchApi,
-                    moviesWatchDatabase = moviesWatchDatabase,
-                    apiType = "upcoming",
-                ),
+            MoviesRemoteMediator(
+                api = moviesWatchApi,
+                moviesWatchDatabase = moviesWatchDatabase,
+                apiType = "upcoming",
+            ),
             pagingSourceFactory = { moviesWatchDatabase.moviesDao().getUpcomingPagingSource() },
         )
     }
@@ -183,11 +183,11 @@ object DataModule {
         return Pager(
             config = PagingConfig(pageSize = 20),
             remoteMediator =
-                MoviesRemoteMediator(
-                    api = moviesWatchApi,
-                    moviesWatchDatabase = moviesWatchDatabase,
-                    apiType = "now_showing",
-                ),
+            MoviesRemoteMediator(
+                api = moviesWatchApi,
+                moviesWatchDatabase = moviesWatchDatabase,
+                apiType = "now_showing",
+            ),
             pagingSourceFactory = { moviesWatchDatabase.moviesDao().getNowShowingPagingSource() },
         )
     }
@@ -203,10 +203,10 @@ object DataModule {
         return Pager(
             config = PagingConfig(pageSize = 20),
             remoteMediator =
-                WatchListRemoteMediator(
-                    api = moviesWatchApi,
-                    moviesWatchDatabase = moviesWatchDatabase,
-                ),
+            WatchListRemoteMediator(
+                api = moviesWatchApi,
+                moviesWatchDatabase = moviesWatchDatabase,
+            ),
             pagingSourceFactory = { moviesWatchDatabase.moviesDao().watchLisPagingSource() },
         )
     }

@@ -134,14 +134,14 @@ class MoviesRemoteMediatorTest {
             val pagingState =
                 PagingState(
                     pages =
-                        listOf(
-                            PagingSource.LoadResult.Page(
-                                data = firstPage.orEmpty(),
-                                prevKey = null,
-                                nextKey = 2,
-                                itemsAfter = 0,
-                            ),
+                    listOf(
+                        PagingSource.LoadResult.Page(
+                            data = firstPage.orEmpty(),
+                            prevKey = null,
+                            nextKey = 2,
+                            itemsAfter = 0,
                         ),
+                    ),
                     anchorPosition = 0,
                     config = PagingConfig(2),
                     leadingPlaceholderCount = 0,

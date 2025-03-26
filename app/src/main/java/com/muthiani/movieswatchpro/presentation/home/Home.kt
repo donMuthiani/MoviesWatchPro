@@ -207,8 +207,8 @@ fun MoviesWatchBottomBar(
                     onSelected = { navigateToRoute(section.route) },
                     animSpec = springSpec,
                     modifier =
-                        BottomNavigationItemPadding
-                            .clip(BottomNavIndicatorShape),
+                    BottomNavigationItemPadding
+                        .clip(BottomNavIndicatorShape),
                 )
             }
         }
@@ -315,9 +315,9 @@ fun MoviesWatchBottomNavigationItem(
         text = text,
         animationProgress = animationProgress,
         modifier =
-            modifier
-                .selectable(selected = selected, onClick = onSelected)
-                .wrapContentSize(),
+        modifier
+            .selectable(selected = selected, onClick = onSelected)
+            .wrapContentSize(),
     )
 }
 
@@ -333,23 +333,23 @@ private fun MoviesWatchBottomNavItemLayout(
         content = {
             Box(
                 modifier =
-                    Modifier
-                        .layoutId("icon")
-                        .padding(horizontal = TextIconSpacing),
+                Modifier
+                    .layoutId("icon")
+                    .padding(horizontal = TextIconSpacing),
                 content = icon,
             )
             val scale = lerp(0.6f, 1f, animationProgress)
             Box(
                 modifier =
-                    Modifier
-                        .layoutId("text")
-                        .padding(horizontal = TextIconSpacing)
-                        .graphicsLayer {
-                            alpha = animationProgress
-                            scaleX = scale
-                            scaleY = scale
-                            transformOrigin = BottomNavLabelTransformOrigin
-                        },
+                Modifier
+                    .layoutId("text")
+                    .padding(horizontal = TextIconSpacing)
+                    .graphicsLayer {
+                        alpha = animationProgress
+                        scaleX = scale
+                        scaleY = scale
+                        transformOrigin = BottomNavLabelTransformOrigin
+                    },
                 content = text,
             )
         },
@@ -397,10 +397,10 @@ private fun JetsnackBottomNavIndicator(
 ) {
     Spacer(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .then(BottomNavigationItemPadding)
-                .border(strokeWidth, color, shape),
+        Modifier
+            .fillMaxSize()
+            .then(BottomNavigationItemPadding)
+            .border(strokeWidth, color, shape),
     )
 }
 

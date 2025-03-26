@@ -53,20 +53,20 @@ fun MoviesWatchButton(
         contentColor = if (enabled) contentColor else disabledContentColor,
         border = border,
         modifier =
-            modifier
-                .clip(shape)
-                .background(
-                    Brush.horizontalGradient(
-                        colors = if (enabled) backgroundGradient else disabledBackgroundGradient,
-                    ),
-                )
-                .clickable(
-                    onClick = onClick,
-                    enabled = enabled,
-                    role = Role.Button,
-                    interactionSource = interactionSource,
-                    indication = rememberRipple(),
+        modifier
+            .clip(shape)
+            .background(
+                Brush.horizontalGradient(
+                    colors = if (enabled) backgroundGradient else disabledBackgroundGradient,
                 ),
+            )
+            .clickable(
+                onClick = onClick,
+                enabled = enabled,
+                role = Role.Button,
+                interactionSource = interactionSource,
+                indication = rememberRipple(),
+            ),
     ) {
         ProvideTextStyle(
             value = MaterialTheme.typography.labelLarge.copy(textAlign = TextAlign.Center),

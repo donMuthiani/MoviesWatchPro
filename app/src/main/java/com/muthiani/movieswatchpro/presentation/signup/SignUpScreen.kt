@@ -86,11 +86,11 @@ fun SignUpScreen(navController: MoviesWatchNavController) {
             topBar = { Header() },
             containerColor = MoviesWatchProTheme.colors.uiBackground,
             content =
-                {
-                    Column(modifier = Modifier.padding(it)) {
-                        Content(navController, splashViewModel)
-                    }
-                },
+            {
+                Column(modifier = Modifier.padding(it)) {
+                    Content(navController, splashViewModel)
+                }
+            },
             bottomBar = {
                 bottomPanel()
             },
@@ -120,10 +120,10 @@ fun Content(
 
     Column(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .verticalScroll(state = rememberScrollState()),
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+            .verticalScroll(state = rememberScrollState()),
     ) {
         Text(
             text = "Welcome",
@@ -147,40 +147,40 @@ fun Content(
             label = { Text(text = "Email address") },
             isError = isError,
             textStyle =
-                TextStyle(
-                    color = MoviesWatchProTheme.colors.textSecondary,
-                    fontSize = 16.sp,
-                ),
+            TextStyle(
+                color = MoviesWatchProTheme.colors.textSecondary,
+                fontSize = 16.sp,
+            ),
             colors =
-                OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MoviesWatchProTheme.colors.brand,
-                    unfocusedBorderColor = MoviesWatchProTheme.colors.brand,
-                    focusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
-                    unfocusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
-                    cursorColor = MoviesWatchProTheme.colors.textSecondary,
-                    errorCursorColor = MoviesWatchProTheme.colors.textSecondary,
-                    errorLabelColor = MoviesWatchProTheme.colors.error,
-                ),
+            OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MoviesWatchProTheme.colors.brand,
+                unfocusedBorderColor = MoviesWatchProTheme.colors.brand,
+                focusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
+                unfocusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
+                cursorColor = MoviesWatchProTheme.colors.textSecondary,
+                errorCursorColor = MoviesWatchProTheme.colors.textSecondary,
+                errorLabelColor = MoviesWatchProTheme.colors.error,
+            ),
         )
 
         OutlinedTextField(
             textStyle =
-                TextStyle(
-                    color = MoviesWatchProTheme.colors.textSecondary,
-                    fontSize = 16.sp,
-                ),
+            TextStyle(
+                color = MoviesWatchProTheme.colors.textSecondary,
+                fontSize = 16.sp,
+            ),
             colors =
-                OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MoviesWatchProTheme.colors.brand,
-                    unfocusedBorderColor = MoviesWatchProTheme.colors.brand,
-                    focusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
-                    unfocusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
-                    cursorColor = MoviesWatchProTheme.colors.textSecondary,
-                    errorCursorColor = MoviesWatchProTheme.colors.textSecondary,
-                    errorLabelColor = MoviesWatchProTheme.colors.error,
-                    focusedTrailingIconColor = MoviesWatchProTheme.colors.textSecondary,
-                    unfocusedTrailingIconColor = MoviesWatchProTheme.colors.textSecondary,
-                ),
+            OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MoviesWatchProTheme.colors.brand,
+                unfocusedBorderColor = MoviesWatchProTheme.colors.brand,
+                focusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
+                unfocusedLabelColor = MoviesWatchProTheme.colors.textSecondary,
+                cursorColor = MoviesWatchProTheme.colors.textSecondary,
+                errorCursorColor = MoviesWatchProTheme.colors.textSecondary,
+                errorLabelColor = MoviesWatchProTheme.colors.error,
+                focusedTrailingIconColor = MoviesWatchProTheme.colors.textSecondary,
+                unfocusedTrailingIconColor = MoviesWatchProTheme.colors.textSecondary,
+            ),
             value = password,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = { password = it },
@@ -213,9 +213,9 @@ fun Content(
             MoviesWatchButton(
                 shape = RoundedCornerShape(size = 12.dp),
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 onClick = {
                     splashViewModel.setUserLoggedIn()
                     navController.navigateToRoute(
@@ -346,20 +346,20 @@ fun BottomViews() {
         Box(modifier = Modifier.wrapContentSize()) {
             Checkbox(
                 colors =
-                    CheckboxColors(
-                        checkedBorderColor = MoviesWatchProTheme.colors.brand,
-                        uncheckedBorderColor = MoviesWatchProTheme.colors.brand,
-                        checkedCheckmarkColor = MoviesWatchProTheme.colors.brand,
-                        uncheckedCheckmarkColor = MoviesWatchProTheme.colors.brand,
-                        checkedBoxColor = MoviesWatchProTheme.colors.brand,
-                        uncheckedBoxColor = MoviesWatchProTheme.colors.brand,
-                        disabledCheckedBoxColor = MoviesWatchProTheme.colors.brand,
-                        disabledUncheckedBoxColor = MoviesWatchProTheme.colors.brand,
-                        disabledBorderColor = MoviesWatchProTheme.colors.brand,
-                        disabledUncheckedBorderColor = MoviesWatchProTheme.colors.brand,
-                        disabledIndeterminateBorderColor = MoviesWatchProTheme.colors.brand,
-                        disabledIndeterminateBoxColor = MoviesWatchProTheme.colors.brand,
-                    ),
+                CheckboxColors(
+                    checkedBorderColor = MoviesWatchProTheme.colors.brand,
+                    uncheckedBorderColor = MoviesWatchProTheme.colors.brand,
+                    checkedCheckmarkColor = MoviesWatchProTheme.colors.brand,
+                    uncheckedCheckmarkColor = MoviesWatchProTheme.colors.brand,
+                    checkedBoxColor = MoviesWatchProTheme.colors.brand,
+                    uncheckedBoxColor = MoviesWatchProTheme.colors.brand,
+                    disabledCheckedBoxColor = MoviesWatchProTheme.colors.brand,
+                    disabledUncheckedBoxColor = MoviesWatchProTheme.colors.brand,
+                    disabledBorderColor = MoviesWatchProTheme.colors.brand,
+                    disabledUncheckedBorderColor = MoviesWatchProTheme.colors.brand,
+                    disabledIndeterminateBorderColor = MoviesWatchProTheme.colors.brand,
+                    disabledIndeterminateBoxColor = MoviesWatchProTheme.colors.brand,
+                ),
                 checked = isChecked,
                 onCheckedChange = { isChecked = !isChecked },
             )
@@ -367,10 +367,10 @@ fun BottomViews() {
 
         Box(
             modifier =
-                Modifier
-                    .wrapContentSize()
-                    .align(Alignment.CenterVertically)
-                    .weight(1f),
+            Modifier
+                .wrapContentSize()
+                .align(Alignment.CenterVertically)
+                .weight(1f),
         ) {
             Text(
                 text = "Remember for 30 days",
@@ -381,11 +381,11 @@ fun BottomViews() {
 
         Box(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(end = 0.dp)
-                    .align(Alignment.CenterVertically)
-                    .weight(1f),
+            Modifier
+                .fillMaxWidth()
+                .padding(end = 0.dp)
+                .align(Alignment.CenterVertically)
+                .weight(1f),
             contentAlignment = Alignment.CenterEnd,
         ) {
             TextButton(onClick = { forgotPassword() }) {
