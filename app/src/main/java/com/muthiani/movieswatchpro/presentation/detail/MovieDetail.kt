@@ -96,8 +96,8 @@ fun MovieDetailScreen(
     movieDetailViewModel: MovieDetailViewModel = hiltViewModel()
 ) {
     LaunchedEffect(movieId) {
-        movieDetailViewModel.getMovie(movieId.toInt())
         movieDetailViewModel.loadMovieWatchlistStatus(movieId.toInt())
+        movieDetailViewModel.getMovie(movieId.toInt())
     }
 
     val uiState by movieDetailViewModel.uiState.collectAsState()

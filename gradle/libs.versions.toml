@@ -8,6 +8,7 @@ credentialsPlayServicesAuth = "1.2.2"
 firebaseBom = "33.2.0"
 googleid = "1.1.1"
 hiltAndroid = "2.51.1"
+hiltAndroidTesting = "2.44"
 hiltCompose = "1.0.0"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
@@ -25,7 +26,8 @@ materialIconsExtended = "1.6.8"
 mockitoCore = "5.2.0"
 mockitoInline = "5.2.0"
 mockitoKotlin = "5.1.0"
-mockk = "1.13.8"
+mockk = "1.12.8"
+mockkAndroid = "1.13.12"
 pagingCompose = "3.3.5"
 preferenceKtx = "1.2.1"
 roomCompiler = "2.6.1"
@@ -38,6 +40,7 @@ ksp = "2.0.0-1.0.21"
 timber = "5.0.1"
 compose-navigation = "2.7.7"
 ktlint = "12.1.0"
+turbine = "1.1.0"
 ui = "1.7.4"
 retrofit = "2.11.0"
 converterGson = "2.11.0"
@@ -67,6 +70,7 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroidTesting" }
 hilt-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -91,7 +95,9 @@ mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore
 mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
