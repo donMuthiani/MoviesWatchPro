@@ -5,7 +5,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
@@ -22,9 +21,4 @@ class TestCoroutineRule : TestWatcher() {
     override fun finished(description: Description) {
         Dispatchers.resetMain()
     }
-
-    fun runTest(block: suspend () -> Unit) =
-        kotlinx.coroutines.test.runTest(testScheduler) {
-            block()
-        }
 }

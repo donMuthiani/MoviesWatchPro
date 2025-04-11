@@ -1,6 +1,5 @@
 package com.muthiani.movieswatchpro.presentation.detail
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muthiani.movieswatchpro.domain.entity.ManageWatchList
@@ -13,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -26,44 +26,62 @@ constructor(private val movieRepository: MovieRepository) : ViewModel() {
         )
     val uiState: StateFlow<MovieDetailUiState> = _uiState.asStateFlow()
 
-    var isWatchListLoaderActive = mutableStateOf(false)
-    val result = mutableStateOf<Boolean?>(null) // Use null when no result is available
+    val _isWatchListLoaderActive = MutableStateFlow(false)
+    var isWatchListLoaderActive: StateFlow<Boolean> = _isWatchListLoaderActive
+
+    val _isInWatchList = MutableStateFlow(false)
+    val isInWatchList: StateFlow<Boolean> = _isInWatchList.asStateFlow()
+
+    fun loadMovieWatchlistStatus(movieId: Int) {
+        viewModelScope.launch {
+            _isInWatchList.value =
+                withContext(Dispatchers.IO) { movieRepository.isMovieInWatchList(movieId) }
+        }
+    }
 
     private val exceptionHandler =
         CoroutineExceptionHandler { _, exception ->
             _uiState.value = MovieDetailUiState.Error(exception.message ?: "An error occurred")
         }
 
-    suspend fun getMovie(movieId: Int) {
+    fun getMovie(movieId: Int) {
         viewModelScope.launch(exceptionHandler) {
-            _uiState.value = MovieDetailUiState.Loading
+            _uiState.update { MovieDetailUiState.Loading }
 
             val movie = withContext(Dispatchers.IO) { movieRepository.getMovie(movieId) }
 
             if (movie != null) {
-                _uiState.value = MovieDetailUiState.Movie(movie)
+                _uiState.update { MovieDetailUiState.Movie(movie) }
             } else {
-                _uiState.value = MovieDetailUiState.Error("Movie not found")
+                _uiState.update { MovieDetailUiState.Error("Movie not found") }
             }
         }
     }
 
     fun addToWatchList(id: Int) {
-        isWatchListLoaderActive.value = true
+        _isWatchListLoaderActive.value = true
+        val shouldAdd = !_isInWatchList.value
         viewModelScope.launch(exceptionHandler) {
             val response =
                 withContext(Dispatchers.IO) {
                     movieRepository.manageMovieWatchList(
-                        ManageWatchList(media_id = id, watchlist = true),
+                        ManageWatchList(media_id = id, watchlist = shouldAdd),
                     )
                 }
             if (response.success) {
-                isWatchListLoaderActive.value = false
-                result.value = true
+                _isInWatchList.value = shouldAdd
+                _isWatchListLoaderActive.value = false
+                withContext(Dispatchers.IO) {
+                    if (shouldAdd) {
+                        movieRepository.addMovieToWatchList(id)
+                    } else {
+                        movieRepository.removeMovieFromWatchList(id)
+                    }
+                }
             } else {
-                isWatchListLoaderActive.value = false
-                result.value = false
+                _uiState.value = MovieDetailUiState.Error("Failed to update watchlist")
             }
+            _isWatchListLoaderActive.value = false
         }
     }
 

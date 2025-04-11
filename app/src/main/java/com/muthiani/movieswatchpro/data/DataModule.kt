@@ -220,8 +220,9 @@ object DataModule {
         @Named("view_more") viewMorePager: Pager<Int, MovieEntity>,
         @Named("watchlist") watchListPager: Pager<Int, MovieEntityWatchList>,
         moviesWatchApi: MoviesWatchApi,
+        moviesWatchDao: MoviesWatchDao
     ): MovieRepository {
-        return MovieRepositoryImpl(popularPager, upcomingPager, nowShowingPager, viewMorePager, watchListPager, moviesWatchApi)
+        return MovieRepositoryImpl(popularPager, upcomingPager, nowShowingPager, viewMorePager, watchListPager, moviesWatchApi, moviesWatchDao)
     }
 
     @Singleton

@@ -5,6 +5,8 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.muthiani.movieswatchpro.data.local.MovieEntity
 import com.muthiani.movieswatchpro.data.local.MovieEntityWatchList
+import com.muthiani.movieswatchpro.data.local.MoviesWatchDao
+import com.muthiani.movieswatchpro.data.mapper.toMovieEntityWatchList
 import com.muthiani.movieswatchpro.data.mapper.toMovieModel
 import com.muthiani.movieswatchpro.data.remote.ApiConstants
 import com.muthiani.movieswatchpro.data.remote.MoviesWatchApi
@@ -26,6 +28,7 @@ constructor(
     @Named("view_more") private val viewMoreMoviesPager: Pager<Int, MovieEntity>,
     @Named("watchlist") private val watchListMoviesPager: Pager<Int, MovieEntityWatchList>,
     private val moviesWatchApi: MoviesWatchApi,
+    private val moviesWatchDao: MoviesWatchDao,
 ) : MovieRepository {
     override fun getWatchList(page: Int): Flow<PagingData<MovieModel>> {
         return watchListMoviesPager.flow.map { pagingData ->
@@ -51,6 +54,18 @@ constructor(
 
     override suspend fun manageMovieWatchList(manageWatchList: ManageWatchList): ManageWatchListResponse {
         return moviesWatchApi.manageWatchList(ApiConstants.ACCOUNT_ID, manageWatchList)
+    }
+
+    override suspend fun isMovieInWatchList(movieId: Int): Boolean {
+        return moviesWatchDao.isMovieInWatchList(movieId)
+    }
+
+    override suspend fun removeMovieFromWatchList(id: Int) {
+        moviesWatchDao.deleteWatchListMovie(id)
+    }
+
+    override suspend fun addMovieToWatchList(id: Int) {
+        moviesWatchDao.insertWatchListMovie(moviesWatchDao.getMovieDetail(id).toMovieEntityWatchList())
     }
 
     override fun getUpcomingMovies(page: Int): Flow<PagingData<MovieModel>> {

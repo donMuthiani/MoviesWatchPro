@@ -3,6 +3,7 @@ package com.muthiani.movieswatchpro.data.repository
 import androidx.paging.Pager
 import com.muthiani.movieswatchpro.data.local.MovieEntity
 import com.muthiani.movieswatchpro.data.local.MovieEntityWatchList
+import com.muthiani.movieswatchpro.data.local.MoviesWatchDao
 import com.muthiani.movieswatchpro.data.remote.ApiConstants
 import com.muthiani.movieswatchpro.data.remote.MoviesWatchApi
 import com.muthiani.movieswatchpro.domain.entity.ApiResponse
@@ -48,6 +49,9 @@ class MovieRepositoryImplTest {
     @Mock
     private lateinit var moviesWatchApi: MoviesWatchApi
 
+    @Mock
+    private lateinit var moviesWatchDao: MoviesWatchDao
+
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
@@ -59,6 +63,7 @@ class MovieRepositoryImplTest {
                 viewMoreMoviesPager = viewMoreMoviesPager,
                 watchListMoviesPager = watchListMoviesPager,
                 moviesWatchApi = moviesWatchApi,
+                moviesWatchDao = moviesWatchDao
             )
     }
 

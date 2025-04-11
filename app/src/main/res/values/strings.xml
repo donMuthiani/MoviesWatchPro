@@ -7,4 +7,9 @@
     <string name="work_in_progress">Currently in progress</string>
     <string name="grab_beverage">Grab a drink</string>
     <string name="account">Account</string>
+    <string name="movie_poster_path">movie poster path</string>
+    <string name="navigate_back">Navigate back</string>
+    <string name="start_icon">Start Icon</string>
+    <string name="remove_from_watch_list">Remove from watchlist</string>
+    <string name="add_to_watch_list">Add to watchlist</string>
 </resources>
