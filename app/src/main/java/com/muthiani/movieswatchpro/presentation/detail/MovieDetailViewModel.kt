@@ -39,6 +39,11 @@ constructor(private val movieRepository: MovieRepository) : ViewModel() {
         }
     }
 
+    // Add for testing
+    fun setWatchListStateForTesting(isInWatchList: Boolean) {
+        _isInWatchList.value = isInWatchList
+    }
+
     private val exceptionHandler =
         CoroutineExceptionHandler { _, exception ->
             _uiState.value = MovieDetailUiState.Error(exception.message ?: "An error occurred")

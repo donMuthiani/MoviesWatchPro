@@ -1,4 +1,6 @@
 import java.util.Properties
+import javax.xml.parsers.DocumentBuilderFactory
+import org.xml.sax.InputSource
 
 plugins {
     alias(libs.plugins.android.application)
@@ -8,6 +10,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     id("com.google.gms.google-services")
+    id("jacoco")
 }
 
 val localProperties =
@@ -181,9 +184,9 @@ dependencies {
     androidTestImplementation(libs.mockk.android)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
+    testImplementation(libs.mockito.inline)
 }
 
-// Optional: Customize JaCoCo report
 tasks.register<JacocoReport>("jacocoTestReport") {
     dependsOn("testDebugUnitTest")
     group = "Reporting"
@@ -216,4 +219,73 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         )
     )
     executionData.setFrom(files("${layout.buildDirectory}/jacoco/testDebugUnitTest.exec"))
+}
+
+tasks.register<JacocoReport>("jacocoInstrumentationTestReport") {
+    dependsOn("connectedDebugAndroidTest")
+    group = "Reporting"
+    description = "Generate JaCoCo coverage reports for instrumentation tests"
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+        xml.outputLocation.set(file("${layout.buildDirectory}/reports/jacoco/instrumentationTest.xml"))
+        html.outputLocation.set(file("${layout.buildDirectory}/reports/jacoco/instrumentationTest/html"))
+    }
+
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    classDirectories.setFrom(
+        files(
+            fileTree("${layout.buildDirectory}/intermediates/javac/debug/classes") {
+                exclude(
+                    "**/R.class",
+                    "**/R\$*.class",
+                    "**/BuildConfig.*",
+                    "**/Manifest*.*",
+                    "**/*Dagger*.*",
+                    "**/*_MembersInjector.class",
+                    "**/*Module*.*",
+                    "**/*_Factory.class",
+                    "**/*_Provide*.*"
+                )
+            }
+        )
+    )
+    executionData.setFrom(files("${layout.buildDirectory}/jacoco/debug.ec"))
+
+    doLast {
+        val reportFile = file("${layout.buildDirectory}/reports/jacoco/instrumentationTest.xml")
+        if (!reportFile.exists()) {
+            throw GradleException("JaCoCo report not found: $reportFile")
+        }
+
+        val xmlDoc = DocumentBuilderFactory.newInstance()
+            .newDocumentBuilder()
+            .parse(InputSource(reportFile.reader()))
+
+        val counters = xmlDoc.getElementsByTagName("counter")
+        var covered = BigDecimal.ZERO
+        var missed = BigDecimal.ZERO
+
+        for (i in 0 until counters.length) {
+            val node = counters.item(i)
+            val attrs = node.attributes
+            if (attrs.getNamedItem("type").nodeValue == "INSTRUCTION") {
+                covered = BigDecimal(attrs.getNamedItem("covered").nodeValue)
+                missed = BigDecimal(attrs.getNamedItem("missed").nodeValue)
+                break
+            }
+        }
+
+        val total = covered + missed
+        val coverage = if (total > BigDecimal.ZERO) (covered * BigDecimal(100)) / total else BigDecimal.ZERO
+        val minCoverage = BigDecimal("80.0") // 💥 Set your threshold here
+
+        println("Current test coverage: ${coverage.setScale(2, BigDecimal.ROUND_HALF_UP)}%")
+
+        if (coverage < minCoverage) {
+            throw GradleException("Test coverage ${coverage.setScale(2, BigDecimal.ROUND_HALF_UP)}% is below the threshold of $minCoverage%")
+        }
+    }
 }

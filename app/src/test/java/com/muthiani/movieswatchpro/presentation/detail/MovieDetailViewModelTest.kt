@@ -34,7 +34,7 @@ class MovieDetailViewModelTest {
 
     @Before
     fun setUp() {
-        movieRepository = mockk(relaxed = true)
+        movieRepository = mockk()
         testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
         Dispatchers.setMain(testDispatcher)
         viewModel = MovieDetailViewModel(movieRepository)
@@ -115,10 +115,12 @@ class MovieDetailViewModelTest {
     @Test
     fun `loadMovieWatchlistStatus should update isInWatchList when repository returns false`() =
         runTest {
-            val movieId = 12
+            val movieId = 123
             coEvery { movieRepository.isMovieInWatchList(movieId) } returns false
             viewModel.isInWatchList.test {
-                assertEquals(false, awaitItem()) // Initial state
+                assertEquals(false, awaitItem())
+                viewModel.setWatchListStateForTesting(true)
+                assertEquals(true, awaitItem())
                 viewModel.loadMovieWatchlistStatus(movieId)
                 assertEquals(false, awaitItem())
             }
