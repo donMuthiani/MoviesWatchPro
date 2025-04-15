@@ -13,10 +13,13 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="MoviesWatchDaoTest">
+      <SelectionState runConfigName="movieDetailScreenShowsLoadingState()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="insertMoviesAndUpcomingPagingSourceReturnsCorrectData()">
+      <SelectionState runConfigName="MovieDetailKtTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="MoviesRemoteMediatorTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

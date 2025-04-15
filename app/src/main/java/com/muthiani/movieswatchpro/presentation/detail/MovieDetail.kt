@@ -339,21 +339,6 @@ private fun MovieRatingSection(movie: MovieModel) {
             tint = MoviesWatchProTheme.colors.brand,
         )
 
-        val annotatedString =
-            buildAnnotatedString {
-                append(movie.voteAverage.toString())
-                append(
-                    AnnotatedString(
-                        text = " · ",
-                        spanStyle =
-                        SpanStyle(
-                            color = MoviesWatchProTheme.colors.brand,
-                            fontSize = 36.sp,
-                        ),
-                    ),
-                )
-            }
-
         Text(
             text = annotatedString,
             style = MaterialTheme.typography.titleLarge,
