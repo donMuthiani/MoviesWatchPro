@@ -16,10 +16,16 @@
       <SelectionState runConfigName="movieDetailScreenShowsLoadingState()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MovieDetailKtTest">
+      <SelectionState runConfigName="movieDetailScreenShowsMovieDetailsWhenLoaded()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="MoviesRemoteMediatorTest">
+      <SelectionState runConfigName="movieDetailScreenShowsErrorState()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="watchListButtonTogglesStateCorrectly()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="backButtonNavigatesBack()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

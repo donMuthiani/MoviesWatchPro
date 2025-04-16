@@ -187,6 +187,7 @@ dependencies {
     // compose ui
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.compose.animation)
 }
 
 tasks.register<JacocoReport>("jacocoTestReport") {

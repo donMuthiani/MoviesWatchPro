@@ -43,8 +43,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -128,7 +131,7 @@ fun MovieDetailScreen(
 fun MovieDetailContent(
     movieDetailViewModel: MovieDetailViewModel,
     upPress: () -> Unit,
-    movie: MovieModel,
+    movie: MovieModel
 ) {
     val isInWatchlist by movieDetailViewModel.isInWatchList.collectAsState()
     val isLoading by movieDetailViewModel.isWatchListLoaderActive.collectAsState()
@@ -144,6 +147,7 @@ fun MovieDetailContent(
                 .fillMaxWidth()
                 .background(color = MoviesWatchProTheme.colors.uiBackground)
                 .verticalScroll(rememberScrollState())
+                .semantics { contentDescription = "MovieDetailScreen" }
                 .sharedBounds(
                     rememberSharedContentState(
                         key =
@@ -193,6 +197,7 @@ fun MoviePosterSection(movie: MovieModel, upPress: () -> Unit) {
                     upPress.invoke()
                 }
                 .align(Alignment.TopStart)
+                .testTag("backButton")
                 .then(defaultPadding),
         )
     }
@@ -255,7 +260,7 @@ fun MovieInfoSection(
                     shape = RoundedCornerShape(16.dp),
                     backgroundGradient = MoviesWatchProTheme.colors.interactiveSecondary,
                     onClick = onWatchListClicked,
-                    modifier = Modifier.padding(top = 24.dp),
+                    modifier = Modifier.padding(top = 24.dp).testTag("Toggle watchlist"),
                 ) {
                     if (isLoading) {
                         CircularProgressIndicator(
