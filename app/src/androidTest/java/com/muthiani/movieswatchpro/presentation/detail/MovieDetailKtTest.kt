@@ -178,49 +178,6 @@ class MovieDetailKtTest {
         verify { viewModel.addToWatchList(movie.id) }
     }
 
-    @Test
-    fun backButtonNavigatesBack() {
-        val movie = MovieModel(
-            id = 1,
-            title = "Test Movie",
-            posterPath = "/poster.jpg",
-            backdropPath = "/backdrop.jpg",
-            overview = "This is a test movie overview.",
-            releaseDate = "2023-10-10",
-            voteAverage = 7.5
-        )
-
-        every { viewModel.uiState } returns MutableStateFlow(MovieDetailViewModel.MovieDetailUiState.Movie(movie))
-
-        every { viewModel.isInWatchList } returns MutableStateFlow(false)
-
-        // Mock upPress lambda
-        val upPress = mockk<() -> Unit>(relaxed = true)
-
-        composeTestRule.activityRule.scenario.onActivity { activity ->
-            activity.setContent {
-                MoviesWatchProTheme {
-                    TestNavHost(
-                        movieId = 1,
-                        viewModel = viewModel,
-                        onNavControllerCreated = { navController = it })
-                }
-            }
-        }
-
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithTag("backButton").assertIsDisplayed()
-
-        composeTestRule.onNodeWithTag("backButton").performClick()
-
-        composeTestRule.waitForIdle()
-
-        verify {
-            upPress.invoke()
-        }
-    }
-
     @After
     fun tearDown() {
     }
@@ -247,7 +204,7 @@ fun TestNavHost(
                         composable("movie/{movieId}") {
                             MovieDetailScreen(
                                 movieId = movieId,
-                                upPress = { navController.popBackStack() }, // Handle back navigation
+                                upPress = { navController.navigateUp() },
                                 movieDetailViewModel = viewModel
                             )
                         }

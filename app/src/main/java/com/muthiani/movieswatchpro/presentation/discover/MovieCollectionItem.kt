@@ -25,7 +25,6 @@ import androidx.paging.compose.LazyPagingItems
 import com.muthiani.movieswatchpro.domain.entity.MovieModel
 import com.muthiani.movieswatchpro.presentation.theme.MoviesWatchProTheme
 import java.util.UUID
-import timber.log.Timber
 
 @Composable
 fun MovieCollectionItem(
@@ -35,7 +34,6 @@ fun MovieCollectionItem(
     onMovieClicked: (Long) -> Unit,
     onMoreClicked: (String) -> Unit = {},
 ) {
-    println("Recomposition: $name") // Log to check
     Column(modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -96,7 +94,6 @@ fun Movies(
                 }
                 loadState.refresh is LoadState.Error -> {
                     val e = loadState.refresh as LoadState.Error
-                    Timber.i("error ${e.error.message}")
                     item { Text("Error: ${e.error.localizedMessage}", modifier = Modifier.padding(16.dp)) }
                 }
             }
