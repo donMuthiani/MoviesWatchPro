@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     id("com.google.gms.google-services")
+    id("jacoco")
 }
 
 val localProperties =
@@ -30,9 +31,16 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.muthiani.movieswatchpro.CustomHiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        buildTypes {
+            debug {
+                enableUnitTestCoverage = true
+                enableAndroidTestCoverage = true
+            }
         }
     }
 
@@ -61,6 +69,10 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes.add("META-INF/LICENSE.md")
+            excludes.add("META-INF/LICENSE-notice.md")
+            excludes.add("META-INF/LICENSE-notice.txt")
+            excludes.add("META-INF/LICENSE.txt")
         }
     }
 
@@ -82,13 +94,6 @@ dependencies {
 //    implementation(libs.okhttp.bom)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
     // splash screen
     implementation(libs.androidx.core.splashScreen)
@@ -152,8 +157,103 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.paging.compose) // Latest stable version
+
+    // Testing dependencies
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    // Mockito for mocking
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.kotlin)
+
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    // LiveData testing
+    testImplementation(libs.androidx.core.testing)
+    androidTestImplementation(libs.androidx.core.testing)
+    // Room testing
+    testImplementation(libs.androidx.room.testing)
+    // Hilt testing
+    testImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.hilt.android.testing)
+
+    androidTestImplementation(libs.mockk.android)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.mockito.inline)
+
+    // compose ui
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.compose.animation)
 }
 
-// kapt {
-//    correctErrorTypes = true
-// }
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+    group = "Reporting"
+    description = "Generate JaCoCo coverage reports for debug unit tests"
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+        xml.outputLocation.set(file("${layout.buildDirectory}/reports/jacoco/testDebugUnitTest.xml"))
+        html.outputLocation.set(file("${layout.buildDirectory}/reports/jacoco/testDebugUnitTest/html"))
+    }
+
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    classDirectories.setFrom(
+        files(
+            fileTree("${layout.buildDirectory}buildDir/intermediates/javac/debug/classes") {
+                exclude(
+                    "**/R.class",
+                    "**/R\$*.class",
+                    "**/BuildConfig.*",
+                    "**/Manifest*.*",
+                    "**/*Dagger*.*", // Exclude Hilt-generated code
+                    "**/*_MembersInjector.class",
+                    "**/*Module*.*",
+                    "**/*_Factory.class",
+                    "**/*_Provide*.*"
+                )
+            }
+        )
+    )
+    executionData.setFrom(files("${layout.buildDirectory}/jacoco/testDebugUnitTest.exec"))
+}
+
+tasks.register<JacocoReport>("jacocoInstrumentationTestReport") {
+    dependsOn("connectedDebugAndroidTest")
+    group = "Reporting"
+    description = "Generate JaCoCo coverage reports for instrumentation tests"
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+        xml.outputLocation.set(file("${layout.buildDirectory}/reports/jacoco/instrumentationTest.xml"))
+        html.outputLocation.set(file("${layout.buildDirectory}/reports/jacoco/instrumentationTest/html"))
+    }
+
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    classDirectories.setFrom(
+        files(
+            fileTree("${layout.buildDirectory}/intermediates/javac/debug/classes") {
+                exclude(
+                    "**/R.class",
+                    "**/R\$*.class",
+                    "**/BuildConfig.*",
+                    "**/Manifest*.*",
+                    "**/*Dagger*.*",
+                    "**/*_MembersInjector.class",
+                    "**/*Module*.*",
+                    "**/*_Factory.class",
+                    "**/*_Provide*.*"
+                )
+            }
+        )
+    )
+    executionData.setFrom(files("${layout.buildDirectory}/jacoco/debug.ec"))
+}

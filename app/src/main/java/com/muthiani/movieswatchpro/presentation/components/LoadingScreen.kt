@@ -6,15 +6,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.muthiani.movieswatchpro.R
 
 @Composable
 fun LoadingScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()
+        .semantics { contentDescription = "Loading" }
+    ) {
         AnimatedPreloader(modifier = Modifier.align(Alignment.Center))
     }
 }
@@ -23,7 +28,7 @@ fun LoadingScreen() {
 fun AnimatedPreloader(modifier: Modifier = Modifier) {
     val preloaderLottieComposition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
-            com.muthiani.movieswatchpro.R.raw.loading,
+            R.raw.loading,
         ),
     )
 

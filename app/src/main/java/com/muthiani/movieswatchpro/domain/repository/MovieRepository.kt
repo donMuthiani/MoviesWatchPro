@@ -20,4 +20,10 @@ interface MovieRepository {
     fun getMoreMovies(page: Int = 1): Flow<PagingData<MovieModel>>
 
     suspend fun manageMovieWatchList(manageWatchList: ManageWatchList): ManageWatchListResponse
+
+    suspend fun isMovieInWatchList(movieId: Int): Boolean
+
+    suspend fun removeMovieFromWatchList(id: Int)
+
+    suspend fun addMovieToWatchList(id: Int)
 }

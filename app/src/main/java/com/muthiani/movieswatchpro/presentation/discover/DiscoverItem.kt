@@ -44,71 +44,71 @@ fun DiscoverItem(
     with(sharedTransitionScope) {
         Column(
             modifier =
-                Modifier
-                    .padding(16.dp)
-                    .width(120.dp)
-                    .clickable {
-                        Timber.i("Movie selected: ${movie.id}")
-                        onMovieSelected(movie.id.toLong())
-                    }
-                    .sharedBounds(
-                        rememberSharedContentState(
-                            key =
-                                MovieSharedElementKey(
-                                    snackId = movie.id.toLong(),
-                                    type = MovieSharedElementType.Bounds,
-                                ),
+            Modifier
+                .padding(16.dp)
+                .width(120.dp)
+                .clickable {
+                    Timber.i("Movie selected: ${movie.id}")
+                    onMovieSelected(movie.id.toLong())
+                }
+                .sharedBounds(
+                    rememberSharedContentState(
+                        key =
+                        MovieSharedElementKey(
+                            snackId = movie.id.toLong(),
+                            type = MovieSharedElementType.Bounds,
                         ),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
-                        boundsTransform = movieDetailBoundsTransform,
-                        exit = fadeOut(nonSpatialExpressiveSpring()),
-                        enter = fadeIn(nonSpatialExpressiveSpring()),
                     ),
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(16.dp)),
+                    boundsTransform = movieDetailBoundsTransform,
+                    exit = fadeOut(nonSpatialExpressiveSpring()),
+                    enter = fadeIn(nonSpatialExpressiveSpring()),
+                ),
         ) {
             Box(
                 modifier =
-                    Modifier
-                        .wrapContentHeight(),
+                Modifier
+                    .wrapContentHeight(),
             ) {
                 AsyncImage(
                     model =
-                        ImageRequest.Builder(LocalContext.current)
-                            .data("https://image.tmdb.org/t/p/original${movie.posterPath}")
-                            .crossfade(true)
-                            .placeholder(R.drawable.movie_placeholder)
-                            .error(R.drawable.movie_error_placeholder)
-                            .diskCachePolicy(CachePolicy.ENABLED)
-                            .build(),
+                    ImageRequest.Builder(LocalContext.current)
+                        .data("https://image.tmdb.org/t/p/original${movie.posterPath}")
+                        .crossfade(true)
+                        .placeholder(R.drawable.movie_placeholder)
+                        .error(R.drawable.movie_error_placeholder)
+                        .diskCachePolicy(CachePolicy.ENABLED)
+                        .build(),
                     contentDescription = "",
                     modifier =
-                        Modifier
-                            .height(180.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .sharedBounds(
-                                sharedContentState =
-                                    rememberSharedContentState(
-                                        key =
-                                            MovieSharedElementKey(
-                                                snackId = movie.id?.toLong() ?: 0,
-                                                type = MovieSharedElementType.Image,
-                                            ),
-                                    ),
-                                animatedVisibilityScope = animatedVisibilityScope,
-                                exit = fadeOut(nonSpatialExpressiveSpring()),
-                                enter = fadeIn(nonSpatialExpressiveSpring()),
-                                boundsTransform = movieDetailBoundsTransform,
+                    Modifier
+                        .height(180.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .sharedBounds(
+                            sharedContentState =
+                            rememberSharedContentState(
+                                key =
+                                MovieSharedElementKey(
+                                    snackId = movie.id?.toLong() ?: 0,
+                                    type = MovieSharedElementType.Image,
+                                ),
                             ),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            exit = fadeOut(nonSpatialExpressiveSpring()),
+                            enter = fadeIn(nonSpatialExpressiveSpring()),
+                            boundsTransform = movieDetailBoundsTransform,
+                        ),
                     contentScale = ContentScale.Crop,
                 )
 
                 Text(
                     text = (movie.voteAverage.toString()),
                     modifier =
-                        Modifier
-                            .align(Alignment.TopEnd)
-                            .background(color = Color.Black.copy(alpha = 0.4f), shape = RoundedCornerShape(4.dp))
-                            .padding(4.dp),
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .background(color = Color.Black.copy(alpha = 0.4f), shape = RoundedCornerShape(4.dp))
+                        .padding(4.dp),
                     style = MaterialTheme.typography.titleMedium,
                     color = MoviesWatchProTheme.colors.brand,
                 )
@@ -119,9 +119,9 @@ fun DiscoverItem(
             Text(
                 text = movie.title ?: movie.originalTitle.orEmpty(),
                 modifier =
-                    Modifier
-                        .padding(bottom = 16.dp)
-                        .align(Alignment.CenterHorizontally),
+                Modifier
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MoviesWatchProTheme.colors.textInteractive,
                 maxLines = 2,

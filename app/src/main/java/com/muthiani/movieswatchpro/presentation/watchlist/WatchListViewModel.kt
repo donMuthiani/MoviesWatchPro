@@ -7,14 +7,14 @@ import androidx.paging.cachedIn
 import com.muthiani.movieswatchpro.domain.entity.MovieModel
 import com.muthiani.movieswatchpro.domain.useCase.GetWatchList
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 @HiltViewModel
 class WatchListViewModel
-    @Inject
-    constructor(
-        getWatchList: GetWatchList,
-    ) : ViewModel() {
-        val watchListMoviesPagingDataFlow: Flow<PagingData<MovieModel>> = getWatchList.getWatchList().cachedIn(viewModelScope)
-    }
+@Inject
+constructor(
+    getWatchList: GetWatchList,
+) : ViewModel() {
+    val watchListMoviesPagingDataFlow: Flow<PagingData<MovieModel>> = getWatchList.getWatchList().cachedIn(viewModelScope)
+}

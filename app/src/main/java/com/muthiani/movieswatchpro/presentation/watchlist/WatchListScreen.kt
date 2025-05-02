@@ -57,10 +57,10 @@ fun WatchListScreen(
                 Column(modifier = Modifier.padding(innerPadding)) {
                     Row(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .statusBarsPadding()
-                                .padding(start = 8.dp, bottom = 8.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .statusBarsPadding()
+                            .padding(start = 8.dp, bottom = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
@@ -68,8 +68,8 @@ fun WatchListScreen(
                             style = MaterialTheme.typography.titleLarge,
                             color = MoviesWatchProTheme.colors.brand,
                             modifier =
-                                Modifier
-                                    .padding(start = 12.dp),
+                            Modifier
+                                .padding(start = 12.dp),
                         )
                     }
 

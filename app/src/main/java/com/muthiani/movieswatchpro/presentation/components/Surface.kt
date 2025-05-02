@@ -32,15 +32,15 @@ fun MoviesWatchSurface(
 ) {
     Box(
         modifier =
-            modifier
-                .shadow(elevation = elevation, shape = shape, clip = false)
-                .zIndex(elevation.value)
-                .then(if (border != null) Modifier.border(border, shape) else Modifier)
-                .background(
-                    color = getBackgroundColorForElevation(color, elevation),
-                    shape = shape,
-                )
-                .clip(shape),
+        modifier
+            .shadow(elevation = elevation, shape = shape, clip = false)
+            .zIndex(elevation.value)
+            .then(if (border != null) Modifier.border(border, shape) else Modifier)
+            .background(
+                color = getBackgroundColorForElevation(color, elevation),
+                shape = shape,
+            )
+            .clip(shape),
     ) {
         CompositionLocalProvider(LocalContentColor provides contentColor, content = content)
     }

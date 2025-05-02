@@ -50,8 +50,8 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 
     Box(
         modifier =
-            Modifier
-                .fillMaxSize(),
+        Modifier
+            .fillMaxSize(),
     ) {
         Scaffold(
             modifier = Modifier,
@@ -59,9 +59,9 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             bottomBar = {
                 Row(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp, 10.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp, 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {

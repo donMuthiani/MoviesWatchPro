@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.muthiani.movieswatchpro.domain.entity.MovieModel
 
 @Dao
 interface MoviesWatchDao {
@@ -17,13 +18,16 @@ interface MoviesWatchDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertMovies(users: List<MovieEntity>)
 
+    @Query("SELECT * FROM movies")
+    fun getALlMovies(): List<MovieEntity>
+
     @Query("SELECT * FROM movies ORDER BY popularity DESC")
     fun getPopularPagingSource(): PagingSource<Int, MovieEntity>
 
     @Query("SELECT * FROM movies ORDER BY releaseDate DESC")
     fun getNowShowingPagingSource(): PagingSource<Int, MovieEntity>
 
-    @Query("SELECT * FROM movies WHERE releaseDate >= DATE(CURRENT_DATE, '-30 days')")
+    @Query("SELECT * FROM movies WHERE releaseDate >= DATE('now', '+30 days')")
     fun getUpcomingPagingSource(): PagingSource<Int, MovieEntity>
 
     @Query("DELETE FROM watchlist")
@@ -35,9 +39,15 @@ interface MoviesWatchDao {
     @Query("SELECT * FROM watchlist")
     fun watchLisPagingSource(): PagingSource<Int, MovieEntityWatchList>
 
+    @Query("SELECT EXISTS(SELECT 1 FROM watchlist WHERE id = :id)")
+    fun isMovieInWatchList(id: Int): Boolean
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertWatchListMovie(movie: MovieEntityWatchList)
 
     @Query("DELETE FROM watchlist WHERE id = :id")
     fun deleteWatchListMovie(id: Int)
+
+    @Query("SELECT * FROM movies WHERE id = :id")
+    fun getMovieDetail(id: Int): MovieModel
 }

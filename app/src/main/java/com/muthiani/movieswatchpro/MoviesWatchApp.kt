@@ -52,13 +52,13 @@ fun MoviesWatchApp(apiTypeHolder: ApiLoadTypeHolder) {
             NavHost(
                 navController = navController.navController,
                 startDestination =
-                    when (isOnboarded) {
-                        true -> {
-                            if (isLoggedIn) MainDestinations.HOME_ROUTE else MainDestinations.LOGIN_ROUTE
-                        }
+                when (isOnboarded) {
+                    true -> {
+                        if (isLoggedIn) MainDestinations.HOME_ROUTE else MainDestinations.LOGIN_ROUTE
+                    }
 
-                        else -> MainDestinations.ONBOARDING_ROUTE
-                    },
+                    else -> MainDestinations.ONBOARDING_ROUTE
+                },
             ) {
                 composableWithCompositionLocal(
                     route = MainDestinations.LOGIN_ROUTE,
@@ -103,11 +103,11 @@ fun MoviesWatchApp(apiTypeHolder: ApiLoadTypeHolder) {
                 composableWithCompositionLocal(
                     route = "${MainDestinations.MOVIE_LIST_VIEWER}/{${MainDestinations.API_CALL_TYPE}}",
                     arguments =
-                        listOf(
-                            navArgument(MainDestinations.API_CALL_TYPE) {
-                                type = NavType.StringType
-                            },
-                        ),
+                    listOf(
+                        navArgument(MainDestinations.API_CALL_TYPE) {
+                            type = NavType.StringType
+                        },
+                    ),
                 ) { backStackEntry ->
                     val apiCallType = backStackEntry.arguments?.getString(MainDestinations.API_CALL_TYPE)
                     GenericMovieListScreen(
@@ -121,11 +121,11 @@ fun MoviesWatchApp(apiTypeHolder: ApiLoadTypeHolder) {
                 composableWithCompositionLocal(
                     route = "${MainDestinations.MOVIE_DETAIL_ROUTE}/{${MainDestinations.MOVIE_ID_KEY}}",
                     arguments =
-                        listOf(
-                            navArgument(MainDestinations.MOVIE_ID_KEY) {
-                                type = NavType.LongType
-                            },
-                        ),
+                    listOf(
+                        navArgument(MainDestinations.MOVIE_ID_KEY) {
+                            type = NavType.LongType
+                        },
+                    ),
                 ) { navBackStackEntry ->
                     val arguments = requireNotNull(navBackStackEntry.arguments)
                     val movieId = arguments.getLong(MainDestinations.MOVIE_ID_KEY)
@@ -166,26 +166,26 @@ fun MainContainer(
                         currentRoute = currentRoute ?: HomeSections.WATCH_LIST.route,
                         navigateToRoute = nestedNavController::navigateToBottomBarRoute,
                         modifier =
-                            Modifier
-                                .renderInSharedTransitionScopeOverlay(
-                                    zIndexInOverlay = 1f,
-                                )
-                                .animateEnterExit(
-                                    enter =
-                                        fadeIn(nonSpatialExpressiveSpring()) +
-                                            slideInVertically(
-                                                spatialExpressiveSpring(),
-                                            ) {
-                                                it
-                                            },
-                                    exit =
-                                        fadeOut(nonSpatialExpressiveSpring()) +
-                                            slideOutVertically(
-                                                spatialExpressiveSpring(),
-                                            ) {
-                                                it
-                                            },
-                                ),
+                        Modifier
+                            .renderInSharedTransitionScopeOverlay(
+                                zIndexInOverlay = 1f,
+                            )
+                            .animateEnterExit(
+                                enter =
+                                fadeIn(nonSpatialExpressiveSpring()) +
+                                    slideInVertically(
+                                        spatialExpressiveSpring(),
+                                    ) {
+                                        it
+                                    },
+                                exit =
+                                fadeOut(nonSpatialExpressiveSpring()) +
+                                    slideOutVertically(
+                                        spatialExpressiveSpring(),
+                                    ) {
+                                        it
+                                    },
+                            ),
                     )
                 }
             }
@@ -201,9 +201,9 @@ fun MainContainer(
                 apiTypeHolder = apiTypeHolder,
                 onMovieSelected = onMovieSelected,
                 modifier =
-                    Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding),
+                Modifier
+                    .padding(padding)
+                    .consumeWindowInsets(padding),
                 onMoreClicked = onMoreClicked,
             )
         }
